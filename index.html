@@ -17,7 +17,214 @@
       body.item-view .PopularPosts { display: none; }
       .blog-name h1, .blog-name h1 a {font: italic 800 20px Open Sans, sans-serif;}
 
-      /* HEADER SECTION STYLE */
+      /* ========= HEADER ========= */
+      .main-header {
+          background: #0a0a0a;
+          border-bottom: 3px solid #ffa74e;
+          margin-bottom: 20px;
+          border-radius: 0 0 12px 12px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          position: relative;
+      }
+      
+      /* BARIS 1: LOGO KIRI + SEARCH ICON (untuk mobile/tablet) */
+      .top-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 15px 20px;
+      }
+      
+      /* LOGO DI KIRI UJUNG */
+      .logo-area {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+      }
+      .logo-icon {
+          font-size: 36px;
+          color: #ffa74e;
+      }
+      .logo-text {
+          font-size: 22px;
+          font-weight: bold;
+          letter-spacing: 2px;
+          background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+      }
+      .logo-sub {
+          font-size: 9px;
+          color: #aaa;
+          letter-spacing: 1px;
+      }
+      
+      /* MENU NAVIGASI (berada di bawah top-bar) */
+      .nav-menu {
+          display: flex;
+          gap: 25px;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 20px;
+          border-top: 1px solid #222;
+          flex-wrap: wrap;
+      }
+      .nav-menu a {
+          color: #ddd;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 14px;
+          transition: 0.2s;
+          padding: 5px 0;
+      }
+      .nav-menu a:hover {
+          color: #ffa74e;
+      }
+      .nav-menu .active-nav {
+          color: #ffa74e;
+          border-bottom: 2px solid #ffa74e;
+      }
+      
+      /* SEARCH ICON (hanya tampil di tablet & HP) */
+      .search-icon-mobile {
+          display: none;
+          background: none;
+          border: none;
+          color: #ffa74e;
+          font-size: 22px;
+          cursor: pointer;
+          padding: 8px;
+      }
+      
+      /* SEARCH PANEL DESKTOP (tampil di layar besar) */
+      .search-panel-desktop {
+          display: flex;
+          align-items: center;
+          background: #222;
+          border-radius: 40px;
+          padding: 5px 15px;
+          border: 1px solid #444;
+          transition: 0.2s;
+      }
+      .search-panel-desktop:focus-within {
+          border-color: #ffa74e;
+          background: #1e1e1e;
+      }
+      .search-panel-desktop input {
+          background: transparent;
+          border: none;
+          padding: 10px 8px;
+          color: white;
+          font-size: 14px;
+          width: 220px;
+          outline: none;
+      }
+      .search-panel-desktop input::placeholder {
+          color: #888;
+      }
+      .search-panel-desktop button {
+          background: none;
+          border: none;
+          color: #ffa74e;
+          cursor: pointer;
+          font-size: 16px;
+          padding: 0 5px;
+      }
+      
+      /* SEARCH BAR MOBILE (muncul saat ikon diklik) */
+      .mobile-search-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: #0a0a0a;
+          padding: 15px 20px;
+          z-index: 1000;
+          border-bottom: 2px solid #ffa74e;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      }
+      .mobile-search-container {
+          display: flex;
+          align-items: center;
+          background: #222;
+          border-radius: 40px;
+          padding: 5px 15px;
+          border: 1px solid #444;
+      }
+      .mobile-search-container:focus-within {
+          border-color: #ffa74e;
+      }
+      .mobile-search-container input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          padding: 12px 8px;
+          color: white;
+          font-size: 16px;
+          outline: none;
+      }
+      .mobile-search-container input::placeholder {
+          color: #888;
+      }
+      .mobile-search-container .close-search-btn {
+          background: none;
+          border: none;
+          color: #ffa74e;
+          cursor: pointer;
+          font-size: 20px;
+          padding: 8px;
+          order: 1;
+      }
+      .mobile-search-container .search-icon-btn {
+          background: none;
+          border: none;
+          color: #ffa74e;
+          cursor: pointer;
+          font-size: 18px;
+          padding: 8px;
+          order: 2;
+      }
+      
+      /* DESKTOP: search panel desktop tampil, icon mobile hidden */
+      @media (min-width: 769px) {
+          .search-icon-mobile {
+              display: none !important;
+          }
+          .desktop-search-wrapper {
+              display: block;
+          }
+      }
+      
+      /* TABLET & HP: search icon tampil, desktop panel hidden */
+      @media (max-width: 768px) {
+          .desktop-search-wrapper {
+              display: none;
+          }
+          .search-icon-mobile {
+              display: block;
+          }
+      }
+      
+      /* RESPONSIVE MENU */
+      @media (max-width: 600px) {
+          .nav-menu {
+              gap: 15px;
+          }
+          .nav-menu a {
+              font-size: 12px;
+          }
+          .logo-text {
+              font-size: 18px;
+          }
+          .logo-icon {
+              font-size: 28px;
+          }
+      }
+
+      /* SISA STYLE LAMA ANDA */
       .container-header {
           border-bottom: 2px solid #ffa74e;
           margin: 20px 0;
@@ -32,7 +239,6 @@
 
       #main-content { display: block; max-width: 1100px; margin: 0 auto; }
 
-      /* GRID SYSTEM */
       .comic-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
@@ -55,7 +261,6 @@
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
 
-      /* BADGES */
       .badge {
           position: absolute; top: 5px; left: 5px;
           color: #fff; font-size: 10px; padding: 2px 7px;
@@ -64,7 +269,6 @@
       .badge-new { background: #b80006; }
       .badge-pick { background: #ff2d55; display: none; }
 
-      /* PAGINATION STYLE */
       .pagination-container {
           display: flex;
           justify-content: center;
@@ -106,6 +310,49 @@
   </head>
   <body>
 
+    <!-- ========= HEADER ========= -->
+    <div class="main-header">
+        <!-- BARIS ATAS: LOGO KIRI + SEARCH ICON (mobile/tablet) -->
+        <div class="top-bar">
+            <div class="logo-area" id="logoClick">
+                <i class="fa-solid fa-book-open logo-icon"></i>
+                <div>
+                    <div class="logo-text">MANGAVERSE</div>
+                    <div class="logo-sub">Gallery Manga Center</div>
+                </div>
+            </div>
+            
+            <!-- Search Icon untuk HP & Tablet -->
+            <button class="search-icon-mobile" id="searchIconMobile">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            
+            <!-- Search Panel Desktop (layar besar) -->
+            <div class="desktop-search-wrapper">
+                <div class="search-panel-desktop">
+                    <input type="text" id="searchInputDesktop" placeholder="Cari manga, komik, judul..." autocomplete="off">
+                    <button id="searchBtnDesktop"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MENU NAVIGASI -->
+        <div class="nav-menu">
+            <a href="#" class="active-nav" id="navHome">🏠 Beranda</a>
+            <a href="#" id="navNew">🆕 New Uploads</a>
+            <a href="#" id="navRecommended">⭐ Rekomendasi</a>
+        </div>
+    </div>
+    
+    <!-- MOBILE SEARCH OVERLAY (muncul saat ikon kaca pembesar diklik) -->
+    <div class="mobile-search-overlay" id="mobileSearchOverlay">
+        <div class="mobile-search-container">
+            <input type="text" id="searchInputMobile" placeholder="Cari manga, komik, judul..." autocomplete="off">
+            <button class="close-search-btn" id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
+            <button class="search-icon-btn" id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+
     <div id="main-content">
       <header class="container-header">
         <i class="fa fa-fire color-icon"></i>
@@ -128,21 +375,222 @@
       const warningImg = "https://i.ibb.co.com/Ld6Kddv9/1-3.webp";
       
       let allEntries = []; 
+      let filteredEntries = [];
+      let isSearchMode = false;
+      let currentSearchQuery = "";
       const itemsPerPage = 25; 
 
-      // Langsung jalankan fungsi tampilkan konten tanpa cek localStorage
       document.addEventListener("DOMContentLoaded", function() {
           showContent();
           
-          const searchForm = document.querySelector('form[action*="/search"]');
-          if (searchForm) {
-              searchForm.addEventListener('submit', function(e) {
+          // DESKTOP SEARCH
+          const searchBtnDesktop = document.getElementById('searchBtnDesktop');
+          const searchInputDesktop = document.getElementById('searchInputDesktop');
+          
+          // MOBILE SEARCH
+          const searchIconMobile = document.getElementById('searchIconMobile');
+          const mobileOverlay = document.getElementById('mobileSearchOverlay');
+          const closeSearchBtn = document.getElementById('closeSearchBtn');
+          const searchBtnMobile = document.getElementById('searchBtnMobile');
+          const searchInputMobile = document.getElementById('searchInputMobile');
+          
+          // Fungsi search (digunakan untuk kedua mode)
+          function executeSearch(query) {
+              if(query === "") {
+                  resetToHome();
+                  return;
+              }
+              
+              isSearchMode = true;
+              currentSearchQuery = query;
+              
+              filteredEntries = allEntries.filter(entry => {
+                  const title = entry.title.$t.toLowerCase();
+                  return title.includes(query);
+              });
+              
+              if(filteredEntries.length === 0) {
+                  document.getElementById('new-uploads-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul "${query}"</div>`;
+                  document.getElementById('pagination').innerHTML = "";
+                  document.getElementById('random-grid').style.display = 'none';
+                  document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
+                  const newHeader = document.querySelector('#new-section .header-title');
+                  if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (0)`;
+              } else {
+                  document.getElementById('random-grid').style.display = 'none';
+                  document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
+                  const newHeader = document.querySelector('#new-section .header-title');
+                  if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (${filteredEntries.length})`;
+                  renderGrid(filteredEntries.slice(0, itemsPerPage), 'new-uploads-grid', 'NEW', 0);
+                  renderPaginationForSearch(1);
+              }
+              
+              if(filteredEntries.length > 0) {
+                  document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+              }
+          }
+          
+          // Desktop search
+          if(searchBtnDesktop) {
+              searchBtnDesktop.addEventListener('click', function(e) {
                   e.preventDefault();
-                  const q = this.querySelector('input[name="q"]').value;
-                  window.location.href = "/2026/04/search.html?q=" + encodeURIComponent(q);
+                  executeSearch(searchInputDesktop.value.trim().toLowerCase());
               });
           }
+          if(searchInputDesktop) {
+              searchInputDesktop.addEventListener('keypress', function(e) {
+                  if(e.key === 'Enter') {
+                      e.preventDefault();
+                      executeSearch(searchInputDesktop.value.trim().toLowerCase());
+                  }
+              });
+          }
+          
+          // Mobile: buka overlay
+          if(searchIconMobile) {
+              searchIconMobile.addEventListener('click', function() {
+                  mobileOverlay.style.display = 'block';
+                  setTimeout(() => searchInputMobile.focus(), 100);
+              });
+          }
+          
+          // Mobile: tutup overlay dengan tombol X
+          if(closeSearchBtn) {
+              closeSearchBtn.addEventListener('click', function() {
+                  mobileOverlay.style.display = 'none';
+                  searchInputMobile.value = '';
+              });
+          }
+          
+          // Mobile: tombol kaca pembesar di dalam search bar
+          if(searchBtnMobile) {
+              searchBtnMobile.addEventListener('click', function() {
+                  const query = searchInputMobile.value.trim().toLowerCase();
+                  mobileOverlay.style.display = 'none';
+                  executeSearch(query);
+                  // sync dengan desktop search input
+                  if(searchInputDesktop) searchInputDesktop.value = query;
+              });
+          }
+          
+          // Mobile: enter key
+          if(searchInputMobile) {
+              searchInputMobile.addEventListener('keypress', function(e) {
+                  if(e.key === 'Enter') {
+                      e.preventDefault();
+                      const query = searchInputMobile.value.trim().toLowerCase();
+                      mobileOverlay.style.display = 'none';
+                      executeSearch(query);
+                      if(searchInputDesktop) searchInputDesktop.value = query;
+                  }
+              });
+          }
+          
+          // Navigasi header
+          document.getElementById('navHome').addEventListener('click', function(e) {
+              e.preventDefault();
+              resetToHome();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
+          });
+          document.getElementById('navNew').addEventListener('click', function(e) {
+              e.preventDefault();
+              scrollToNewUploads();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
+          });
+          document.getElementById('navRecommended').addEventListener('click', function(e) {
+              e.preventDefault();
+              document.getElementById('random-grid').scrollIntoView({ behavior: 'smooth' });
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
+          });
+          
+          // Logo klik
+          document.getElementById('logoClick').addEventListener('click', function() {
+              resetToHome();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
+          });
       });
+
+      function resetToHome() {
+          isSearchMode = false;
+          currentSearchQuery = "";
+          
+          const searchInputDesktop = document.getElementById('searchInputDesktop');
+          const searchInputMobile = document.getElementById('searchInputMobile');
+          if(searchInputDesktop) searchInputDesktop.value = "";
+          if(searchInputMobile) searchInputMobile.value = "";
+          
+          document.getElementById('random-grid').style.display = 'grid';
+          document.querySelector('#main-content .container-header:first-of-type').style.display = 'flex';
+          const newHeader = document.querySelector('#new-section .header-title');
+          if(newHeader) newHeader.innerText = "New Uploads";
+          
+          renderRecommended(allEntries);
+          goToPage(1);
+      }
+      
+      function renderPaginationForSearch(currentPage) {
+          const container = document.getElementById('pagination');
+          container.innerHTML = "";
+          const totalPages = Math.ceil(filteredEntries.length / itemsPerPage);
+          if (totalPages <= 1) return;
+          
+          container.appendChild(createPageBtnSearch('<i class="fa-solid fa-angles-left"></i>', 1, currentPage === 1));
+          container.appendChild(createPageBtnSearch('<i class="fa-solid fa-angle-left"></i>', currentPage - 1, currentPage === 1));
+          
+          let startPage = Math.max(1, currentPage - 2);
+          let endPage = Math.min(totalPages, currentPage + 2);
+          
+          if (startPage > 1) {
+              container.appendChild(createPageBtnSearch("1", 1, false));
+              if (startPage > 2) {
+                  const dots = document.createElement('span');
+                  dots.className = "page-dots";
+                  dots.innerText = "...";
+                  container.appendChild(dots);
+              }
+          }
+          
+          for (let i = startPage; i <= endPage; i++) {
+              container.appendChild(createPageBtnSearch(i.toString(), i, false, i === currentPage));
+          }
+          
+          if (endPage < totalPages) {
+              if (endPage < totalPages - 1) {
+                  const dots = document.createElement('span');
+                  dots.className = "page-dots";
+                  dots.innerText = "...";
+                  container.appendChild(dots);
+              }
+              container.appendChild(createPageBtnSearch(totalPages.toString(), totalPages, false, currentPage === totalPages));
+          }
+          
+          container.appendChild(createPageBtnSearch('<i class="fa-solid fa-angle-right"></i>', currentPage + 1, currentPage === totalPages));
+          container.appendChild(createPageBtnSearch('<i class="fa-solid fa-angles-right"></i>', totalPages, currentPage === totalPages));
+      }
+      
+      function createPageBtnSearch(text, targetPage, isDisabled, isActive = false) {
+          const btn = document.createElement('button');
+          btn.innerHTML = text;
+          btn.className = `page-num ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+          if (!isDisabled) {
+              btn.onclick = () => {
+                  const start = (targetPage - 1) * itemsPerPage;
+                  const paginated = filteredEntries.slice(start, start + itemsPerPage);
+                  renderGrid(paginated, 'new-uploads-grid', 'NEW', start);
+                  renderPaginationForSearch(targetPage);
+                  document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+              };
+          }
+          return btn;
+      }
+      
+      function scrollToNewUploads() {
+          if(isSearchMode) {
+              resetToHome();
+          }
+          if(window.currentPageNum !== 1) goToPage(1);
+          else document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+      }
 
       function showContent() {
           loadFeeds();
@@ -197,7 +645,10 @@
           goToPage(1);
       };
 
+      window.currentPageNum = 1;
       function goToPage(page) {
+          if(isSearchMode) return;
+          window.currentPageNum = page;
           const start = (page - 1) * itemsPerPage;
           const end = start + itemsPerPage;
           const paginatedData = allEntries.slice(start, end);
