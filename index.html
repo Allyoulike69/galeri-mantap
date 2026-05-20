@@ -6,35 +6,64 @@
     <title>Gallery Manga Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <style>
-        /* --- GAYA (CSS) ANDA TETAP SAMA, DISINI DIPERSINGKAT --- */
         body { background: #111; color: #fff; margin: 0; padding: 20px; font-family: 'Segoe UI', sans-serif; }
+        
+        /* HEADER */
         .main-header { background: #0a0a0a; border-bottom: 3px solid #ffa74e; border-radius: 0 0 12px 12px; padding: 10px 20px; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
         .logo-text { font-size: 24px; font-weight: bold; background: linear-gradient(135deg, #ffa74e, #ff5e7c); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .nav-menu { display: flex; gap: 25px; justify-content: center; padding: 15px 0 5px; flex-wrap: wrap; }
-        .nav-menu a { color: #ddd; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .nav-menu a { color: #ddd; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
         .nav-menu a:hover { color: #ffa74e; }
+        
+        /* SEARCH */
         .search-panel-desktop, .mobile-search-container { display: flex; background: #222; border-radius: 40px; padding: 5px 15px; border: 1px solid #444; }
-        .search-panel-desktop input, .mobile-search-container input { background: transparent; border: none; padding: 8px; color: white; outline: none; }
-        .mobile-search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; background: #0a0a0a; padding: 15px; z-index: 1000; }
+        .search-panel-desktop input, .mobile-search-container input { background: transparent; border: none; padding: 8px; color: white; outline: none; width: 200px; }
+        .search-panel-desktop button, .mobile-search-container button { background: transparent; border: none; color: #ffa74e; cursor: pointer; }
+        .mobile-search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; background: #0a0a0a; padding: 15px; z-index: 1000; border-bottom: 2px solid #ffa74e; }
+        
+        /* HEADER SECTION */
         .container-header { border-bottom: 2px solid #ffa74e; margin: 30px 0 15px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .header-title { color: #eee; font-size: 22px; font-weight: bold; margin: 0; }
+        .color-icon { color: #ff2d55; font-size: 24px; }
+        
+        /* GRID */
         .comic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px; }
         @media (min-width: 768px) { .comic-grid { grid-template-columns: repeat(5, 1fr); } }
-        .comic-item { background: #1a1a1a; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.2s; position: relative; }
+        
+        /* CARD */
+        .comic-item { background: #1a1a1a; border-radius: 8px; overflow: hidden; border: 1px solid #333; transition: transform 0.2s, border-color 0.2s; position: relative; }
         .comic-item:hover { transform: translateY(-5px); border-color: #ffa74e; }
-        .comic-thumb-container { aspect-ratio: 2/3; overflow: hidden; }
-        .comic-thumb { width: 100%; height: 100%; object-fit: cover; }
+        .comic-thumb-container { aspect-ratio: 2/3; overflow: hidden; background: #222; }
+        .comic-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
         .comic-title { display: block; padding: 8px; text-align: center; color: #eee; text-decoration: none; font-size: 12px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .badge, .date-badge { position: absolute; background: rgba(0,0,0,0.8); padding: 3px 6px; font-size: 10px; border-radius: 4px; }
-        .badge-new { background: #b80006; top: 5px; left: 5px; color: white; }
-        .badge-pick { background: #ff2d55; top: 5px; left: 5px; color: white; }
-        .date-badge { bottom: 5px; right: 5px; color: #ffa74e; }
+        .comic-title:hover { color: #ffa74e; }
+        
+        /* BADGE (tanpa tanggal) */
+        .badge { position: absolute; top: 5px; left: 5px; background: rgba(0,0,0,0.8); padding: 3px 6px; font-size: 10px; border-radius: 4px; color: white; }
+        .badge-new { background: #b80006; }
+        .badge-pick { background: #ff2d55; }
+        
+        /* PAGINATION */
         .pagination-container { display: flex; justify-content: center; gap: 8px; margin: 30px 0; flex-wrap: wrap; }
-        .page-num { background: #222; border: none; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; }
+        .page-num { background: #222; border: none; color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+        .page-num:hover { background: #333; }
         .page-num.active { background: #ffa74e; color: #111; }
-        @media (max-width: 768px) { .search-icon-mobile { display: block; } .desktop-search-wrapper { display: none; } }
-        @media (min-width: 769px) { .search-icon-mobile { display: none; } .desktop-search-wrapper { display: block; } }
+        .page-num:disabled { opacity: 0.3; cursor: not-allowed; }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) { 
+            .search-icon-mobile { display: block !important; } 
+            .desktop-search-wrapper { display: none !important; } 
+            .search-icon-mobile { background: none; border: none; color: #ffa74e; font-size: 22px; cursor: pointer; padding: 8px; }
+        }
+        @media (min-width: 769px) { 
+            .search-icon-mobile { display: none !important; } 
+            .desktop-search-wrapper { display: block !important; } 
+        }
+        
+        .search-icon-mobile { background: none; border: none; color: #ffa74e; font-size: 22px; cursor: pointer; padding: 8px; }
     </style>
 </head>
 <body>
@@ -69,16 +98,22 @@
 </div>
 
 <div id="main-content">
-    <header class="container-header"><i class="fa fa-fire" style="color:#ff2d55;"></i><h1 class="header-title">Recommended</h1></header>
+    <header class="container-header" id="recommended-header">
+        <i class="fa fa-fire color-icon"></i>
+        <h1 class="header-title">Recommended</h1>
+    </header>
     <div id="random-grid" class="comic-grid"></div>
 
-    <header class="container-header"><i class="fa-solid fa-box-tissue" style="color:#ff2d55;"></i><h1 class="header-title">New Uploads</h1></header>
+    <header class="container-header" id="new-section">
+        <i class="fa-solid fa-box-tissue color-icon"></i>
+        <h1 class="header-title" id="new-uploads-title">New Uploads</h1>
+    </header>
     <div id="new-uploads-grid" class="comic-grid"></div>
     <div id="pagination" class="pagination-container"></div>
 </div>
 
 <script>
-    // ========= KONFIGURASI DENGAN URL ABSOLUT =========
+    // ========= KONFIGURASI =========
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
     
@@ -86,17 +121,30 @@
     let isSearchMode = false, currentPageNum = 1;
     const itemsPerPage = 25;
 
+    // ========= LOAD DATA =========
     async function loadData() {
         try {
-            document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center;">⏳ Memuat data...</div>';
+            document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Memuat data...</div>';
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Memuat data...</div>';
+            
             const response = await fetch(DATA_URL);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             allPages = data.pages || [];
-            // Urutkan dari terbaru ke terlama
-            allPages.sort((a,b) => new Date(b.date) - new Date(a.date));
             
-            if (!allPages.length) throw new Error("Data kosong");
+            // Urutkan berdasarkan tanggal (terbaru di depan) - TANGGAL TIDAK DITAMPILKAN
+            allPages.sort((a, b) => {
+                if (!a.date && !b.date) return 0;
+                if (!a.date) return 1;
+                if (!b.date) return -1;
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            if (allPages.length === 0) {
+                document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data. Silakan isi daftar.json</div>';
+                document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data</div>';
+                return;
+            }
             
             // Recommended (5 random)
             let shuffled = [...allPages];
@@ -104,101 +152,235 @@
                 const j = Math.floor(Math.random() * (i + 1));
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
-            renderGrid(shuffled.slice(0,5), 'random-grid', true);
+            renderGrid(shuffled.slice(0, 5), 'random-grid', true);
+            
+            // New Uploads (halaman 1)
             goToPage(1);
+            
         } catch (err) {
-            document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#ff8888;">❌ Gagal memuat data: ${err.message}<br>Pastikan file daftar.json benar-benar ada di:<br>${DATA_URL}</div>`;
-            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center;">Gagal memuat data.</div>';
+            console.error('Error:', err);
+            document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#ff8888;">❌ Gagal memuat data: ${err.message}<br><br>Pastikan file daftar.json ada di:<br>${DATA_URL}</div>`;
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Gagal memuat data.</div>';
         }
     }
 
+    // ========= RENDER GRID (TANPA TANGGAL) =========
     function renderGrid(data, gridId, isRecommended = false) {
         const grid = document.getElementById(gridId);
         if (!grid) return;
         grid.innerHTML = "";
-        if (!data.length) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center;">📭 Tidak ada konten.</div>'; return; }
+        
+        if (!data || data.length === 0) {
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada konten.</div>';
+            return;
+        }
         
         data.forEach((item, idx) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
-            let badge = isRecommended ? '<span class="badge badge-pick">PICK</span>' : (idx < 5 ? '<span class="badge badge-new">NEW</span>' : '');
-            let dateHtml = item.date ? `<span class="date-badge"><i class="fa-regular fa-calendar"></i> ${new Date(item.date).toLocaleDateString('id-ID')}</span>` : '';
+            let title = item.title || "Untitled";
+            
+            let badge = '';
+            if (isRecommended) {
+                badge = '<span class="badge badge-pick">PICK</span>';
+            } else if (idx < 5) {
+                badge = '<span class="badge badge-new">NEW</span>';
+            }
+            
+            // TANGGAL TIDAK DITAMPILKAN - hanya badge NEW/PICK yang muncul
+            
             grid.innerHTML += `
                 <div class="comic-item">
-                    ${badge}${dateHtml}
-                    <a href="${link}"><div class="comic-thumb-container"><img src="${imgUrl}" class="comic-thumb" loading="lazy" onerror="this.src='https://placehold.co/400x600?text=Error'"></div></a>
-                    <a class="comic-title" href="${link}">${escapeHtml(item.title)}</a>
-                </div>`;
+                    ${badge}
+                    <a href="${link}">
+                        <div class="comic-thumb-container">
+                            <img src="${imgUrl}" class="comic-thumb" loading="lazy" 
+                                 onerror="this.src='https://placehold.co/400x600?text=Gambar+Gagal'">
+                        </div>
+                        <div class="comic-title">${escapeHtml(title)}</div>
+                    </a>
+                </div>
+            `;
         });
     }
 
+    // ========= PAGINATION =========
     function goToPage(page) {
         if (isSearchMode) return;
         currentPageNum = page;
-        const start = (page-1) * itemsPerPage;
-        renderGrid(allPages.slice(start, start+itemsPerPage), 'new-uploads-grid', false);
+        const start = (page - 1) * itemsPerPage;
+        const paginatedData = allPages.slice(start, start + itemsPerPage);
+        renderGrid(paginatedData, 'new-uploads-grid', false);
         renderPagination(page);
-        if(page>1) document.getElementById('new-section')?.scrollIntoView({ behavior: 'smooth' });
+        if (page > 1) {
+            document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+        }
     }
 
     function renderPagination(currentPage) {
         const container = document.getElementById('pagination');
+        if (!container) return;
         container.innerHTML = "";
         const totalPages = Math.ceil(allPages.length / itemsPerPage);
-        if(totalPages <= 1) return;
-        for(let i=1; i<=totalPages; i++) {
-            if(i===1 || i===totalPages || (i>=currentPage-2 && i<=currentPage+2)) {
-                let btn = document.createElement('button');
-                btn.innerText = i; btn.className = `page-num ${i===currentPage ? 'active' : ''}`;
-                btn.onclick = () => goToPage(i);
-                container.appendChild(btn);
-            } else if (i === currentPage-3 || i === currentPage+3) {
-                let span = document.createElement('span'); span.innerText = '...'; span.style.color = '#aaa';
-                container.appendChild(span);
+        if (totalPages <= 1) return;
+        
+        // Tombol First & Prev
+        const firstBtn = document.createElement('button');
+        firstBtn.innerHTML = '«'; firstBtn.className = 'page-num';
+        firstBtn.onclick = () => goToPage(1);
+        if (currentPage === 1) firstBtn.disabled = true;
+        container.appendChild(firstBtn);
+        
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '‹'; prevBtn.className = 'page-num';
+        prevBtn.onclick = () => goToPage(currentPage - 1);
+        if (currentPage === 1) prevBtn.disabled = true;
+        container.appendChild(prevBtn);
+        
+        // Nomor halaman
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
+        
+        if (startPage > 1) {
+            const btn = document.createElement('button');
+            btn.innerText = '1'; btn.className = 'page-num';
+            btn.onclick = () => goToPage(1);
+            container.appendChild(btn);
+            if (startPage > 2) {
+                const dots = document.createElement('span');
+                dots.innerText = '...'; dots.style.color = '#aaa'; dots.style.padding = '0 5px';
+                container.appendChild(dots);
             }
         }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.innerText = i;
+            btn.className = `page-num ${i === currentPage ? 'active' : ''}`;
+            btn.onclick = () => goToPage(i);
+            container.appendChild(btn);
+        }
+        
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                const dots = document.createElement('span');
+                dots.innerText = '...'; dots.style.color = '#aaa'; dots.style.padding = '0 5px';
+                container.appendChild(dots);
+            }
+            const btn = document.createElement('button');
+            btn.innerText = totalPages; btn.className = 'page-num';
+            btn.onclick = () => goToPage(totalPages);
+            container.appendChild(btn);
+        }
+        
+        // Tombol Next & Last
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = '›'; nextBtn.className = 'page-num';
+        nextBtn.onclick = () => goToPage(currentPage + 1);
+        if (currentPage === totalPages) nextBtn.disabled = true;
+        container.appendChild(nextBtn);
+        
+        const lastBtn = document.createElement('button');
+        lastBtn.innerHTML = '»'; lastBtn.className = 'page-num';
+        lastBtn.onclick = () => goToPage(totalPages);
+        if (currentPage === totalPages) lastBtn.disabled = true;
+        container.appendChild(lastBtn);
     }
 
+    // ========= SEARCH =========
     function performSearch(query) {
-        if(!query.trim()) { resetToHome(); return; }
-        isSearchMode = true;
-        filteredPages = allPages.filter(p => p.title.toLowerCase().includes(query.toLowerCase()));
-        document.getElementById('random-grid').style.display = 'none';
-        document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
-        document.querySelector('#new-section .header-title').innerText = `Hasil Cari: ${query} (${filteredPages.length})`;
+        if (!query.trim()) {
+            resetToHome();
+            return;
+        }
         
-        if(filteredPages.length) renderGrid(filteredPages.slice(0, itemsPerPage), 'new-uploads-grid', false);
-        else document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center;">🔍 Tidak ditemukan</div>';
-        document.getElementById('pagination').innerHTML = "";
+        isSearchMode = true;
+        filteredPages = allPages.filter(p => (p.title || "").toLowerCase().includes(query.toLowerCase()));
+        
+        // Sembunyikan Recommended header
+        document.getElementById('recommended-header').style.display = 'none';
+        document.getElementById('random-grid').style.display = 'none';
+        
+        // Ubah judul New Uploads menjadi hasil pencarian
+        const titleEl = document.getElementById('new-uploads-title');
+        if (titleEl) titleEl.innerText = `Hasil Cari: ${query} (${filteredPages.length})`;
+        
+        // Sembunyikan pagination sementara
+        document.getElementById('pagination').style.display = 'none';
+        
+        if (filteredPages.length === 0) {
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul tersebut</div>';
+        } else {
+            renderGrid(filteredPages, 'new-uploads-grid', false);
+        }
+        
         document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
     }
-
+    
     function resetToHome() {
         isSearchMode = false;
+        filteredPages = [];
+        
+        // Tampilkan kembali Recommended
+        document.getElementById('recommended-header').style.display = 'flex';
         document.getElementById('random-grid').style.display = 'grid';
-        document.querySelector('#main-content .container-header:first-of-type').style.display = 'flex';
-        document.querySelector('#new-section .header-title').innerText = "New Uploads";
+        
+        // Reset judul
+        const titleEl = document.getElementById('new-uploads-title');
+        if (titleEl) titleEl.innerText = "New Uploads";
+        
+        // Tampilkan pagination
+        document.getElementById('pagination').style.display = 'flex';
+        
+        // Refresh Recommended dengan random baru
         let shuffled = [...allPages];
-        for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
-        renderGrid(shuffled.slice(0,5), 'random-grid', true);
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        renderGrid(shuffled.slice(0, 5), 'random-grid', true);
+        
+        // Refresh New Uploads
         goToPage(1);
     }
 
-    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
 
-    // Event Listeners
+    // ========= EVENT LISTENERS =========
     document.addEventListener("DOMContentLoaded", () => {
         loadData();
+        
+        // Desktop search
         document.getElementById('searchBtnDesktop').onclick = () => performSearch(document.getElementById('searchInputDesktop').value);
-        document.getElementById('searchInputDesktop').onkeypress = (e) => { if(e.key === 'Enter') performSearch(e.target.value); };
+        document.getElementById('searchInputDesktop').onkeypress = (e) => { if (e.key === 'Enter') performSearch(e.target.value); };
+        
+        // Mobile search
         document.getElementById('searchIconMobile').onclick = () => document.getElementById('mobileSearchOverlay').style.display = 'flex';
         document.getElementById('closeSearchBtn').onclick = () => document.getElementById('mobileSearchOverlay').style.display = 'none';
-        document.getElementById('searchBtnMobile').onclick = () => { performSearch(document.getElementById('searchInputMobile').value); document.getElementById('mobileSearchOverlay').style.display = 'none'; };
-        document.getElementById('searchInputMobile').onkeypress = (e) => { if(e.key === 'Enter') { performSearch(e.target.value); document.getElementById('mobileSearchOverlay').style.display = 'none'; } };
-        document.getElementById('navHome').onclick = (e) => { e.preventDefault(); resetToHome(); };
+        document.getElementById('searchBtnMobile').onclick = () => { 
+            performSearch(document.getElementById('searchInputMobile').value); 
+            document.getElementById('mobileSearchOverlay').style.display = 'none';
+        };
+        document.getElementById('searchInputMobile').onkeypress = (e) => { 
+            if (e.key === 'Enter') { 
+                performSearch(e.target.value); 
+                document.getElementById('mobileSearchOverlay').style.display = 'none';
+            } 
+        };
+        
+        // Navigasi
+        document.getElementById('navHome').onclick = (e) => { e.preventDefault(); resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
         document.getElementById('navNew').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' }); };
-        document.getElementById('navRecommended').onclick = (e) => { e.preventDefault(); document.getElementById('random-grid').scrollIntoView({ behavior: 'smooth' }); };
-        document.getElementById('logoClick').onclick = () => resetToHome();
+        document.getElementById('navRecommended').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('recommended-header').scrollIntoView({ behavior: 'smooth' }); };
+        document.getElementById('logoClick').onclick = () => { resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
     });
 </script>
 </body>
