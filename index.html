@@ -11,13 +11,13 @@
     />
 
     <style>
+      /* ========= SEMUA CSS SAMA ========= */
       body { background: #111; color: #fff; margin: 0; padding: 20px 10px; font-family: 'Segoe UI', Arial, sans-serif; overflow: auto; }
       body.item-view .Blog .post-title-container { display: none;}
       body.item-view .Blog .post-header-container { display: none; }
       body.item-view .PopularPosts { display: none; }
       .blog-name h1, .blog-name h1 a {font: italic 800 20px Open Sans, sans-serif;}
 
-      /* ========= HEADER ========= */
       .main-header {
           background: #0a0a0a;
           border-bottom: 3px solid #ffa74e;
@@ -27,7 +27,6 @@
           position: relative;
       }
       
-      /* BARIS 1: LOGO KIRI + SEARCH ICON (untuk mobile/tablet) */
       .top-bar {
           display: flex;
           align-items: center;
@@ -35,7 +34,6 @@
           padding: 15px 20px;
       }
       
-      /* LOGO DI KIRI UJUNG */
       .logo-area {
           display: flex;
           align-items: center;
@@ -61,7 +59,6 @@
           letter-spacing: 1px;
       }
       
-      /* MENU NAVIGASI (berada di bawah top-bar) */
       .nav-menu {
           display: flex;
           gap: 25px;
@@ -78,6 +75,12 @@
           font-size: 14px;
           transition: 0.2s;
           padding: 5px 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .nav-menu a i {
+          font-size: 16px;
       }
       .nav-menu a:hover {
           color: #ffa74e;
@@ -87,7 +90,6 @@
           border-bottom: 2px solid #ffa74e;
       }
       
-      /* SEARCH ICON (hanya tampil di tablet & HP) */
       .search-icon-mobile {
           display: none;
           background: none;
@@ -98,7 +100,6 @@
           padding: 8px;
       }
       
-      /* SEARCH PANEL DESKTOP (tampil di layar besar) */
       .search-panel-desktop {
           display: flex;
           align-items: center;
@@ -133,7 +134,6 @@
           padding: 0 5px;
       }
       
-      /* SEARCH BAR MOBILE (muncul saat ikon diklik) */
       .mobile-search-overlay {
           display: none;
           position: fixed;
@@ -188,43 +188,24 @@
           order: 2;
       }
       
-      /* DESKTOP: search panel desktop tampil, icon mobile hidden */
       @media (min-width: 769px) {
-          .search-icon-mobile {
-              display: none !important;
-          }
-          .desktop-search-wrapper {
-              display: block;
-          }
+          .search-icon-mobile { display: none !important; }
+          .desktop-search-wrapper { display: block; }
       }
       
-      /* TABLET & HP: search icon tampil, desktop panel hidden */
       @media (max-width: 768px) {
-          .desktop-search-wrapper {
-              display: none;
-          }
-          .search-icon-mobile {
-              display: block;
-          }
+          .desktop-search-wrapper { display: none; }
+          .search-icon-mobile { display: block; }
       }
       
-      /* RESPONSIVE MENU */
       @media (max-width: 600px) {
-          .nav-menu {
-              gap: 15px;
-          }
-          .nav-menu a {
-              font-size: 12px;
-          }
-          .logo-text {
-              font-size: 18px;
-          }
-          .logo-icon {
-              font-size: 28px;
-          }
+          .nav-menu { gap: 15px; }
+          .nav-menu a { font-size: 12px; }
+          .nav-menu a i { font-size: 14px; }
+          .logo-text { font-size: 18px; }
+          .logo-icon { font-size: 28px; }
       }
 
-      /* SISA STYLE LAMA ANDA */
       .container-header {
           border-bottom: 2px solid #ffa74e;
           margin: 20px 0;
@@ -298,21 +279,38 @@
           color: #ffa74e;
           border-radius: 50%;
       }
-      .page-num:hover:not(.active) {
-          color: #fff;
-      }
+      .page-num:hover:not(.active) { color: #fff; }
       .page-num.disabled {
           opacity: 0.3;
           cursor: not-allowed;
       }
       .page-dots { color: #aaa; padding: 0 5px; font-weight: bold; }
+
+      .date-badge {
+          position: absolute;
+          bottom: 5px;
+          right: 5px;
+          background: rgba(0,0,0,0.7);
+          color: #ffa74e;
+          font-size: 9px;
+          padding: 2px 5px;
+          border-radius: 3px;
+          z-index: 2;
+          font-family: monospace;
+      }
+      
+      .loading-progress {
+          text-align: center;
+          padding: 20px;
+          color: #ffa74e;
+          font-size: 14px;
+      }
     </style>
   </head>
   <body>
 
     <!-- ========= HEADER ========= -->
     <div class="main-header">
-        <!-- BARIS ATAS: LOGO KIRI + SEARCH ICON (mobile/tablet) -->
         <div class="top-bar">
             <div class="logo-area" id="logoClick">
                 <i class="fa-solid fa-book-open logo-icon"></i>
@@ -322,12 +320,10 @@
                 </div>
             </div>
             
-            <!-- Search Icon untuk HP & Tablet -->
             <button class="search-icon-mobile" id="searchIconMobile">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
             
-            <!-- Search Panel Desktop (layar besar) -->
             <div class="desktop-search-wrapper">
                 <div class="search-panel-desktop">
                     <input type="text" id="searchInputDesktop" placeholder="Cari manga, komik, judul..." autocomplete="off">
@@ -336,15 +332,13 @@
             </div>
         </div>
         
-        <!-- MENU NAVIGASI -->
         <div class="nav-menu">
-            <a href="#" class="active-nav" id="navHome">🏠 Beranda</a>
-            <a href="#" id="navNew">🆕 New Uploads</a>
-            <a href="#" id="navRecommended">⭐ Rekomendasi</a>
+            <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Beranda</a>
+            <a href="#" id="navNew"><i class="fa-solid fa-fire"></i> New Uploads</a>
+            <a href="#" id="navRecommended"><i class="fa-solid fa-star"></i> Rekomendasi</a>
         </div>
     </div>
     
-    <!-- MOBILE SEARCH OVERLAY (muncul saat ikon kaca pembesar diklik) -->
     <div class="mobile-search-overlay" id="mobileSearchOverlay">
         <div class="mobile-search-container">
             <input type="text" id="searchInputMobile" placeholder="Cari manga, komik, judul..." autocomplete="off">
@@ -367,171 +361,353 @@
       <div id="new-uploads-grid" class="comic-grid"></div>
       
       <div id="pagination" class="pagination-container"></div>
+      <div id="scan-status" class="loading-progress"></div>
     </div>
 
     <script>
-      const blogUrl = "https://allyoulikecomic69.blogspot.com";
-      const targetUrl = "https://allyoulikecomic69.blogspot.com/2026/04/home.html";
-      const warningImg = "https://i.ibb.co.com/Ld6Kddv9/1-3.webp";
+      // ========= KONFIGURASI =========
+      // GANTI INI SESUAI DENGAN FILE ANDA!
+      // Contoh: jika file Anda bernama 642402.html, 642403.html, dst.
+      const START_NUM = 642400;  // Mulai dari nomor ini
+      const END_NUM = 642500;    // Sampai nomor ini
       
-      let allEntries = []; 
-      let filteredEntries = [];
+      // URL root (tempat file HTML berada)
+      const BASE_URL = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      const targetUrl = BASE_URL;
+      
+      let allPages = [];           // Menyimpan semua halaman yang ditemukan
+      let filteredPages = [];
       let isSearchMode = false;
       let currentSearchQuery = "";
+      let isScanning = true;
       const itemsPerPage = 25; 
 
-      document.addEventListener("DOMContentLoaded", function() {
-          showContent();
-          
-          // DESKTOP SEARCH
-          const searchBtnDesktop = document.getElementById('searchBtnDesktop');
-          const searchInputDesktop = document.getElementById('searchInputDesktop');
-          
-          // MOBILE SEARCH
-          const searchIconMobile = document.getElementById('searchIconMobile');
-          const mobileOverlay = document.getElementById('mobileSearchOverlay');
-          const closeSearchBtn = document.getElementById('closeSearchBtn');
-          const searchBtnMobile = document.getElementById('searchBtnMobile');
-          const searchInputMobile = document.getElementById('searchInputMobile');
-          
-          // Fungsi search (digunakan untuk kedua mode)
-          function executeSearch(query) {
-              if(query === "") {
-                  resetToHome();
-                  return;
-              }
-              
-              isSearchMode = true;
-              currentSearchQuery = query;
-              
-              filteredEntries = allEntries.filter(entry => {
-                  const title = entry.title.$t.toLowerCase();
-                  return title.includes(query);
-              });
-              
-              if(filteredEntries.length === 0) {
-                  document.getElementById('new-uploads-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul "${query}"</div>`;
-                  document.getElementById('pagination').innerHTML = "";
-                  document.getElementById('random-grid').style.display = 'none';
-                  document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
-                  const newHeader = document.querySelector('#new-section .header-title');
-                  if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (0)`;
-              } else {
-                  document.getElementById('random-grid').style.display = 'none';
-                  document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
-                  const newHeader = document.querySelector('#new-section .header-title');
-                  if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (${filteredEntries.length})`;
-                  renderGrid(filteredEntries.slice(0, itemsPerPage), 'new-uploads-grid', 'NEW', 0);
-                  renderPaginationForSearch(1);
-              }
-              
-              if(filteredEntries.length > 0) {
-                  document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
-              }
+      // ========= FUNGSI FORMAT TANGGAL =========
+      function formatDate(dateString) {
+          if (!dateString) return "";
+          try {
+              const date = new Date(dateString);
+              if (isNaN(date.getTime())) return "";
+              const day = String(date.getDate()).padStart(2, '0');
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const year = date.getFullYear();
+              const hours = String(date.getHours()).padStart(2, '0');
+              const minutes = String(date.getMinutes()).padStart(2, '0');
+              return `${day}/${month}/${year} ${hours}:${minutes}`;
+          } catch(e) {
+              return "";
           }
-          
-          // Desktop search
-          if(searchBtnDesktop) {
-              searchBtnDesktop.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  executeSearch(searchInputDesktop.value.trim().toLowerCase());
-              });
-          }
-          if(searchInputDesktop) {
-              searchInputDesktop.addEventListener('keypress', function(e) {
-                  if(e.key === 'Enter') {
-                      e.preventDefault();
-                      executeSearch(searchInputDesktop.value.trim().toLowerCase());
-                  }
-              });
-          }
-          
-          // Mobile: buka overlay
-          if(searchIconMobile) {
-              searchIconMobile.addEventListener('click', function() {
-                  mobileOverlay.style.display = 'block';
-                  setTimeout(() => searchInputMobile.focus(), 100);
-              });
-          }
-          
-          // Mobile: tutup overlay dengan tombol X
-          if(closeSearchBtn) {
-              closeSearchBtn.addEventListener('click', function() {
-                  mobileOverlay.style.display = 'none';
-                  searchInputMobile.value = '';
-              });
-          }
-          
-          // Mobile: tombol kaca pembesar di dalam search bar
-          if(searchBtnMobile) {
-              searchBtnMobile.addEventListener('click', function() {
-                  const query = searchInputMobile.value.trim().toLowerCase();
-                  mobileOverlay.style.display = 'none';
-                  executeSearch(query);
-                  // sync dengan desktop search input
-                  if(searchInputDesktop) searchInputDesktop.value = query;
-              });
-          }
-          
-          // Mobile: enter key
-          if(searchInputMobile) {
-              searchInputMobile.addEventListener('keypress', function(e) {
-                  if(e.key === 'Enter') {
-                      e.preventDefault();
-                      const query = searchInputMobile.value.trim().toLowerCase();
-                      mobileOverlay.style.display = 'none';
-                      executeSearch(query);
-                      if(searchInputDesktop) searchInputDesktop.value = query;
-                  }
-              });
-          }
-          
-          // Navigasi header
-          document.getElementById('navHome').addEventListener('click', function(e) {
-              e.preventDefault();
-              resetToHome();
-              if(mobileOverlay) mobileOverlay.style.display = 'none';
-          });
-          document.getElementById('navNew').addEventListener('click', function(e) {
-              e.preventDefault();
-              scrollToNewUploads();
-              if(mobileOverlay) mobileOverlay.style.display = 'none';
-          });
-          document.getElementById('navRecommended').addEventListener('click', function(e) {
-              e.preventDefault();
-              document.getElementById('random-grid').scrollIntoView({ behavior: 'smooth' });
-              if(mobileOverlay) mobileOverlay.style.display = 'none';
-          });
-          
-          // Logo klik
-          document.getElementById('logoClick').addEventListener('click', function() {
-              resetToHome();
-              if(mobileOverlay) mobileOverlay.style.display = 'none';
-          });
-      });
+      }
 
-      function resetToHome() {
-          isSearchMode = false;
-          currentSearchQuery = "";
+      // ========= EKSTRAK JUDUL DARI URL =========
+      function extractTitleFromUrl(url) {
+          let filename = url.split('/').pop().replace('.html', '');
+          // Hapus karakter # jika ada
+          filename = filename.replace('#', '');
+          return `Manga ${filename}`;
+      }
+
+      // ========= SCAN SEMUA FILE DI ROOT =========
+      async function scanAllFiles() {
+          const statusDiv = document.getElementById('scan-status');
+          statusDiv.innerHTML = `🔍 Memindai file dari ${START_NUM} sampai ${END_NUM} di root...`;
+          statusDiv.style.display = 'block';
           
-          const searchInputDesktop = document.getElementById('searchInputDesktop');
-          const searchInputMobile = document.getElementById('searchInputMobile');
-          if(searchInputDesktop) searchInputDesktop.value = "";
-          if(searchInputMobile) searchInputMobile.value = "";
+          const promises = [];
+          let foundFiles = [];
           
-          document.getElementById('random-grid').style.display = 'grid';
-          document.querySelector('#main-content .container-header:first-of-type').style.display = 'flex';
-          const newHeader = document.querySelector('#new-section .header-title');
-          if(newHeader) newHeader.innerText = "New Uploads";
+          for (let num = START_NUM; num <= END_NUM; num++) {
+              const url = `${BASE_URL}${num}.html`;
+              promises.push(
+                  fetch(url, { method: 'HEAD' })
+                      .then(response => {
+                          if (response.ok) {
+                              return { url, number: num };
+                          }
+                          return null;
+                      })
+                      .catch(() => null)
+              );
+              
+              // Update progress setiap 20 file
+              if ((num - START_NUM) % 20 === 0) {
+                  const percent = Math.round((num - START_NUM) / (END_NUM - START_NUM) * 100);
+                  statusDiv.innerHTML = `🔍 Memindai file... ${percent}%`;
+                  await new Promise(r => setTimeout(r, 5));
+              }
+          }
           
-          renderRecommended(allEntries);
-          goToPage(1);
+          const results = await Promise.all(promises);
+          const existingFiles = results.filter(r => r !== null);
+          
+          if (existingFiles.length === 0) {
+              statusDiv.innerHTML = `⚠️ Tidak ada file yang ditemukan dari ${START_NUM}.html sampai ${END_NUM}.html`;
+              document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada file yang ditemukan.<br>Cek kembali rentang nomor file Anda.</div>`;
+              document.getElementById('new-uploads-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada file yang ditemukan</div>`;
+              isScanning = false;
+              return;
+          }
+          
+          statusDiv.innerHTML = `📄 Menemukan ${existingFiles.length} file. Membaca tanggal dari <span id="manualDate">...</span> masing-masing file...`;
+          
+          // Untuk setiap file yang ada, baca tanggal dari manualDate
+          for (let i = 0; i < existingFiles.length; i++) {
+              const file = existingFiles[i];
+              statusDiv.innerHTML = `📖 Membaca file ${i+1}/${existingFiles.length}: ${file.number}.html...`;
+              
+              try {
+                  const response = await fetch(file.url);
+                  const html = await response.text();
+                  
+                  // Ekstrak tanggal dari manualDate (support berbagai format)
+                  let date = null;
+                  let title = extractTitleFromUrl(file.url);
+                  
+                  // Cari <span id="manualDate">
+                  const spanMatch = html.match(/<span\s+id=["']manualDate["'][^>]*>(.*?)<\/span>/i);
+                  if (spanMatch && spanMatch[1]) {
+                      date = spanMatch[1].trim();
+                  }
+                  
+                  // Cari <input type="hidden" id="customDate">
+                  const inputMatch = html.match(/<input[^>]+id=["']customDate["'][^>]+value=["']([^"']+)["']/i);
+                  if (inputMatch && inputMatch[1] && !date) {
+                      date = inputMatch[1].trim();
+                  }
+                  
+                  // Cari judul dari <title>
+                  const titleMatch = html.match(/<title>(.*?)<\/title>/i);
+                  if (titleMatch && titleMatch[1]) {
+                      title = titleMatch[1].trim();
+                  }
+                  
+                  // Cari gambar pertama (opsional)
+                  let imageUrl = "https://via.placeholder.com/300x400?text=No+Image";
+                  const imgMatch = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+                  if (imgMatch && imgMatch[1]) {
+                      imageUrl = imgMatch[1];
+                      // Pastikan URL gambar absolut
+                      if (imageUrl.startsWith('/')) {
+                          imageUrl = BASE_URL + imageUrl.slice(1);
+                      } else if (imageUrl.startsWith('./')) {
+                          imageUrl = BASE_URL + imageUrl.slice(2);
+                      } else if (!imageUrl.startsWith('http')) {
+                          imageUrl = BASE_URL + imageUrl;
+                      }
+                  }
+                  
+                  foundFiles.push({
+                      title: title,
+                      link: file.url,
+                      image: imageUrl,
+                      date: date,
+                      number: file.number
+                  });
+                  
+              } catch(e) {
+                  console.error(`Gagal membaca ${file.url}:`, e);
+              }
+          }
+          
+          // Sortir berdasarkan tanggal (terbaru di depan)
+          foundFiles.sort((a, b) => {
+              // Jika kedua file punya tanggal
+              if (a.date && b.date) {
+                  return new Date(b.date) - new Date(a.date);
+              }
+              // Jika hanya a yang punya tanggal
+              if (a.date) return -1;
+              // Jika hanya b yang punya tanggal
+              if (b.date) return 1;
+              // Jika tidak ada tanggal, urut berdasarkan nomor file (descending = terbaru)
+              return b.number - a.number;
+          });
+          
+          allPages = foundFiles;
+          statusDiv.innerHTML = `✅ Selesai! Ditemukan ${allPages.length} halaman.`;
+          
+          // Sembunyikan status setelah 3 detik
+          setTimeout(() => {
+              statusDiv.style.display = 'none';
+          }, 3000);
+          
+          // Render konten
+          if (allPages.length > 0) {
+              renderRecommended();
+              goToPage(1);
+          } else {
+              document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada file yang ditemukan</div>`;
+              document.getElementById('new-uploads-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada file yang ditemukan</div>`;
+          }
+          
+          isScanning = false;
+      }
+      
+      // ========= RENDER RECOMMENDED (5 ITEM RANDOM) =========
+      function renderRecommended() {
+          if (allPages.length === 0) return;
+          let shuffled = [...allPages];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          const selected = shuffled.slice(0, 5);
+          renderGridFromArray(selected, 'random-grid', 'PICK');
+      }
+      
+      // ========= PAGINATION UNTUK NEW UPLOADS =========
+      let currentPageNum = 1;
+      
+      function goToPage(page) {
+          if(isSearchMode || isScanning) return;
+          currentPageNum = page;
+          const start = (page - 1) * itemsPerPage;
+          const end = start + itemsPerPage;
+          const paginatedData = allPages.slice(start, end);
+          
+          renderGridFromArray(paginatedData, 'new-uploads-grid', 'NEW', start);
+          renderPaginationControls(page);
+          
+          if(page > 1) {
+              document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+          }
+      }
+      
+      function renderPaginationControls(currentPage) {
+          const container = document.getElementById('pagination');
+          container.innerHTML = "";
+          const totalPages = Math.ceil(allPages.length / itemsPerPage);
+          if (totalPages <= 1) return;
+          
+          container.appendChild(createPageBtn('<i class="fa-solid fa-angles-left"></i>', 1, currentPage === 1));
+          container.appendChild(createPageBtn('<i class="fa-solid fa-angle-left"></i>', currentPage - 1, currentPage === 1));
+          
+          let startPage = Math.max(1, currentPage - 2);
+          let endPage = Math.min(totalPages, currentPage + 2);
+          
+          if (startPage > 1) {
+              container.appendChild(createPageBtn("1", 1, false, currentPage === 1));
+              if (startPage > 2) {
+                  const dots = document.createElement('span');
+                  dots.className = "page-dots";
+                  dots.innerText = "...";
+                  container.appendChild(dots);
+              }
+          }
+          
+          for (let i = startPage; i <= endPage; i++) {
+              container.appendChild(createPageBtn(i.toString(), i, false, i === currentPage));
+          }
+          
+          if (endPage < totalPages) {
+              if (endPage < totalPages - 1) {
+                  const dots = document.createElement('span');
+                  dots.className = "page-dots";
+                  dots.innerText = "...";
+                  container.appendChild(dots);
+              }
+              container.appendChild(createPageBtn(totalPages.toString(), totalPages, false, currentPage === totalPages));
+          }
+          
+          container.appendChild(createPageBtn('<i class="fa-solid fa-angle-right"></i>', currentPage + 1, currentPage === totalPages));
+          container.appendChild(createPageBtn('<i class="fa-solid fa-angles-right"></i>', totalPages, currentPage === totalPages));
+      }
+      
+      function createPageBtn(text, targetPage, isDisabled, isActive = false) {
+          const btn = document.createElement('button');
+          btn.innerHTML = text;
+          btn.className = `page-num ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+          if (!isDisabled) {
+              btn.onclick = () => goToPage(targetPage);
+          }
+          return btn;
+      }
+      
+      // ========= RENDER GRID =========
+      function renderGridFromArray(data, gridId, type, startIndex = 0) {
+          const grid = document.getElementById(gridId);
+          if(!grid) return;
+          grid.innerHTML = "";
+          
+          if(!data || data.length === 0) {
+              grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada konten.</div>`;
+              return;
+          }
+          
+          data.forEach(function(item, index) {
+              let title = item.title || "Untitled";
+              let link = item.link || "#";
+              let imgUrl = item.image || "https://via.placeholder.com/300x400?text=No+Image";
+              let dateStr = item.date ? formatDate(item.date) : "";
+              
+              let badge = "";
+              if (type === 'NEW' && (startIndex + index) < 5) {
+                  badge = `<span class="badge badge-new">NEW</span>`;
+              } else if (type === 'PICK') {
+                  badge = `<span class="badge badge-pick">PICK</span>`;
+              }
+              
+              let dateBadge = dateStr ? `<span class="date-badge"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>` : "";
+              
+              grid.innerHTML += `
+                <div class="comic-item">
+                    ${badge}
+                    ${dateBadge}
+                    <a href="${link}"><div class="comic-thumb-container"><img src="${imgUrl}" class="comic-thumb" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400?text=Error'"></div></a>
+                    <a class="comic-title" href="${link}">${escapeHtml(title)}</a>
+                </div>`;
+          });
+      }
+      
+      function escapeHtml(str) {
+          return str.replace(/[&<>]/g, function(m) {
+              if (m === '&') return '&amp;';
+              if (m === '<') return '&lt;';
+              if (m === '>') return '&gt;';
+              return m;
+          });
+      }
+      
+      // ========= FUNGSI PENCARIAN =========
+      function performSearch(query) {
+          if(query === "" || isScanning) {
+              resetToHome();
+              return;
+          }
+          
+          isSearchMode = true;
+          currentSearchQuery = query;
+          
+          filteredPages = allPages.filter(item => {
+              const title = (item.title || "").toLowerCase();
+              return title.includes(query);
+          });
+          
+          if(filteredPages.length === 0) {
+              document.getElementById('new-uploads-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul "${query}"</div>`;
+              document.getElementById('pagination').innerHTML = "";
+              document.getElementById('random-grid').style.display = 'none';
+              document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
+              const newHeader = document.querySelector('#new-section .header-title');
+              if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (0)`;
+          } else {
+              document.getElementById('random-grid').style.display = 'none';
+              document.querySelector('#main-content .container-header:first-of-type').style.display = 'none';
+              const newHeader = document.querySelector('#new-section .header-title');
+              if(newHeader) newHeader.innerText = `Hasil Cari: ${query} (${filteredPages.length})`;
+              renderGridFromArray(filteredPages.slice(0, itemsPerPage), 'new-uploads-grid', 'NEW', 0);
+              renderPaginationForSearch(1);
+          }
+          
+          if(filteredPages.length > 0) {
+              document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
+          }
       }
       
       function renderPaginationForSearch(currentPage) {
           const container = document.getElementById('pagination');
           container.innerHTML = "";
-          const totalPages = Math.ceil(filteredEntries.length / itemsPerPage);
+          const totalPages = Math.ceil(filteredPages.length / itemsPerPage);
           if (totalPages <= 1) return;
           
           container.appendChild(createPageBtnSearch('<i class="fa-solid fa-angles-left"></i>', 1, currentPage === 1));
@@ -575,8 +751,8 @@
           if (!isDisabled) {
               btn.onclick = () => {
                   const start = (targetPage - 1) * itemsPerPage;
-                  const paginated = filteredEntries.slice(start, start + itemsPerPage);
-                  renderGrid(paginated, 'new-uploads-grid', 'NEW', start);
+                  const paginated = filteredPages.slice(start, start + itemsPerPage);
+                  renderGridFromArray(paginated, 'new-uploads-grid', 'NEW', start);
                   renderPaginationForSearch(targetPage);
                   document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
               };
@@ -584,168 +760,122 @@
           return btn;
       }
       
+      function resetToHome() {
+          if(isScanning) return;
+          isSearchMode = false;
+          currentSearchQuery = "";
+          
+          const searchInputDesktop = document.getElementById('searchInputDesktop');
+          const searchInputMobile = document.getElementById('searchInputMobile');
+          if(searchInputDesktop) searchInputDesktop.value = "";
+          if(searchInputMobile) searchInputMobile.value = "";
+          
+          document.getElementById('random-grid').style.display = 'grid';
+          document.querySelector('#main-content .container-header:first-of-type').style.display = 'flex';
+          const newHeader = document.querySelector('#new-section .header-title');
+          if(newHeader) newHeader.innerText = "New Uploads";
+          
+          renderRecommended();
+          goToPage(1);
+      }
+      
       function scrollToNewUploads() {
+          if(isScanning) return;
           if(isSearchMode) {
               resetToHome();
           }
-          if(window.currentPageNum !== 1) goToPage(1);
+          if(currentPageNum !== 1) goToPage(1);
           else document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
       }
-
-      function showContent() {
-          loadFeeds();
-          applyMainHeaderLink();
-      }
-
-      function applyMainHeaderLink() {
-          var mainHeader = document.querySelectorAll('.Header h1, .Header a, .titlewrapper h1, .header-inner h1');
-          mainHeader.forEach(function(header) {
-              header.onclick = function() { window.location.href = targetUrl; };
-              header.style.cursor = "pointer";
-              var originalText = header.innerText;
-              header.innerHTML = `<a href="${targetUrl}" style="color:inherit; text-decoration:none;">${originalText}</a>`;
+      
+      // ========= EVENT LISTENER =========
+      document.addEventListener("DOMContentLoaded", function() {
+          // Mulai scan file di root
+          scanAllFiles();
+          
+          // DESKTOP SEARCH
+          const searchBtnDesktop = document.getElementById('searchBtnDesktop');
+          const searchInputDesktop = document.getElementById('searchInputDesktop');
+          
+          // MOBILE SEARCH
+          const searchIconMobile = document.getElementById('searchIconMobile');
+          const mobileOverlay = document.getElementById('mobileSearchOverlay');
+          const closeSearchBtn = document.getElementById('closeSearchBtn');
+          const searchBtnMobile = document.getElementById('searchBtnMobile');
+          const searchInputMobile = document.getElementById('searchInputMobile');
+          
+          if(searchBtnDesktop) {
+              searchBtnDesktop.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  performSearch(searchInputDesktop.value.trim().toLowerCase());
+              });
+          }
+          if(searchInputDesktop) {
+              searchInputDesktop.addEventListener('keypress', function(e) {
+                  if(e.key === 'Enter') {
+                      e.preventDefault();
+                      performSearch(searchInputDesktop.value.trim().toLowerCase());
+                  }
+              });
+          }
+          
+          if(searchIconMobile) {
+              searchIconMobile.addEventListener('click', function() {
+                  mobileOverlay.style.display = 'block';
+                  setTimeout(() => searchInputMobile.focus(), 100);
+              });
+          }
+          
+          if(closeSearchBtn) {
+              closeSearchBtn.addEventListener('click', function() {
+                  mobileOverlay.style.display = 'none';
+                  searchInputMobile.value = '';
+              });
+          }
+          
+          if(searchBtnMobile) {
+              searchBtnMobile.addEventListener('click', function() {
+                  const query = searchInputMobile.value.trim().toLowerCase();
+                  mobileOverlay.style.display = 'none';
+                  performSearch(query);
+                  if(searchInputDesktop) searchInputDesktop.value = query;
+              });
+          }
+          
+          if(searchInputMobile) {
+              searchInputMobile.addEventListener('keypress', function(e) {
+                  if(e.key === 'Enter') {
+                      e.preventDefault();
+                      const query = searchInputMobile.value.trim().toLowerCase();
+                      mobileOverlay.style.display = 'none';
+                      performSearch(query);
+                      if(searchInputDesktop) searchInputDesktop.value = query;
+                  }
+              });
+          }
+          
+          // Navigasi header
+          document.getElementById('navHome').addEventListener('click', function(e) {
+              e.preventDefault();
+              resetToHome();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
           });
-      }
-
-      function loadFeeds() {
-          appendScript(`${blogUrl}/feeds/posts/default?alt=json-in-script&max-results=150&callback=processData`);
-      }
-
-      function appendScript(src) {
-          var script = document.createElement('script');
-          script.src = src;
-          document.body.appendChild(script);
-      }
-
-      function getFirstImg(entry) {
-          var content = (entry.content ? entry.content.$t : "") + (entry.summary ? entry.summary.$t : "");
-          var imgRegex = /(https?:\/\/[^\s<"']+?\.(?:jpg|jpeg|gif|png|webp|bmp))/gi;
-          let match;
-          let foundImg = "";
-          while ((match = imgRegex.exec(content)) !== null) {
-              let currentImg = match[0].replace(/&amp;/g, "&");
-              if (currentImg !== warningImg) {
-                  foundImg = currentImg;
-                  break;
-              }
-          }
-          if (foundImg) return foundImg;
-          if (entry.media$thumbnail) return entry.media$thumbnail.url.replace(/\/s[72]-c\//, "/s1600/");
-          return "https://via.placeholder.com/300x400?text=No+Image";
-      }
-
-      window.processData = function(json) {
-          if(!json.feed.entry) return;
-          allEntries = json.feed.entry.filter(e => {
-              const title = e.title.$t.toLowerCase().trim();
-              const link = e.link.find(l => l.rel === 'alternate').href.toLowerCase();
-              return !(title === "home" || title === "search" || link.includes("home.html") || link.includes("search.html"));
+          document.getElementById('navNew').addEventListener('click', function(e) {
+              e.preventDefault();
+              scrollToNewUploads();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
           });
-          renderRecommended(allEntries);
-          goToPage(1);
-      };
-
-      window.currentPageNum = 1;
-      function goToPage(page) {
-          if(isSearchMode) return;
-          window.currentPageNum = page;
-          const start = (page - 1) * itemsPerPage;
-          const end = start + itemsPerPage;
-          const paginatedData = allEntries.slice(start, end);
-
-          renderGrid(paginatedData, 'new-uploads-grid', 'NEW', start);
-          renderPaginationControls(page);
-
-          if(page > 1) {
-             document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
-          }
-      }
-
-      function renderPaginationControls(currentPage) {
-          const container = document.getElementById('pagination');
-          container.innerHTML = "";
-          const totalPages = Math.ceil(allEntries.length / itemsPerPage);
-          if (totalPages <= 1) return;
-
-          container.appendChild(createPageBtn('<i class="fa-solid fa-angles-left"></i>', 1, currentPage === 1));
-          container.appendChild(createPageBtn('<i class="fa-solid fa-angle-left"></i>', currentPage - 1, currentPage === 1));
-
-          let startPage = Math.max(1, currentPage - 2);
-          let endPage = Math.min(totalPages, currentPage + 2);
-
-          if (startPage > 1) {
-              container.appendChild(createPageBtn("1", 1, false, currentPage === 1));
-              if (startPage > 2) {
-                  const dots = document.createElement('span');
-                  dots.className = "page-dots";
-                  dots.innerText = "...";
-                  container.appendChild(dots);
-              }
-          }
-
-          for (let i = startPage; i <= endPage; i++) {
-              container.appendChild(createPageBtn(i.toString(), i, false, i === currentPage));
-          }
-
-          if (endPage < totalPages) {
-              if (endPage < totalPages - 1) {
-                  const dots = document.createElement('span');
-                  dots.className = "page-dots";
-                  dots.innerText = "...";
-                  container.appendChild(dots);
-              }
-              container.appendChild(createPageBtn(totalPages.toString(), totalPages, false, currentPage === totalPages));
-          }
-
-          container.appendChild(createPageBtn('<i class="fa-solid fa-angle-right"></i>', currentPage + 1, currentPage === totalPages));
-          container.appendChild(createPageBtn('<i class="fa-solid fa-angles-right"></i>', totalPages, currentPage === totalPages));
-      }
-
-      function createPageBtn(text, targetPage, isDisabled, isActive = false) {
-          const btn = document.createElement('button');
-          btn.innerHTML = text;
-          btn.className = `page-num ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
-          if (!isDisabled) {
-              btn.onclick = () => goToPage(targetPage);
-          }
-          return btn;
-      }
-
-      function renderRecommended(entries) {
-          const now = new Date().getTime();
-          const savedTime = localStorage.getItem('block_timer');
-          let savedData = JSON.parse(localStorage.getItem('block_data'));
-          if (!savedTime || (now - savedTime > 86400000) || !savedData) {
-              const pool = entries.length > 10 ? entries.slice(5) : entries;
-              savedData = pool.sort(() => 0.5 - Math.random()).slice(0, 5);
-              localStorage.setItem('block_data', JSON.stringify(savedData));
-              localStorage.setItem('block_timer', now);
-          }
-          renderGrid(savedData, 'random-grid', 'PICK', 0);
-      }
-
-      function renderGrid(data, gridId, type, startIndex) {
-          const grid = document.getElementById(gridId);
-          if(!grid) return;
-          grid.innerHTML = "";
-          data.forEach(function(entry, index) {
-              var title = entry.title.$t;
-              var link = entry.link.find(l => l.rel === 'alternate').href;
-              var imgUrl = getFirstImg(entry);
-              var badge = "";
-              if (type === 'NEW' && (startIndex + index) < 5) {
-                  badge = `<span class="badge badge-new">NEW</span>`;
-              } else if (type === 'PICK') {
-                  badge = `<span class="badge badge-pick">PICK</span>`;
-              }
-              grid.innerHTML += `
-                <div class="comic-item">
-                    ${badge}
-                    <a href="${link}"><div class="comic-thumb-container"><img src="${imgUrl}" class="comic-thumb" loading="lazy"></div></a>
-                    <a class="comic-title" href="${link}">${title}</a>
-                </div>`;
+          document.getElementById('navRecommended').addEventListener('click', function(e) {
+              e.preventDefault();
+              document.getElementById('random-grid').scrollIntoView({ behavior: 'smooth' });
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
           });
-      }
+          
+          document.getElementById('logoClick').addEventListener('click', function() {
+              resetToHome();
+              if(mobileOverlay) mobileOverlay.style.display = 'none';
+          });
+      });
     </script>
   </body>
 </html>
