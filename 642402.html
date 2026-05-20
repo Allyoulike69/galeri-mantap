@@ -46,11 +46,13 @@
           padding: 15px 20px;
       }
       
+      /* LOGO AREA - SELALU DI KIRI */
       .logo-area {
           display: flex;
           align-items: center;
           gap: 12px;
           cursor: pointer;
+          flex-shrink: 0;
       }
       .logo-icon {
           font-size: 36px;
@@ -71,6 +73,7 @@
           letter-spacing: 1px;
       }
       
+      /* NAV MENU */
       .nav-menu {
           display: flex;
           gap: 25px;
@@ -97,21 +100,11 @@
       .nav-menu a:hover {
           color: #ffa74e;
       }
-      .nav-menu .active-nav {
-          color: #ffa74e;
-          border-bottom: 2px solid #ffa74e;
-      }
       
-      .search-icon-mobile {
-          display: none;
-          background: none;
-          border: none;
-          color: #ffa74e;
-          font-size: 22px;
-          cursor: pointer;
-          padding: 8px;
+      /* SEARCH DESKTOP - DI KANAN */
+      .desktop-search-wrapper {
+          display: block;
       }
-      
       .search-panel-desktop {
           display: flex;
           align-items: center;
@@ -146,6 +139,19 @@
           padding: 0 5px;
       }
       
+      /* SEARCH ICON MOBILE/TABLET - DI KANAN UJUNG */
+      .search-icon-mobile {
+          display: none;
+          background: none;
+          border: none;
+          color: #ffa74e;
+          font-size: 22px;
+          cursor: pointer;
+          padding: 8px;
+          flex-shrink: 0;
+      }
+      
+      /* MOBILE SEARCH OVERLAY */
       .mobile-search-overlay {
           display: none;
           position: fixed;
@@ -188,7 +194,6 @@
           cursor: pointer;
           font-size: 20px;
           padding: 8px;
-          order: 1;
       }
       .mobile-search-container .search-icon-btn {
           background: none;
@@ -197,43 +202,26 @@
           cursor: pointer;
           font-size: 18px;
           padding: 8px;
-          order: 2;
       }
       
+      /* ========= RESPONSIVE HEADER ========= */
       @media (min-width: 769px) {
-          .search-icon-mobile {
-              display: none !important;
-          }
-          .desktop-search-wrapper {
-              display: block;
-          }
+          .search-icon-mobile { display: none !important; }
+          .desktop-search-wrapper { display: block !important; }
       }
       
       @media (max-width: 768px) {
-          .desktop-search-wrapper {
-              display: none;
-          }
-          .search-icon-mobile {
-              display: block;
-          }
+          .desktop-search-wrapper { display: none !important; }
+          .search-icon-mobile { display: block !important; }
       }
       
       @media (max-width: 600px) {
-          .nav-menu {
-              gap: 15px;
-          }
-          .nav-menu a {
-              font-size: 12px;
-          }
-          .nav-menu a i {
-              font-size: 14px;
-          }
-          .logo-text {
-              font-size: 18px;
-          }
-          .logo-icon {
-              font-size: 28px;
-          }
+          .nav-menu { gap: 15px; }
+          .nav-menu a { font-size: 12px; }
+          .nav-menu a i { font-size: 14px; }
+          .logo-text { font-size: 18px; }
+          .logo-icon { font-size: 28px; }
+          .logo-sub { font-size: 8px; }
       }
 
     /* ========= SLIDER STYLE ========= */
@@ -507,9 +495,10 @@
 </head>
 <body>
 
-  <!-- ========= HEADER ========= -->
+  <!-- ========= HEADER (DIPERBAIKI) ========= -->
   <div class="main-header">
       <div class="top-bar">
+          <!-- LOGO AREA - SELALU DI KIRI -->
           <div class="logo-area" id="logoClick">
               <i class="fa-solid fa-book-open logo-icon"></i>
               <div>
@@ -518,10 +507,12 @@
               </div>
           </div>
           
+          <!-- SEARCH ICON - muncul di tablet & HP (DI KANAN UJUNG) -->
           <button class="search-icon-mobile" id="searchIconMobile">
               <i class="fa-solid fa-magnifying-glass"></i>
           </button>
           
+          <!-- SEARCH DESKTOP - hanya untuk desktop (DI KANAN) -->
           <div class="desktop-search-wrapper">
               <div class="search-panel-desktop">
                   <input type="text" id="searchInputDesktop" placeholder="Cari manga, komik, judul..." autocomplete="off">
@@ -530,7 +521,7 @@
           </div>
       </div>
       
-      <!-- MENU NAVIGASI - TANPA active-nav DI AWAL -->
+      <!-- MENU NAVIGASI -->
       <div class="nav-menu">
           <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Beranda</a>
           <a href="#" id="navNew"><i class="fa-solid fa-fire"></i> New Uploads</a>
@@ -542,8 +533,8 @@
   <div class="mobile-search-overlay" id="mobileSearchOverlay">
       <div class="mobile-search-container">
           <input type="text" id="searchInputMobile" placeholder="Cari manga, komik, judul..." autocomplete="off">
-          <button class="close-search-btn" id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
           <button class="search-icon-btn" id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button class="close-search-btn" id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
       </div>
   </div>
 
@@ -655,12 +646,10 @@
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
     
-    let allPages = [];           // Semua data dari daftar.json
-    let filteredPages = [];      // Hasil pencarian
+    let allPages = [];
+    let filteredPages = [];
     let isSearchMode = false;
     let currentSearchQuery = "";
-    let currentPageNum = 1;
-    const itemsPerPage = 25;
     
     // Variabel untuk slider
     let currentPos = 0, popCurrentPos = 0;
@@ -714,47 +703,41 @@
         }
     }
     
-    // ========= RENDER NEW UPDATE SLIDER (semua item, urut terbaru) =========
+    // ========= RENDER NEW UPDATE SLIDER =========
     function renderNewUpdateSlider() {
         const container = document.getElementById('pop-inner-slider');
         container.innerHTML = "";
         
         if (!allPages.length) return;
         
-        // Tampilkan semua item (atau batasi 20 untuk performa slider)
         const itemsToShow = allPages.slice(0, 20);
         
-        itemsToShow.forEach((item, index) => {
+        itemsToShow.forEach((item) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
             let title = item.title || "Untitled";
-            let dateStr = formatDate(item.date);
-            let dateBadge = dateStr ? `<span style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.7); color:#ffa74e; font-size:9px; padding:2px 5px; border-radius:3px;"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>` : "";
             
             container.innerHTML += `
                 <div class="pop-slide-item">
                     <div class="pop-view-badge"><i class="fa-regular fa-clock"></i> NEW</div>
-                    ${dateBadge}
                     <a href="${link}"><img src="${imgUrl}" onerror="this.src='https://placehold.co/400x600?text=Error'" loading="lazy"></a>
                     <a class="pop-slide-title" href="${link}">${escapeHtml(title)}</a>
                 </div>
             `;
         });
         
-        // Reset posisi slider
         popCurrentPos = 0;
         const inner = document.getElementById('pop-inner-slider');
         if(inner) inner.style.transform = 'translateX(0px)';
     }
     
-    // ========= RENDER RECOMMENDED SLIDER (5 item random) =========
+    // ========= RENDER RECOMMENDED SLIDER =========
     function renderRecommendedSlider() {
         const container = document.getElementById('random-slider-inner');
         container.innerHTML = "";
         
         if (!allPages.length) return;
         
-        // Acak dan ambil 5 item
         let shuffled = [...allPages];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -775,7 +758,6 @@
             `;
         });
         
-        // Reset posisi slider
         currentPos = 0;
         const inner = document.getElementById('random-slider-inner');
         if(inner) inner.style.transform = 'translateX(0px)';
@@ -821,12 +803,10 @@
             return title.includes(query.toLowerCase());
         });
         
-        // Sembunyikan slider
         document.getElementById('new-update-section').style.display = 'none';
         document.getElementById('recommended-section').style.display = 'none';
         document.getElementById('comic-gallery').style.display = 'none';
         
-        // Tampilkan hasil pencarian
         const searchContainer = document.createElement('div');
         searchContainer.id = 'search-results';
         searchContainer.className = 'comic-grid';
@@ -842,13 +822,10 @@
                 let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
                 let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
                 let title = item.title || "Untitled";
-                let dateStr = formatDate(item.date);
-                let dateBadge = dateStr ? `<span class="date-badge" style="position:absolute; bottom:5px; right:5px; background:rgba(0,0,0,0.7); color:#ffa74e; font-size:9px; padding:2px 5px; border-radius:3px;"><i class="fa-regular fa-calendar"></i> ${dateStr}</span>` : "";
                 
                 searchContainer.innerHTML += `
                     <div class="comic-item">
-                        <span class="badge badge-new" style="top:5px; left:5px; background:#b80006;">NEW</span>
-                        ${dateBadge}
+                        <span class="badge badge-new" style="position:absolute; top:5px; left:5px; background:#b80006; color:white; padding:3px 6px; font-size:10px; border-radius:4px;">NEW</span>
                         <a href="${link}"><div class="comic-thumb-container"><img src="${imgUrl}" class="comic-thumb" loading="lazy" onerror="this.src='https://placehold.co/400x600?text=Error'"></div></a>
                         <a class="comic-title" href="${link}">${escapeHtml(title)}</a>
                     </div>
@@ -857,26 +834,22 @@
         }
         
         document.getElementById('main-content').appendChild(searchContainer);
-        document.getElementById('new-section')?.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('new-update-section')?.scrollIntoView({ behavior: 'smooth' });
     }
     
     function resetToHome() {
         isSearchMode = false;
         currentSearchQuery = "";
         
-        // Tampilkan kembali slider
         document.getElementById('new-update-section').style.display = 'block';
         document.getElementById('recommended-section').style.display = 'block';
         document.getElementById('comic-gallery').style.display = 'flex';
         
-        // Hapus hasil pencarian
         const oldSearch = document.getElementById('search-results');
         if (oldSearch) oldSearch.remove();
         
-        // Refresh slider (Recommended di-random ulang)
         renderRecommendedSlider();
         
-        // Reset posisi slider
         currentPos = 0;
         popCurrentPos = 0;
         const randomInner = document.getElementById('random-slider-inner');
@@ -885,7 +858,7 @@
         if(popInner) popInner.style.transform = 'translateX(0px)';
     }
     
-    // ========= MANGA READER (dari raw-links) =========
+    // ========= MANGA READER =========
     let currentImages = [];
     let currentIndex = 0;
     let zoomLevel = 1.0;
@@ -962,6 +935,7 @@
     });
     
     function escapeHtml(str) {
+        if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
@@ -972,10 +946,7 @@
     
     // ========= EVENT LISTENER =========
     document.addEventListener("DOMContentLoaded", function() {
-        // Load data dari daftar.json
         loadData();
-        
-        // Init gallery manga reader
         initGallery();
         
         // DESKTOP SEARCH
