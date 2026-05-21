@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -120,7 +120,7 @@
         }
         .mobile-search-container button:hover { color: #ffa74e; transform: scale(1.05); }
         
-        /* NAV MENU */
+        /* NAV MENU - BAHASA INGGRIS */
         .nav-menu { display: flex; gap: 25px; justify-content: center; padding: 15px 0 5px; flex-wrap: wrap; }
         .nav-menu a { color: #ddd; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
         .nav-menu a:hover { color: #ffa74e; }
@@ -181,15 +181,17 @@
             .logo-icon { width: 40px; height: 40px; }
             .logo-text { font-size: 20px; }
             .mobile-search-container { width: 95% !important; max-width: 95% !important; }
+            .nav-menu { gap: 15px; }
+            .nav-menu a { font-size: 12px; }
         }
         
         @media (max-width: 480px) {
             .logo-text { font-size: 18px; }
             .logo-sub { font-size: 8px; }
             .logo-icon { width: 36px; height: 36px; }
-            .nav-menu { gap: 12px; }
-            .nav-menu a { font-size: 12px; }
-            .nav-menu a i { font-size: 14px; }
+            .nav-menu { gap: 10px; }
+            .nav-menu a { font-size: 11px; }
+            .nav-menu a i { font-size: 12px; }
             .mobile-search-container { width: 95% !important; max-width: 95% !important; }
         }
     </style>
@@ -198,7 +200,7 @@
 
 <div class="main-header">
     <div class="top-bar">
-        <!-- LOGO AREA DENGAN GAMBAR ICON -->
+        <!-- LOGO AREA -->
         <div class="logo-area" id="logoClick">
             <img src="https://i.ibb.co.com/11BD9mL/38ce5f186788fbab817dc04d9ccc14e4.jpg" 
                  alt="Allyoulike Comic Logo" 
@@ -218,24 +220,24 @@
         <!-- SEARCH DESKTOP - hanya untuk desktop -->
         <div class="desktop-search-wrapper">
             <div class="search-panel-desktop">
-                <input type="text" id="searchInputDesktop" placeholder="Cari komik, manga, judul...">
+                <input type="text" id="searchInputDesktop" placeholder="Search comics, manga, title...">
                 <button id="searchBtnDesktop"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div>
     </div>
     
-    <!-- MENU NAVIGASI -->
+    <!-- MENU NAVIGASI - BAHASA INGGRIS -->
     <div class="nav-menu">
-        <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Beranda</a>
-        <a href="#" id="navNew"><i class="fa-solid fa-fire"></i> New Uploads</a>
-        <a href="#" id="navRecommended"><i class="fa-solid fa-star"></i> Rekomendasi</a>
+        <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#" id="navRandom"><i class="fa-solid fa-shuffle"></i> Random</a>
+        <a href="#" id="navVideo"><i class="fa-solid fa-video"></i> Video</a>
     </div>
 </div>
 
 <!-- MOBILE SEARCH OVERLAY -->
 <div class="mobile-search-overlay" id="mobileSearchOverlay">
     <div class="mobile-search-container">
-        <input type="text" id="searchInputMobile" placeholder="Cari komik, manga, judul..." autocomplete="off">
+        <input type="text" id="searchInputMobile" placeholder="Search comics, manga, title..." autocomplete="off">
         <button id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
     </div>
@@ -253,6 +255,7 @@
         <h1 class="header-title" id="new-uploads-title">New Uploads</h1>
     </header>
     <div id="new-uploads-grid" class="comic-grid"></div>
+    
     <div id="pagination" class="pagination-container"></div>
 </div>
 
@@ -261,14 +264,50 @@
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
     
+    // ========= KONFIGURASI URL VIDEO =========
+    const VIDEO_URL = "https://www.youtube.com";  // Change this to your video website URL
+    
     let allPages = [], filteredPages = [];
     let isSearchMode = false, currentPageNum = 1;
     const itemsPerPage = 25;
+    
+    function showRandomComic() {
+        if (allPages.length === 0) return;
+        const randomIndex = Math.floor(Math.random() * allPages.length);
+        const randomItem = allPages[randomIndex];
+        const link = randomItem.link.startsWith('http') ? randomItem.link : BASE_URL + randomItem.link;
+        window.location.href = link;
+    }
+    
+    function openVideoSite() {
+        window.open(VIDEO_URL, '_blank');
+    }
+    
+    function resetToHome() {
+        isSearchMode = false;
+        filteredPages = [];
+        
+        document.getElementById('recommended-header').style.display = 'flex';
+        document.getElementById('random-grid').style.display = 'grid';
+        document.getElementById('new-uploads-title').innerText = "New Uploads";
+        document.getElementById('pagination').style.display = 'flex';
+        
+        let shuffled = [...allPages];
+        for (let i = shuffled.length - 1; i > 0; i--) { 
+            const j = Math.floor(Math.random() * (i + 1)); 
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; 
+        }
+        renderGrid(shuffled.slice(0, 5), 'random-grid', false);
+        goToPage(1);
+        
+        const oldSearch = document.getElementById('search-results');
+        if (oldSearch) oldSearch.remove();
+    }
 
     async function loadData() {
         try {
-            document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Memuat data...</div>';
-            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Memuat data...</div>';
+            document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Loading data...</div>';
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Loading data...</div>';
             
             const response = await fetch(DATA_URL);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -283,12 +322,11 @@
             });
             
             if (allPages.length === 0) {
-                document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data</div>';
-                document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data</div>';
+                document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No data available</div>';
+                document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No data available</div>';
                 return;
             }
             
-            // Recommended (5 random) - TANPA BADGE
             let shuffled = [...allPages];
             for (let i = shuffled.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -298,8 +336,8 @@
             goToPage(1);
             
         } catch (err) {
-            document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#ff8888;">❌ Gagal: ${err.message}<br>${DATA_URL}</div>`;
-            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Gagal memuat data.</div>';
+            document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#ff8888;">❌ Failed: ${err.message}<br>${DATA_URL}</div>`;
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Failed to load data.</div>';
         }
     }
 
@@ -309,7 +347,7 @@
         grid.innerHTML = "";
         
         if (!data || data.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Tidak ada konten.</div>';
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No content available.</div>';
             return;
         }
         
@@ -319,11 +357,9 @@
             let title = item.title || "Untitled";
             let badge = '';
             
-            // HANYA New Uploads yang menampilkan badge NEW untuk 5 item teratas
             if (isNewUploads && idx < 5) {
                 badge = '<span class="badge badge-new">NEW</span>';
             }
-            // Recommended TANPA BADGE
             
             grid.innerHTML += `
                 <div class="comic-item">
@@ -380,34 +416,16 @@
         
         document.getElementById('recommended-header').style.display = 'none';
         document.getElementById('random-grid').style.display = 'none';
-        document.getElementById('new-uploads-title').innerText = `Hasil Cari: ${query} (${filteredPages.length})`;
+        document.getElementById('new-uploads-title').innerText = `Search Results: ${query} (${filteredPages.length})`;
         document.getElementById('pagination').style.display = 'none';
         
         if(filteredPages.length === 0) {
-            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul tersebut</div>';
+            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 No comics found with that title</div>';
         } else {
             renderGrid(filteredPages, 'new-uploads-grid', true);
         }
         
         document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    function resetToHome() {
-        isSearchMode = false;
-        filteredPages = [];
-        
-        document.getElementById('recommended-header').style.display = 'flex';
-        document.getElementById('random-grid').style.display = 'grid';
-        document.getElementById('new-uploads-title').innerText = "New Uploads";
-        document.getElementById('pagination').style.display = 'flex';
-        
-        let shuffled = [...allPages];
-        for (let i = shuffled.length - 1; i > 0; i--) { 
-            const j = Math.floor(Math.random() * (i + 1)); 
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; 
-        }
-        renderGrid(shuffled.slice(0, 5), 'random-grid', false);
-        goToPage(1);
     }
 
     function escapeHtml(str) { 
@@ -474,13 +492,30 @@
             };
         }
         
-        // NAVIGASI
-        document.getElementById('navHome').onclick = (e) => { e.preventDefault(); resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-        document.getElementById('navNew').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' }); };
-        document.getElementById('navRecommended').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('recommended-header').scrollIntoView({ behavior: 'smooth' }); };
-        document.getElementById('logoClick').onclick = () => { resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+        // NAVIGATION MENU (ENGLISH)
+        document.getElementById('navHome').onclick = (e) => { 
+            e.preventDefault(); 
+            resetToHome(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        };
         
-        // TUTUP OVERLAY JIKA KLIK DI LUAR
+        document.getElementById('navRandom').onclick = (e) => { 
+            e.preventDefault(); 
+            if (allPages.length > 0) {
+                showRandomComic();
+            }
+        };
+        
+        document.getElementById('navVideo').onclick = (e) => { 
+            e.preventDefault(); 
+            openVideoSite();
+        };
+        
+        document.getElementById('logoClick').onclick = () => { 
+            resetToHome(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        };
+        
         if(mobileOverlay) {
             mobileOverlay.addEventListener('click', function(e) {
                 if(e.target === mobileOverlay) {
