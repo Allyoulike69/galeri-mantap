@@ -6,570 +6,65 @@
   <title>Allyoulike Comic - Gallery Comic Center</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-     /* --- CSS BASE --- */
-      body { background: #111; color: #fff; margin: 0; padding: 10px; font-family: 'Segoe UI', 'Poppins', sans-serif; overflow: auto; }
-      body.item-view .PopularPosts {display: none;}
-
-      .post-snippet .snippet-item {
-          line-height: 0px;
-          color: #f7f7f700;
-      }
-
-      .blog-name h1, .blog-name h1 a {
-          color: #ffffff;
-          font: italic 800 20px 'Segoe UI', sans-serif;
-      }
-
-      body.item-view .Blog .post-title, body.item-view .Blog .post-title a {
-          color: #fffdfd;
-      }
-
-      body.item-view .Blog .post-title-container {
-        padding-bottom: 10px;
-        padding-top: 10px;
-      }
-
-      /* ========= HEADER STYLE ========= */
-      .main-header {
-          background: #0a0a0a;
-          border-bottom: 3px solid #ffa74e;
-          margin-bottom: 20px;
-          border-radius: 0 0 12px 12px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-          position: relative;
-      }
-      
-      .top-bar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 15px 20px;
-      }
-      
-      /* LOGO AREA - DENGAN GAMBAR ICON */
-      .logo-area {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          cursor: pointer;
-          flex-shrink: 0;
-      }
-      .logo-icon {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 2px solid #ffa74e;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-      }
-      .logo-icon:hover {
-          transform: scale(1.05);
-          border-color: #ff5e7c;
-      }
-      .logo-text-container {
-          display: flex;
-          flex-direction: column;
-      }
-      .logo-text {
-          font-size: 24px;
-          font-weight: 800;
-          letter-spacing: 1px;
-          background: linear-gradient(135deg, #ffa74e, #ff5e7c, #ffa74e);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-          animation: gradient 3s ease infinite;
-      }
-      @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-      }
-      .logo-sub {
-          font-size: 11px;
-          color: #aaa;
-          letter-spacing: 0.5px;
-          margin-top: 2px;
-      }
-      .logo-sub i {
-          font-size: 10px;
-          margin-right: 4px;
-          color: #ffa74e;
-      }
-      
-      /* NAV MENU - 3 MENU: HOME, RANDOM, VIDEO */
-      .nav-menu {
-          display: flex;
-          gap: 25px;
-          align-items: center;
-          justify-content: center;
-          padding: 12px 20px;
-          border-top: 1px solid #222;
-          flex-wrap: wrap;
-      }
-      .nav-menu a {
-          color: #ddd;
-          text-decoration: none;
-          font-weight: 600;
-          font-size: 14px;
-          transition: 0.2s;
-          padding: 5px 0;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-      }
-      .nav-menu a i {
-          font-size: 16px;
-      }
-      .nav-menu a:hover {
-          color: #ffa74e;
-      }
-      
-      .search-icon-mobile {
-          display: none;
-          background: none;
-          border: none;
-          color: #ffa74e;
-          font-size: 22px;
-          cursor: pointer;
-          padding: 8px;
-          flex-shrink: 0;
-      }
-      
-      .search-panel-desktop {
-          display: flex;
-          align-items: center;
-          background: #222;
-          border-radius: 40px;
-          padding: 5px 15px;
-          border: 1px solid #444;
-      }
-      .search-panel-desktop input {
-          background: transparent;
-          border: none;
-          padding: 10px 8px;
-          color: white;
-          font-size: 14px;
-          width: 220px;
-          outline: none;
-      }
-      .search-panel-desktop input::placeholder {
-          color: #888;
-      }
-      .search-panel-desktop button {
-          background: none;
-          border: none;
-          color: #ffa74e;
-          cursor: pointer;
-          font-size: 16px;
-          padding: 0 5px;
-      }
-      
-      /* ========= SEARCH OVERLAY ========= */
-      .mobile-search-overlay {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          background: #0a0a0a;
-          padding: 15px 20px;
-          z-index: 9999;
-          border-bottom: 2px solid #ffa74e;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-          box-sizing: border-box;
-      }
-      .mobile-search-container {
-          display: flex;
-          align-items: center;
-          background: #222;
-          border-radius: 40px;
-          padding: 5px 15px;
-          border: 1px solid #444;
-          width: 100%;
-          max-width: 600px;
-          margin: 0 auto;
-      }
-      .mobile-search-container:focus-within {
-          border-color: #ffa74e;
-      }
-      .mobile-search-container input {
-          flex: 1;
-          background: transparent;
-          border: none;
-          padding: 12px 8px;
-          color: white;
-          font-size: 16px;
-          outline: none;
-      }
-      .mobile-search-container input::placeholder {
-          color: #888;
-      }
-      .mobile-search-container .close-search-btn {
-          background: none;
-          border: none;
-          color: #ffa74e;
-          cursor: pointer;
-          font-size: 20px;
-          padding: 8px;
-          order: 1;
-      }
-      .mobile-search-container .search-icon-btn {
-          background: none;
-          border: none;
-          color: #ffa74e;
-          cursor: pointer;
-          font-size: 18px;
-          padding: 8px;
-          order: 2;
-      }
-      
-      /* RESPONSIVE */
-      @media (max-width: 768px) {
-          .mobile-search-container {
-              width: 95% !important;
-              max-width: 95% !important;
-          }
-      }
-      
-      @media (max-width: 480px) {
-          .mobile-search-container {
-              width: 95% !important;
-              max-width: 95% !important;
-          }
-      }
-      
-      @media (min-width: 769px) {
-          .search-icon-mobile { display: none !important; }
-          .desktop-search-wrapper { display: block !important; }
-      }
-      
-      @media (max-width: 768px) {
-          .desktop-search-wrapper { display: none !important; }
-          .search-icon-mobile { display: block !important; }
-          .logo-icon { width: 40px; height: 40px; }
-          .logo-text { font-size: 20px; }
-          .logo-sub { font-size: 9px; }
-      }
-      
-      @media (max-width: 600px) {
-          .nav-menu { gap: 15px; }
-          .nav-menu a { font-size: 12px; }
-          .nav-menu a i { font-size: 14px; }
-          .logo-icon { width: 36px; height: 36px; }
-          .logo-text { font-size: 18px; }
-          .logo-sub { font-size: 8px; }
-          .mobile-search-container { padding: 5px 12px; }
-          .mobile-search-container input { padding: 10px 5px; font-size: 14px; }
-      }
-
-    /* ========= SLIDER STYLE ========= */
-    .main-column-container { 
-        position: relative; 
-        border: 2px solid #333; 
-        border-radius: 12px; 
-        padding: 15px; 
-        margin-bottom: 20px; 
-        background: #1a1a1a; 
-        color: #fff; 
-    }
-    .column-header { 
-        margin-bottom: 15px; 
-        border-bottom: 2px solid #ffa74e; 
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .column-header i {
-        font-size: 20px;
-        color: #ffa74e;
-    }
-    .column-header h3 { 
-        margin: 0; 
-        padding: 5px 10px; 
-        background: #333; 
-        color: #ffa74e; 
-        font-size: 16px; 
-        text-transform: uppercase; 
-    }
-    #pop-viewport, #slider-viewport { 
-        overflow: hidden; 
-        width: 100%; 
-        border-radius: 8px; 
-    }
-    #pop-inner-slider, #random-slider-inner { 
-        display: flex; 
-        transition: transform 0.4s ease; 
-        gap: 12px; 
-    }
-    .slider-item, .pop-slide-item { 
-        flex: 0 0 calc(25% - 9px); 
-        border-radius: 8px; 
-        background: #0a0a0a; 
-        overflow: hidden; 
-        position: relative; 
-        display: flex; 
-        flex-direction: column; 
-        border: 1px solid #333;
-        transition: transform 0.2s;
-    }
-    .slider-item:hover, .pop-slide-item:hover {
-        transform: translateY(-3px);
-        border-color: #ffa74e;
-    }
-    .slider-item img, .pop-slide-item img { 
-        width: 100%; 
-        aspect-ratio: 2/3;
-        object-fit: cover;
-        display: block; 
-        background: #222; 
-    }
-    .pop-view-badge { 
-        position: absolute; 
-        top: 8px; 
-        left: 8px; 
-        background: #ff2d55; 
-        color: #fff; 
-        font-size: 10px; 
-        padding: 3px 8px; 
-        border-radius: 4px; 
-        z-index: 2; 
-        font-weight: bold; 
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .pop-view-badge i {
-        font-size: 10px;
-    }
-    .slider-title, .pop-slide-title { 
-        padding: 10px 6px; 
-        font-size: 12px; 
-        font-weight: bold; 
-        color: #eee; 
-        background: #0a0a0a; 
-        text-decoration: none; 
-        display: block; 
-        text-align: center; 
-        white-space: nowrap; 
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-        border-top: 1px solid #222;
-    }
-    .slider-title:hover, .pop-slide-title:hover {
-        color: #ffa74e;
-    }
-    .slider-controls, .pop-controls { 
-        position: absolute; 
-        top: 50%; 
-        left: 5px; 
-        right: 5px; 
-        transform: translateY(-50%); 
-        display: flex; 
-        justify-content: space-between; 
-        pointer-events: none; 
-        z-index: 10; 
-    }
-    .nav-btn, .pop-nav { 
-        pointer-events: auto; 
-        background: rgba(0, 0, 0, 0.7); 
-        color: #ffa74e; 
-        border: 1px solid #ffa74e; 
-        width: 36px; 
-        height: 36px; 
-        border-radius: 50%; 
-        cursor: pointer; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        font-weight: bold; 
-        font-size: 18px;
-        transition: 0.2s;
-    }
-    .nav-btn:hover, .pop-nav:hover {
-        background: #ffa74e;
-        color: #000;
-    }
-    
-    @media (max-width: 1024px) {
-        .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); }
-    }
-    @media (max-width: 768px) {
-        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
-    }
-    @media (max-width: 480px) {
-        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
-        .slider-item img, .pop-slide-item img { aspect-ratio: 3/4; }
-    }
-    
-    /* ========= GALLERY STYLE DENGAN PAGE TITLE ========= */
-    .gallery-container {
-        text-align: center;
-        margin-bottom: 25px;
-    }
-    .page-title {
-        font-size: 28px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #ffa74e, #ff5e7c);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        margin-bottom: 15px;
-        letter-spacing: 2px;
-        position: relative;
-        display: inline-block;
-        padding-bottom: 10px;
-    }
-    .page-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 25%;
-        width: 50%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent);
-    }
-    .page-title i {
-        margin-right: 10px;
-        color: #ffa74e;
-        font-size: 28px;
-    }
-    
-    #comic-gallery { 
-        width: 100%; 
-        max-width: 600px; 
-        margin: 0 auto 20px; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-    }
-    #comic-gallery img { 
-        width: 100% !important; 
-        max-width: 565px;
-        margin-bottom: 15px; 
-        display: block; 
-        background: #222; 
-        border: 1px solid #444; 
-        border-radius: 8px;
-        cursor: pointer; 
-        transition: transform 0.2s;
-    }
-    #comic-gallery img:hover {
-        transform: scale(1.02);
-        border-color: #ffa74e;
-    }
-
-    #manga-reader {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #000;
-      z-index: 9999;
-      flex-direction: column;
-    }
-    #reader-top-bar, #reader-bottom-bar {
-      background: #1a1a1a;
-      min-height: 55px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 8px 15px;
-      border-bottom: 1px solid #333;
-      position: relative;
-    }
-    #reader-bottom-bar {
-      border-bottom: none;
-      border-top: 1px solid #333;
-    }
-    .nav-arrow {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 24px;
-      padding: 6px 10px;
-      cursor: pointer;
-    }
-    .nav-arrow:hover {
-      color: #ffa74e;
-    }
-    #page-counter {
-      color: #fff;
-      font-size: 16px;
-      min-width: 110px;
-      text-align: center;
-    }
-    .zoom-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .zoom-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 22px;
-      cursor: pointer;
-      padding: 5px 8px;
-    }
-    .zoom-btn:hover {
-      color: #ffa74e;
-    }
-    .close-btn {
-      position: absolute;
-      left: 15px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 26px;
-      cursor: pointer;
-      z-index: 11;
-    }
-    .close-btn:hover {
-      color: #ffa74e;
-    }
-    .zoom-group {
-      position: absolute;
-      right: 15px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    #reader-content {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: auto;
-      background: #000;
-      padding-top: 10px;
-      touch-action: pinch-zoom pan-x pan-y;
-    }
-    #reader-image {
-      max-width: 100%;
-      max-height: 100%;
-      cursor: pointer;
-      padding-bottom: 10px;
-      transition: transform 0.3s ease;
-      transform-origin: top center;
-    }
-
-    @media (max-width: 600px) {
-      .zoom-group { display: none; }
-      .nav-arrow { font-size: 20px; padding: 4px 8px; }
-      #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
-      #reader-top-bar, #reader-bottom-bar { gap: 8px; padding: 8px 12px; }
-      .page-title { font-size: 22px; }
-      .page-title i { font-size: 22px; }
-    }
+     body { background: #111; color: #fff; margin: 0; padding: 10px; font-family: 'Segoe UI', 'Poppins', sans-serif; overflow: auto; }
+      .main-header { background: #0a0a0a; border-bottom: 3px solid #ffa74e; margin-bottom: 20px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+      .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; }
+      .logo-area { display: flex; align-items: center; gap: 15px; cursor: pointer; flex-shrink: 0; }
+      .logo-icon { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ffa74e; transition: transform 0.3s ease, border-color 0.3s ease; }
+      .logo-icon:hover { transform: scale(1.05); border-color: #ff5e7c; }
+      .logo-text { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #ffa74e, #ff5e7c, #ffa74e); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: gradient 3s ease infinite; }
+      @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+      .logo-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+      .nav-menu { display: flex; gap: 25px; align-items: center; justify-content: center; padding: 12px 20px; border-top: 1px solid #222; flex-wrap: wrap; }
+      .nav-menu a { color: #ddd; text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.2s; padding: 5px 0; display: flex; align-items: center; gap: 8px; }
+      .nav-menu a:hover { color: #ffa74e; }
+      .search-icon-mobile { display: none; background: none; border: none; color: #ffa74e; font-size: 22px; cursor: pointer; padding: 8px; flex-shrink: 0; }
+      .search-panel-desktop { display: flex; align-items: center; background: #222; border-radius: 40px; padding: 5px 15px; border: 1px solid #444; }
+      .search-panel-desktop input { background: transparent; border: none; padding: 10px 8px; color: white; font-size: 14px; width: 220px; outline: none; }
+      .search-panel-desktop input::placeholder { color: #888; }
+      .search-panel-desktop button { background: none; border: none; color: #ffa74e; cursor: pointer; font-size: 16px; padding: 0 5px; }
+      .mobile-search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; background: #0a0a0a; padding: 15px 20px; z-index: 9999; border-bottom: 2px solid #ffa74e; box-shadow: 0 4px 12px rgba(0,0,0,0.5); box-sizing: border-box; }
+      .mobile-search-container { display: flex; align-items: center; background: #222; border-radius: 40px; padding: 5px 15px; border: 1px solid #444; width: 100%; max-width: 600px; margin: 0 auto; }
+      .mobile-search-container input { flex: 1; background: transparent; border: none; padding: 12px 8px; color: white; font-size: 16px; outline: none; }
+      .mobile-search-container .close-search-btn { background: none; border: none; color: #ffa74e; cursor: pointer; font-size: 20px; padding: 8px; order: 1; }
+      .mobile-search-container .search-icon-btn { background: none; border: none; color: #ffa74e; cursor: pointer; font-size: 18px; padding: 8px; order: 2; }
+      @media (max-width: 768px) { .mobile-search-container { width: 95% !important; max-width: 95% !important; } }
+      @media (min-width: 769px) { .search-icon-mobile { display: none !important; } .desktop-search-wrapper { display: block !important; } }
+      @media (max-width: 768px) { .desktop-search-wrapper { display: none !important; } .search-icon-mobile { display: block !important; } .logo-icon { width: 40px; height: 40px; } .logo-text { font-size: 20px; } }
+      @media (max-width: 600px) { .nav-menu { gap: 15px; } .nav-menu a { font-size: 12px; } .logo-icon { width: 36px; height: 36px; } .logo-text { font-size: 18px; } }
+      .main-column-container { position: relative; border: 2px solid #333; border-radius: 12px; padding: 15px; margin-bottom: 20px; background: #1a1a1a; color: #fff; }
+      .column-header { margin-bottom: 15px; border-bottom: 2px solid #ffa74e; display: inline-flex; align-items: center; gap: 10px; }
+      .column-header h3 { margin: 0; padding: 5px 10px; background: #333; color: #ffa74e; font-size: 16px; text-transform: uppercase; }
+      #pop-viewport, #slider-viewport { overflow: hidden; width: 100%; border-radius: 8px; }
+      #pop-inner-slider, #random-slider-inner { display: flex; transition: transform 0.4s ease; gap: 12px; }
+      .slider-item, .pop-slide-item { flex: 0 0 calc(25% - 9px); border-radius: 8px; background: #0a0a0a; overflow: hidden; position: relative; display: flex; flex-direction: column; border: 1px solid #333; transition: transform 0.2s; }
+      .slider-item:hover, .pop-slide-item:hover { transform: translateY(-3px); border-color: #ffa74e; }
+      .slider-item img, .pop-slide-item img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #222; }
+      .pop-view-badge { position: absolute; top: 8px; left: 8px; background: #ff2d55; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; z-index: 2; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+      .slider-title, .pop-slide-title { padding: 10px 6px; font-size: 12px; font-weight: bold; color: #eee; background: #0a0a0a; text-decoration: none; display: block; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-top: 1px solid #222; }
+      .slider-controls, .pop-controls { position: absolute; top: 50%; left: 5px; right: 5px; transform: translateY(-50%); display: flex; justify-content: space-between; pointer-events: none; z-index: 10; }
+      .nav-btn, .pop-nav { pointer-events: auto; background: rgba(0, 0, 0, 0.7); color: #ffa74e; border: 1px solid #ffa74e; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; transition: 0.2s; }
+      @media (max-width: 1024px) { .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); } }
+      @media (max-width: 768px) { .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); } }
+      .gallery-container { text-align: center; margin-bottom: 25px; }
+      .page-title { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #ffa74e, #ff5e7c); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 15px; letter-spacing: 2px; position: relative; display: inline-block; padding-bottom: 10px; }
+      .page-title::after { content: ''; position: absolute; bottom: 0; left: 25%; width: 50%; height: 2px; background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent); }
+      #comic-gallery { width: 100%; max-width: 600px; margin: 0 auto 20px; display: flex; flex-direction: column; align-items: center; }
+      #comic-gallery img { width: 100% !important; max-width: 565px; margin-bottom: 15px; display: block; background: #222; border: 1px solid #444; border-radius: 8px; cursor: pointer; transition: transform 0.2s; }
+      #manga-reader { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 9999; flex-direction: column; }
+      #reader-top-bar, #reader-bottom-bar { background: #1a1a1a; min-height: 55px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 8px 15px; border-bottom: 1px solid #333; position: relative; }
+      .nav-arrow { background: none; border: none; color: #fff; font-size: 24px; padding: 6px 10px; cursor: pointer; }
+      .close-btn { position: absolute; left: 15px; background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; z-index: 11; }
+      .zoom-group { position: absolute; right: 15px; display: flex; align-items: center; gap: 8px; }
+      #reader-content { flex: 1; display: flex; align-items: center; justify-content: center; overflow: auto; background: #000; }
+      #reader-image { max-width: 100%; max-height: 100%; cursor: pointer; transition: transform 0.3s ease; }
+      @media (max-width: 600px) { .zoom-group { display: none; } .nav-arrow { font-size: 20px; } .page-title { font-size: 22px; } }
   </style>
 </head>
 <body>
 
   <div class="main-header">
       <div class="top-bar">
-          <!-- LOGO AREA DENGAN GAMBAR ICON -->
           <div class="logo-area" id="logoClick">
               <img src="https://i.ibb.co.com/11BD9mL/38ce5f186788fbab817dc04d9ccc14e4.jpg" 
                    alt="Allyoulike Comic Logo" 
@@ -609,15 +104,13 @@
   </div>
 
   <div id="main-content">
-    <!-- ========= PAGE TITLE DI ATAS GAMBAR KOMIK ========= -->
     <div class="gallery-container">
         <div class="page-title">
             <i class="fa-solid fa-book-open"></i> 
-            #642402
+            Comic Gallery
         </div>
     </div>
     
-    <!-- GAMBAR KOMIK TETAP ADA DI SINI -->
     <div id="comic-gallery"></div>
     
     <div class="main-column-container" id="new-update-section">
@@ -654,27 +147,25 @@
       <button class="nav-arrow" onclick="nextPage()">›</button>
       <button class="nav-arrow" onclick="lastPage()">»»</button>
       <div class="zoom-group">
-        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
-        <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
-        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+        <button class="zoom-btn" onclick="zoomOut()"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()"><i class="fa fa-search-plus"></i></button>
       </div>
     </div>
-
     <div id="reader-content">
       <img id="reader-image" onclick="nextPage()" alt="Manga Page">
     </div>
-
     <div id="reader-bottom-bar">
       <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
       <button class="nav-arrow" onclick="firstPage()">««</button>
       <button class="nav-arrow" onclick="prevPage()">‹</button>
-      <div id="page-counter-bottom" style="color:#fff; font-size:17px; min-width:110px; text-align:center;">1 of 9</div>
+      <div id="page-counter-bottom">1 of 9</div>
       <button class="nav-arrow" onclick="nextPage()">›</button>
       <button class="nav-arrow" onclick="lastPage()">»»</button>
       <div class="zoom-group">
-        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
-        <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
-        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+        <button class="zoom-btn" onclick="zoomOut()"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level-bottom">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()"><i class="fa fa-search-plus"></i></button>
       </div>
     </div>
   </div>
@@ -722,6 +213,16 @@
     const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";
     const VIDEO_URL = "https://www.youtube.com";
     
+    // ========= AMBIL NAMA FILE HALAMAN SAAT INI =========
+    let currentPageFile = window.location.pathname.split('/').pop();
+    if (currentPageFile === '' || currentPageFile === '/') {
+        currentPageFile = 'index.html';
+    }
+    // Hapus query string dan hash (#)
+    currentPageFile = currentPageFile.split('?')[0].split('#')[0];
+    
+    console.log('Current page file:', currentPageFile);
+    
     let allPages = [];
     let filteredPages = [];
     let isSearchMode = false;
@@ -731,8 +232,12 @@
     
     function showRandomComic() {
         if (allPages.length === 0) return;
-        const randomIndex = Math.floor(Math.random() * allPages.length);
-        const randomItem = allPages[randomIndex];
+        let otherPages = allPages.filter(item => {
+            return item.link !== currentPageFile;
+        });
+        if (otherPages.length === 0) return;
+        const randomIndex = Math.floor(Math.random() * otherPages.length);
+        const randomItem = otherPages[randomIndex];
         const link = randomItem.link.startsWith('http') ? randomItem.link : BASE_URL + randomItem.link;
         window.location.href = link;
     }
@@ -752,6 +257,8 @@
             
             allPages = data.pages || [];
             
+            console.log('Total pages loaded:', allPages.length);
+            
             allPages.sort((a, b) => {
                 if (!a.date && !b.date) return 0;
                 if (!a.date) return 1;
@@ -769,6 +276,7 @@
             renderRecommendedSlider();
             
         } catch (error) {
+            console.error('Error:', error);
             document.getElementById('pop-inner-slider').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Failed: ${DATA_URL}</div>`;
             document.getElementById('random-slider-inner').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Failed</div>`;
         }
@@ -778,7 +286,22 @@
         const container = document.getElementById('pop-inner-slider');
         container.innerHTML = "";
         if (!allPages.length) return;
-        const itemsToShow = allPages.slice(0, 20);
+        
+        // Filter: exclude current page berdasarkan LINK
+        let filteredPagesForSlider = allPages.filter(item => {
+            return item.link !== currentPageFile;
+        });
+        
+        console.log('New Update - pages after filter:', filteredPagesForSlider.length);
+        console.log('Current page file:', currentPageFile);
+        
+        const itemsToShow = filteredPagesForSlider.slice(0, 20);
+        
+        if (itemsToShow.length === 0) {
+            container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No other comics available</div>';
+            return;
+        }
+        
         itemsToShow.forEach((item) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
@@ -800,12 +323,26 @@
         const container = document.getElementById('random-slider-inner');
         container.innerHTML = "";
         if (!allPages.length) return;
-        let shuffled = [...allPages];
+        
+        // Filter: exclude current page berdasarkan LINK
+        let filteredPagesForSlider = allPages.filter(item => {
+            return item.link !== currentPageFile;
+        });
+        
+        console.log('Recommended - pages after filter:', filteredPagesForSlider.length);
+        
+        if (filteredPagesForSlider.length === 0) {
+            container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No other comics available</div>';
+            return;
+        }
+        
+        let shuffled = [...filteredPagesForSlider];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         const selected = shuffled.slice(0, 5);
+        
         selected.forEach((item) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
@@ -901,6 +438,7 @@
         if(popInner) popInner.style.transform = 'translateX(0px)';
     }
     
+    // MANGA READER FUNCTIONS
     let currentImages = [];
     let currentIndex = 0;
     let zoomLevel = 1.0;
@@ -921,7 +459,14 @@
         });
     }
 
-    function openReader(index) { currentIndex = index; zoomLevel = 1.0; updateMaxZoom(); document.getElementById('manga-reader').style.display = 'flex'; showCurrentPage(); }
+    function openReader(index) { 
+        currentIndex = index; 
+        zoomLevel = 1.0; 
+        updateMaxZoom(); 
+        document.getElementById('manga-reader').style.display = 'flex'; 
+        showCurrentPage(); 
+    }
+    
     function showCurrentPage() {
         const img = document.getElementById('reader-image');
         img.src = currentImages[currentIndex];
@@ -932,6 +477,7 @@
         document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x";
         document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x";
     }
+    
     function nextPage() { if (currentIndex < currentImages.length - 1) { currentIndex++; showCurrentPage(); } }
     function prevPage() { if (currentIndex > 0) { currentIndex--; showCurrentPage(); } }
     function firstPage() { currentIndex = 0; showCurrentPage(); }
@@ -939,9 +485,24 @@
     function zoomIn() { updateMaxZoom(); zoomLevel = Math.min(maxZoom, zoomLevel + 0.25); document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`; document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x"; document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x"; }
     function zoomOut() { zoomLevel = Math.max(1.0, zoomLevel - 0.25); document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`; document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x"; document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x"; }
     function closeReader() { document.getElementById('manga-reader').style.display = 'none'; }
-    document.addEventListener('keydown', function(e) { if (document.getElementById('manga-reader').style.display === 'flex') { if (e.key === "ArrowRight") nextPage(); if (e.key === "ArrowLeft") prevPage(); if (e.key === "Escape") closeReader(); } });
     
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    document.addEventListener('keydown', function(e) { 
+        if (document.getElementById('manga-reader').style.display === 'flex') { 
+            if (e.key === "ArrowRight") nextPage(); 
+            if (e.key === "ArrowLeft") prevPage(); 
+            if (e.key === "Escape") closeReader(); 
+        } 
+    });
+    
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, function(m){ 
+            if(m==='&') return '&amp;'; 
+            if(m==='<') return '&lt;'; 
+            if(m==='>') return '&gt;'; 
+            return m;
+        }); 
+    }
     
     document.addEventListener("DOMContentLoaded", function() {
         loadData();
@@ -962,7 +523,6 @@
         if(searchBtnMobile) { searchBtnMobile.onclick = () => { const q = searchInputMobile.value.trim(); mobileOverlay.style.display = 'none'; if(q) performSearch(q); }; }
         if(searchInputMobile) { searchInputMobile.onkeypress = (e) => { if(e.key === 'Enter') { const q = e.target.value.trim(); mobileOverlay.style.display = 'none'; if(q) performSearch(q); } }; }
         
-        // ========= HOME - PASTI KEMBALI KE INDEX.HTML =========
         document.getElementById('navHome').onclick = (e) => { 
             e.preventDefault(); 
             window.location.href = HOME_URL; 
@@ -980,7 +540,6 @@
             openVideoSite();
         };
         
-        // ========= LOGO - JUGA KEMBALI KE INDEX =========
         document.getElementById('logoClick').onclick = () => { 
             window.location.href = HOME_URL; 
         };
