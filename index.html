@@ -263,6 +263,7 @@
     // ========= KONFIGURASI =========
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
+    const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";  // URL index
     
     // ========= KONFIGURASI URL VIDEO =========
     const VIDEO_URL = "https://www.youtube.com";  // Change this to your video website URL
@@ -492,11 +493,11 @@
             };
         }
         
-        // NAVIGATION MENU (ENGLISH)
+        // ========= NAVIGATION MENU =========
+        // HOME - REDIRECT KE INDEX.HTML (HALAMAN UTAMA)
         document.getElementById('navHome').onclick = (e) => { 
             e.preventDefault(); 
-            resetToHome(); 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            window.location.href = HOME_URL;  // ← LANGSUNG KE INDEX
         };
         
         document.getElementById('navRandom').onclick = (e) => { 
@@ -511,9 +512,9 @@
             openVideoSite();
         };
         
+        // LOGO - JUGA REDIRECT KE INDEX
         document.getElementById('logoClick').onclick = () => { 
-            resetToHome(); 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+            window.location.href = HOME_URL; 
         };
         
         if(mobileOverlay) {
