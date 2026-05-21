@@ -6,6 +6,7 @@
     <title>Allyoulike Comic - Gallery Comic Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <style>
+        /* CSS SAMA PERSIS DENGAN KODE ANDA (saya tidak ubah) */
         * { box-sizing: border-box; }
         body { background: #111; color: #fff; margin: 0; padding: 20px; font-family: 'Segoe UI', 'Poppins', sans-serif; }
         
@@ -263,10 +264,8 @@
     // ========= KONFIGURASI =========
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
-    const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";  // URL index
-    
-    // ========= KONFIGURASI URL VIDEO =========
-    const VIDEO_URL = "https://www.youtube.com";  // Change this to your video website URL
+    const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";
+    const VIDEO_URL = "https://www.youtube.com";
     
     let allPages = [], filteredPages = [];
     let isSearchMode = false, currentPageNum = 1;
@@ -315,11 +314,19 @@
             const data = await response.json();
             allPages = data.pages || [];
             
+            // ========= PERBAIKAN: URUTKAN BERDASARKAN TANGGAL (TERBARU DI DEPAN) =========
             allPages.sort((a, b) => {
-                if (!a.date && !b.date) return 0;
-                if (!a.date) return 1;
-                if (!b.date) return -1;
-                return new Date(b.date) - new Date(a.date);
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                if (isNaN(dateA)) return 1;
+                if (isNaN(dateB)) return -1;
+                return dateB - dateA;
+            });
+            
+            // DEBUG: lihat urutan di console
+            console.log('===== URUTAN NEW UPLOADS (TERBARU KE LAMA) =====');
+            allPages.forEach((page, idx) => {
+                console.log(`${idx + 1}. ${page.title} - ${page.date}`);
             });
             
             if (allPages.length === 0) {
@@ -337,6 +344,7 @@
             goToPage(1);
             
         } catch (err) {
+            console.error('Error:', err);
             document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#ff8888;">❌ Failed: ${err.message}<br>${DATA_URL}</div>`;
             document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Failed to load data.</div>';
         }
@@ -381,7 +389,10 @@
         if (isSearchMode) return;
         currentPageNum = page;
         const start = (page - 1) * itemsPerPage;
-        renderGrid(allPages.slice(start, start + itemsPerPage), 'new-uploads-grid', true);
+        const end = start + itemsPerPage;
+        // Pastikan menggunakan allPages yang sudah terurut
+        const paginatedData = allPages.slice(start, end);
+        renderGrid(paginatedData, 'new-uploads-grid', true);
         renderPagination(page);
         if (page > 1) document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
     }
@@ -494,10 +505,9 @@
         }
         
         // ========= NAVIGATION MENU =========
-        // HOME - REDIRECT KE INDEX.HTML (HALAMAN UTAMA)
         document.getElementById('navHome').onclick = (e) => { 
             e.preventDefault(); 
-            window.location.href = HOME_URL;  // ← LANGSUNG KE INDEX
+            window.location.href = HOME_URL;
         };
         
         document.getElementById('navRandom').onclick = (e) => { 
@@ -512,7 +522,6 @@
             openVideoSite();
         };
         
-        // LOGO - JUGA REDIRECT KE INDEX
         document.getElementById('logoClick').onclick = () => { 
             window.location.href = HOME_URL; 
         };
