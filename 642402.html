@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Gallery Manga Complete</title>
+  <title>Allyoulike Comic - Gallery Comic Center</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
      /* --- CSS BASE --- */
-      body { background: #111; color: #fff; margin: 0; padding: 10px; font-family: sans-serif; overflow: auto; }
+      body { background: #111; color: #fff; margin: 0; padding: 10px; font-family: 'Segoe UI', 'Poppins', sans-serif; overflow: auto; }
       body.item-view .PopularPosts {display: none;}
 
       .post-snippet .snippet-item {
@@ -17,7 +17,7 @@
 
       .blog-name h1, .blog-name h1 a {
           color: #ffffff;
-          font: italic 800 20px Open Sans, sans-serif;
+          font: italic 800 20px 'Segoe UI', sans-serif;
       }
 
       body.item-view .Blog .post-title, body.item-view .Blog .post-title a {
@@ -46,34 +46,58 @@
           padding: 15px 20px;
       }
       
-      /* LOGO AREA - SELALU DI KIRI */
+      /* LOGO AREA - DENGAN GAMBAR ICON */
       .logo-area {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 15px;
           cursor: pointer;
           flex-shrink: 0;
       }
       .logo-icon {
-          font-size: 36px;
-          color: #ffa74e;
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #ffa74e;
+          transition: transform 0.3s ease, border-color 0.3s ease;
+      }
+      .logo-icon:hover {
+          transform: scale(1.05);
+          border-color: #ff5e7c;
+      }
+      .logo-text-container {
+          display: flex;
+          flex-direction: column;
       }
       .logo-text {
-          font-size: 22px;
-          font-weight: bold;
-          letter-spacing: 2px;
-          background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+          font-size: 24px;
+          font-weight: 800;
+          letter-spacing: 1px;
+          background: linear-gradient(135deg, #ffa74e, #ff5e7c, #ffa74e);
+          background-size: 200% auto;
           -webkit-background-clip: text;
           background-clip: text;
           color: transparent;
+          animation: gradient 3s ease infinite;
+      }
+      @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
       }
       .logo-sub {
-          font-size: 9px;
+          font-size: 11px;
           color: #aaa;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
+          margin-top: 2px;
+      }
+      .logo-sub i {
+          font-size: 10px;
+          margin-right: 4px;
+          color: #ffa74e;
       }
       
-      /* NAV MENU */
       .nav-menu {
           display: flex;
           gap: 25px;
@@ -101,10 +125,17 @@
           color: #ffa74e;
       }
       
-      /* SEARCH DESKTOP - DI KANAN */
-      .desktop-search-wrapper {
-          display: block;
+      .search-icon-mobile {
+          display: none;
+          background: none;
+          border: none;
+          color: #ffa74e;
+          font-size: 22px;
+          cursor: pointer;
+          padding: 8px;
+          flex-shrink: 0;
       }
+      
       .search-panel-desktop {
           display: flex;
           align-items: center;
@@ -112,11 +143,6 @@
           border-radius: 40px;
           padding: 5px 15px;
           border: 1px solid #444;
-          transition: 0.2s;
-      }
-      .search-panel-desktop:focus-within {
-          border-color: #ffa74e;
-          background: #1e1e1e;
       }
       .search-panel-desktop input {
           background: transparent;
@@ -139,19 +165,7 @@
           padding: 0 5px;
       }
       
-      /* SEARCH ICON MOBILE/TABLET - DI KANAN UJUNG */
-      .search-icon-mobile {
-          display: none;
-          background: none;
-          border: none;
-          color: #ffa74e;
-          font-size: 22px;
-          cursor: pointer;
-          padding: 8px;
-          flex-shrink: 0;
-      }
-      
-      /* MOBILE SEARCH OVERLAY */
+      /* ========= SEARCH OVERLAY ========= */
       .mobile-search-overlay {
           display: none;
           position: fixed;
@@ -160,9 +174,10 @@
           width: 100%;
           background: #0a0a0a;
           padding: 15px 20px;
-          z-index: 1000;
+          z-index: 9999;
           border-bottom: 2px solid #ffa74e;
           box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          box-sizing: border-box;
       }
       .mobile-search-container {
           display: flex;
@@ -171,6 +186,9 @@
           border-radius: 40px;
           padding: 5px 15px;
           border: 1px solid #444;
+          width: 100%;
+          max-width: 600px;
+          margin: 0 auto;
       }
       .mobile-search-container:focus-within {
           border-color: #ffa74e;
@@ -194,6 +212,7 @@
           cursor: pointer;
           font-size: 20px;
           padding: 8px;
+          order: 1;
       }
       .mobile-search-container .search-icon-btn {
           background: none;
@@ -202,9 +221,24 @@
           cursor: pointer;
           font-size: 18px;
           padding: 8px;
+          order: 2;
       }
       
-      /* ========= RESPONSIVE HEADER ========= */
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+          .mobile-search-container {
+              width: 95% !important;
+              max-width: 95% !important;
+          }
+      }
+      
+      @media (max-width: 480px) {
+          .mobile-search-container {
+              width: 95% !important;
+              max-width: 95% !important;
+          }
+      }
+      
       @media (min-width: 769px) {
           .search-icon-mobile { display: none !important; }
           .desktop-search-wrapper { display: block !important; }
@@ -213,16 +247,20 @@
       @media (max-width: 768px) {
           .desktop-search-wrapper { display: none !important; }
           .search-icon-mobile { display: block !important; }
+          .logo-icon { width: 40px; height: 40px; }
+          .logo-text { font-size: 20px; }
+          .logo-sub { font-size: 9px; }
       }
       
       @media (max-width: 600px) {
           .nav-menu { gap: 15px; }
           .nav-menu a { font-size: 12px; }
           .nav-menu a i { font-size: 14px; }
+          .logo-icon { width: 36px; height: 36px; }
           .logo-text { font-size: 18px; }
-          .logo-icon { font-size: 28px; }
           .logo-sub { font-size: 8px; }
-          .mobile-search-container { width: 95%;}
+          .mobile-search-container { padding: 5px 12px; }
+          .mobile-search-container input { padding: 10px 5px; font-size: 14px; }
       }
 
     /* ========= SLIDER STYLE ========= */
@@ -353,7 +391,6 @@
         color: #000;
     }
     
-    /* RESPONSIVE SLIDER */
     @media (max-width: 1024px) {
         .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); }
     }
@@ -365,7 +402,6 @@
         .slider-item img, .pop-slide-item img { aspect-ratio: 3/4; }
     }
     
-    /* GALLERY STYLE */
     #comic-gallery { 
         width: 100%; 
         max-width: 600px; 
@@ -390,7 +426,6 @@
         border-color: #ffa74e;
     }
 
-    /* MANGA READER */
     #manga-reader {
       display: none;
       position: fixed;
@@ -496,33 +531,32 @@
 </head>
 <body>
 
-  <!-- ========= HEADER (DIPERBAIKI) ========= -->
   <div class="main-header">
       <div class="top-bar">
-          <!-- LOGO AREA - SELALU DI KIRI -->
+          <!-- LOGO AREA DENGAN GAMBAR ICON -->
           <div class="logo-area" id="logoClick">
-              <i class="fa-solid fa-book-open logo-icon"></i>
-              <div>
-                  <div class="logo-text">MANGAVERSE</div>
-                  <div class="logo-sub">Gallery Manga Center</div>
+              <img src="https://i.ibb.co.com/11BD9mL/38ce5f186788fbab817dc04d9ccc14e4.jpg" 
+                   alt="Allyoulike Comic Logo" 
+                   class="logo-icon"
+                   onerror="this.onerror=null; this.src='https://placehold.co/48x48?text=AC'">
+              <div class="logo-text-container">
+                  <div class="logo-text">Allyoulike Comic</div>
+                  <div class="logo-sub"><i class="fa-regular fa-images"></i> Gallery Comic Center</div>
               </div>
           </div>
           
-          <!-- SEARCH ICON - muncul di tablet & HP (DI KANAN UJUNG) -->
           <button class="search-icon-mobile" id="searchIconMobile">
               <i class="fa-solid fa-magnifying-glass"></i>
           </button>
           
-          <!-- SEARCH DESKTOP - hanya untuk desktop (DI KANAN) -->
           <div class="desktop-search-wrapper">
               <div class="search-panel-desktop">
-                  <input type="text" id="searchInputDesktop" placeholder="Cari manga, komik, judul..." autocomplete="off">
+                  <input type="text" id="searchInputDesktop" placeholder="Cari komik, manga, judul..." autocomplete="off">
                   <button id="searchBtnDesktop"><i class="fa-solid fa-magnifying-glass"></i></button>
               </div>
           </div>
       </div>
       
-      <!-- MENU NAVIGASI -->
       <div class="nav-menu">
           <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Beranda</a>
           <a href="#" id="navNew"><i class="fa-solid fa-fire"></i> New Uploads</a>
@@ -530,17 +564,15 @@
       </div>
   </div>
   
-  <!-- MOBILE SEARCH OVERLAY -->
   <div class="mobile-search-overlay" id="mobileSearchOverlay">
       <div class="mobile-search-container">
-          <input type="text" id="searchInputMobile" placeholder="Cari manga, komik, judul..." autocomplete="off">
-          <button class="search-icon-btn" id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <input type="text" id="searchInputMobile" placeholder="Cari komik, manga, judul..." autocomplete="off">
           <button class="close-search-btn" id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
+          <button class="search-icon-btn" id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
       </div>
   </div>
 
   <div id="main-content">
-    <!-- GALERI GAMBAR (dari raw-links) -->
     <div id="raw-links" style="display:none;">
       https://i.ibb.co.com/rGSwZbh1/1t.webp
       https://i.ibb.co.com/jPd5vj0n/2t-webp.webp
@@ -580,7 +612,6 @@
 
     <div id="comic-gallery"></div>
     
-    <!-- SLIDER NEW UPDATE (dari daftar.json) -->
     <div class="main-column-container" id="new-update-section">
       <div class="column-header">
         <i class="fa-solid fa-fire"></i>
@@ -593,7 +624,6 @@
       <div id="pop-viewport"><div id="pop-inner-slider"></div></div>
     </div>
     
-    <!-- SLIDER RECOMMENDED (dari daftar.json) -->
     <div class="main-column-container" id="recommended-section">
       <div class="column-header">
         <i class="fa-solid fa-heart"></i>
@@ -607,7 +637,6 @@
     </div>
   </div>
 
-  <!-- MANGA READER -->
   <div id="manga-reader">
     <div id="reader-top-bar">
       <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
@@ -643,7 +672,6 @@
   </div>
 
   <script>
-    // ========= KONFIGURASI =========
     const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/daftar.json";
     const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/";
     
@@ -652,22 +680,8 @@
     let isSearchMode = false;
     let currentSearchQuery = "";
     
-    // Variabel untuk slider
     let currentPos = 0, popCurrentPos = 0;
     
-    // ========= FORMAT TANGGAL =========
-    function formatDate(dateStr) {
-        if (!dateStr) return "";
-        try {
-            let date = new Date(dateStr);
-            if (isNaN(date.getTime())) return "";
-            return `${date.getDate().toString().padStart(2,'0')}/${(date.getMonth()+1).toString().padStart(2,'0')}/${date.getFullYear()}`;
-        } catch(e) {
-            return "";
-        }
-    }
-    
-    // ========= LOAD DATA DARI daftar.json =========
     async function loadData() {
         try {
             document.getElementById('pop-inner-slider').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Memuat data...</div>';
@@ -679,7 +693,6 @@
             
             allPages = data.pages || [];
             
-            // Urutkan berdasarkan tanggal (terbaru di depan)
             allPages.sort((a, b) => {
                 if (!a.date && !b.date) return 0;
                 if (!a.date) return 1;
@@ -688,36 +701,29 @@
             });
             
             if (allPages.length === 0) {
-                document.getElementById('pop-inner-slider').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data. Silakan isi daftar.json</div>';
+                document.getElementById('pop-inner-slider').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data</div>';
                 document.getElementById('random-slider-inner').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 Belum ada data</div>';
                 return;
             }
             
-            // Render kedua slider
             renderNewUpdateSlider();
             renderRecommendedSlider();
             
         } catch (error) {
-            console.error('Error loading data:', error);
-            document.getElementById('pop-inner-slider').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Gagal memuat daftar.json<br>Pastikan file ada di: ${DATA_URL}</div>`;
-            document.getElementById('random-slider-inner').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Gagal memuat daftar.json</div>`;
+            document.getElementById('pop-inner-slider').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Gagal: ${DATA_URL}</div>`;
+            document.getElementById('random-slider-inner').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">❌ Gagal</div>`;
         }
     }
     
-    // ========= RENDER NEW UPDATE SLIDER =========
     function renderNewUpdateSlider() {
         const container = document.getElementById('pop-inner-slider');
         container.innerHTML = "";
-        
         if (!allPages.length) return;
-        
         const itemsToShow = allPages.slice(0, 20);
-        
         itemsToShow.forEach((item) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
             let title = item.title || "Untitled";
-            
             container.innerHTML += `
                 <div class="pop-slide-item">
                     <div class="pop-view-badge"><i class="fa-regular fa-clock"></i> NEW</div>
@@ -726,31 +732,25 @@
                 </div>
             `;
         });
-        
         popCurrentPos = 0;
         const inner = document.getElementById('pop-inner-slider');
         if(inner) inner.style.transform = 'translateX(0px)';
     }
     
-    // ========= RENDER RECOMMENDED SLIDER =========
     function renderRecommendedSlider() {
         const container = document.getElementById('random-slider-inner');
         container.innerHTML = "";
-        
         if (!allPages.length) return;
-        
         let shuffled = [...allPages];
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         const selected = shuffled.slice(0, 5);
-        
         selected.forEach((item) => {
             let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
             let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
             let title = item.title || "Untitled";
-            
             container.innerHTML += `
                 <div class="slider-item">
                     <a href="${link}"><img src="${imgUrl}" onerror="this.src='https://placehold.co/400x600?text=Error'" loading="lazy"></a>
@@ -758,13 +758,11 @@
                 </div>
             `;
         });
-        
         currentPos = 0;
         const inner = document.getElementById('random-slider-inner');
         if(inner) inner.style.transform = 'translateX(0px)';
     }
     
-    // ========= FUNGSI SLIDER NAVIGASI =========
     function moveSlide(dir) {
         const inner = document.getElementById('random-slider-inner');
         const item = document.querySelector('.slider-item');
@@ -789,33 +787,20 @@
         inner.style.transform = 'translateX(' + popCurrentPos + 'px)';
     }
     
-    // ========= FUNGSI PENCARIAN =========
     function performSearch(query) {
-        if (!query.trim()) {
-            resetToHome();
-            return;
-        }
-        
+        if (!query.trim()) { resetToHome(); return; }
         isSearchMode = true;
         currentSearchQuery = query;
-        
-        filteredPages = allPages.filter(item => {
-            const title = (item.title || "").toLowerCase();
-            return title.includes(query.toLowerCase());
-        });
-        
+        filteredPages = allPages.filter(item => (item.title || "").toLowerCase().includes(query.toLowerCase()));
         document.getElementById('new-update-section').style.display = 'none';
         document.getElementById('recommended-section').style.display = 'none';
         document.getElementById('comic-gallery').style.display = 'none';
-        
         const searchContainer = document.createElement('div');
         searchContainer.id = 'search-results';
         searchContainer.className = 'comic-grid';
         searchContainer.style.marginTop = '20px';
-        
         const oldSearch = document.getElementById('search-results');
         if (oldSearch) oldSearch.remove();
-        
         if (filteredPages.length === 0) {
             searchContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 Tidak ada komik dengan judul "${query}"</div>`;
         } else {
@@ -823,7 +808,6 @@
                 let link = item.link.startsWith('http') ? item.link : BASE_URL + item.link;
                 let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
                 let title = item.title || "Untitled";
-                
                 searchContainer.innerHTML += `
                     <div class="comic-item">
                         <span class="badge badge-new" style="position:absolute; top:5px; left:5px; background:#b80006; color:white; padding:3px 6px; font-size:10px; border-radius:4px;">NEW</span>
@@ -833,7 +817,6 @@
                 `;
             });
         }
-        
         document.getElementById('main-content').appendChild(searchContainer);
         document.getElementById('new-update-section')?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -841,16 +824,12 @@
     function resetToHome() {
         isSearchMode = false;
         currentSearchQuery = "";
-        
         document.getElementById('new-update-section').style.display = 'block';
         document.getElementById('recommended-section').style.display = 'block';
         document.getElementById('comic-gallery').style.display = 'flex';
-        
         const oldSearch = document.getElementById('search-results');
         if (oldSearch) oldSearch.remove();
-        
         renderRecommendedSlider();
-        
         currentPos = 0;
         popCurrentPos = 0;
         const randomInner = document.getElementById('random-slider-inner');
@@ -859,22 +838,17 @@
         if(popInner) popInner.style.transform = 'translateX(0px)';
     }
     
-    // ========= MANGA READER =========
     let currentImages = [];
     let currentIndex = 0;
     let zoomLevel = 1.0;
     let maxZoom = 3.0;
 
-    function updateMaxZoom() {
-        maxZoom = window.innerWidth <= 1280 ? 2.0 : 3.0;
-    }
+    function updateMaxZoom() { maxZoom = window.innerWidth <= 1280 ? 2.0 : 3.0; }
 
     function initGallery() {
         const rawLinksEl = document.getElementById('raw-links');
         const gallery = document.getElementById('comic-gallery');
-        
         currentImages = rawLinksEl.innerText.split(/\s+/).filter(u => u.startsWith("http"));
-        
         currentImages.forEach((url, index) => {
             const img = document.createElement('img');
             img.src = url;
@@ -884,14 +858,7 @@
         });
     }
 
-    function openReader(index) {
-        currentIndex = index;
-        zoomLevel = 1.0;
-        updateMaxZoom();
-        document.getElementById('manga-reader').style.display = 'flex';
-        showCurrentPage();
-    }
-
+    function openReader(index) { currentIndex = index; zoomLevel = 1.0; updateMaxZoom(); document.getElementById('manga-reader').style.display = 'flex'; showCurrentPage(); }
     function showCurrentPage() {
         const img = document.getElementById('reader-image');
         img.src = currentImages[currentIndex];
@@ -902,139 +869,40 @@
         document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x";
         document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x";
     }
-
     function nextPage() { if (currentIndex < currentImages.length - 1) { currentIndex++; showCurrentPage(); } }
     function prevPage() { if (currentIndex > 0) { currentIndex--; showCurrentPage(); } }
     function firstPage() { currentIndex = 0; showCurrentPage(); }
     function lastPage() { currentIndex = currentImages.length - 1; showCurrentPage(); }
-
-    function zoomIn() {
-        updateMaxZoom();
-        zoomLevel = Math.min(maxZoom, zoomLevel + 0.25);
-        document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`;
-        document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x";
-        document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x";
-    }
-
-    function zoomOut() {
-        zoomLevel = Math.max(1.0, zoomLevel - 0.25);
-        document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`;
-        document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x";
-        document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x";
-    }
-
-    function closeReader() {
-        document.getElementById('manga-reader').style.display = 'none';
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (document.getElementById('manga-reader').style.display === 'flex') {
-            if (e.key === "ArrowRight") nextPage();
-            if (e.key === "ArrowLeft") prevPage();
-            if (e.key === "Escape") closeReader();
-        }
-    });
+    function zoomIn() { updateMaxZoom(); zoomLevel = Math.min(maxZoom, zoomLevel + 0.25); document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`; document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x"; document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x"; }
+    function zoomOut() { zoomLevel = Math.max(1.0, zoomLevel - 0.25); document.getElementById('reader-image').style.transform = `scale(${zoomLevel})`; document.getElementById('zoom-level').textContent = zoomLevel.toFixed(1) + "x"; document.getElementById('zoom-level-bottom').textContent = zoomLevel.toFixed(1) + "x"; }
+    function closeReader() { document.getElementById('manga-reader').style.display = 'none'; }
+    document.addEventListener('keydown', function(e) { if (document.getElementById('manga-reader').style.display === 'flex') { if (e.key === "ArrowRight") nextPage(); if (e.key === "ArrowLeft") prevPage(); if (e.key === "Escape") closeReader(); } });
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     
-    // ========= EVENT LISTENER =========
     document.addEventListener("DOMContentLoaded", function() {
         loadData();
         initGallery();
         
-        // DESKTOP SEARCH
         const searchBtnDesktop = document.getElementById('searchBtnDesktop');
         const searchInputDesktop = document.getElementById('searchInputDesktop');
-        
-        // MOBILE SEARCH
         const searchIconMobile = document.getElementById('searchIconMobile');
         const mobileOverlay = document.getElementById('mobileSearchOverlay');
         const closeSearchBtn = document.getElementById('closeSearchBtn');
         const searchBtnMobile = document.getElementById('searchBtnMobile');
         const searchInputMobile = document.getElementById('searchInputMobile');
         
-        if(searchBtnDesktop) {
-            searchBtnDesktop.addEventListener('click', function(e) {
-                e.preventDefault();
-                performSearch(searchInputDesktop.value.trim());
-            });
-        }
-        if(searchInputDesktop) {
-            searchInputDesktop.addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    performSearch(searchInputDesktop.value.trim());
-                }
-            });
-        }
+        if(searchBtnDesktop) { searchBtnDesktop.onclick = () => performSearch(searchInputDesktop.value.trim()); }
+        if(searchInputDesktop) { searchInputDesktop.onkeypress = (e) => { if(e.key === 'Enter') performSearch(e.target.value.trim()); }; }
+        if(searchIconMobile) { searchIconMobile.onclick = () => { mobileOverlay.style.display = 'block'; setTimeout(() => searchInputMobile.focus(), 100); }; }
+        if(closeSearchBtn) { closeSearchBtn.onclick = () => { mobileOverlay.style.display = 'none'; searchInputMobile.value = ''; }; }
+        if(searchBtnMobile) { searchBtnMobile.onclick = () => { const q = searchInputMobile.value.trim(); mobileOverlay.style.display = 'none'; if(q) performSearch(q); }; }
+        if(searchInputMobile) { searchInputMobile.onkeypress = (e) => { if(e.key === 'Enter') { const q = e.target.value.trim(); mobileOverlay.style.display = 'none'; if(q) performSearch(q); } }; }
         
-        if(searchIconMobile) {
-            searchIconMobile.addEventListener('click', function() {
-                mobileOverlay.style.display = 'block';
-                setTimeout(() => searchInputMobile.focus(), 100);
-            });
-        }
-        
-        if(closeSearchBtn) {
-            closeSearchBtn.addEventListener('click', function() {
-                mobileOverlay.style.display = 'none';
-                searchInputMobile.value = '';
-            });
-        }
-        
-        if(searchBtnMobile) {
-            searchBtnMobile.addEventListener('click', function() {
-                const query = searchInputMobile.value.trim();
-                mobileOverlay.style.display = 'none';
-                performSearch(query);
-                if(searchInputDesktop) searchInputDesktop.value = query;
-            });
-        }
-        
-        if(searchInputMobile) {
-            searchInputMobile.addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') {
-                    e.preventDefault();
-                    const query = searchInputMobile.value.trim();
-                    mobileOverlay.style.display = 'none';
-                    performSearch(query);
-                    if(searchInputDesktop) searchInputDesktop.value = query;
-                }
-            });
-        }
-        
-        // Navigasi header
-        document.getElementById('navHome').addEventListener('click', function(e) {
-            e.preventDefault();
-            resetToHome();
-            if(mobileOverlay) mobileOverlay.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        document.getElementById('navNew').addEventListener('click', function(e) {
-            e.preventDefault();
-            resetToHome();
-            document.getElementById('new-update-section')?.scrollIntoView({ behavior: 'smooth' });
-            if(mobileOverlay) mobileOverlay.style.display = 'none';
-        });
-        document.getElementById('navRecommended').addEventListener('click', function(e) {
-            e.preventDefault();
-            resetToHome();
-            document.getElementById('recommended-section')?.scrollIntoView({ behavior: 'smooth' });
-            if(mobileOverlay) mobileOverlay.style.display = 'none';
-        });
-        document.getElementById('logoClick').addEventListener('click', function() {
-            resetToHome();
-            if(mobileOverlay) mobileOverlay.style.display = 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        document.getElementById('navHome').onclick = (e) => { e.preventDefault(); resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+        document.getElementById('navNew').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('new-update-section')?.scrollIntoView({ behavior: 'smooth' }); };
+        document.getElementById('navRecommended').onclick = (e) => { e.preventDefault(); resetToHome(); document.getElementById('recommended-section')?.scrollIntoView({ behavior: 'smooth' }); };
+        document.getElementById('logoClick').onclick = () => { resetToHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
     });
   </script>
 </body>
