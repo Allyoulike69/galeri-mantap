@@ -170,6 +170,40 @@
         .page-num:hover { background: #333; }
         .page-num.active { background: #ffa74e; color: #111; }
         
+        /* SEARCH INFO STYLES */
+        .search-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border-left: 4px solid #ffa74e;
+        }
+        .search-info-text {
+            color: #ddd;
+            font-size: 14px;
+        }
+        .search-info-text i {
+            color: #ffa74e;
+            margin-right: 8px;
+        }
+        .clear-search {
+            background: #333;
+            color: #ffa74e;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .clear-search:hover {
+            background: #444;
+            transform: scale(1.05);
+        }
+        
         /* ========= RESPONSIVE ========= */
         @media (min-width: 769px) {
             .search-icon-mobile { display: none !important; }
@@ -251,6 +285,8 @@
     </header>
     <div id="random-grid" class="comic-grid"></div>
 
+    <div id="search-info-container"></div>
+    
     <header class="container-header" id="new-section">
         <i class="fa-solid fa-box-tissue color-icon"></i>
         <h1 class="header-title" id="new-uploads-title">New Uploads</h1>
@@ -269,6 +305,7 @@
     
     let allPages = [], filteredPages = [];
     let isSearchMode = false, currentPageNum = 1;
+    let currentSearchQuery = "";
     const itemsPerPage = 25;
     
     function showRandomComic() {
@@ -286,11 +323,22 @@
     function resetToHome() {
         isSearchMode = false;
         filteredPages = [];
+        currentSearchQuery = "";
         
         document.getElementById('recommended-header').style.display = 'flex';
         document.getElementById('random-grid').style.display = 'grid';
         document.getElementById('new-uploads-title').innerText = "New Uploads";
         document.getElementById('pagination').style.display = 'flex';
+        
+        // Clear search info
+        const searchInfoContainer = document.getElementById('search-info-container');
+        if (searchInfoContainer) searchInfoContainer.innerHTML = '';
+        
+        // Reset search inputs
+        const searchInputDesktop = document.getElementById('searchInputDesktop');
+        const searchInputMobile = document.getElementById('searchInputMobile');
+        if (searchInputDesktop) searchInputDesktop.value = '';
+        if (searchInputMobile) searchInputMobile.value = '';
         
         let shuffled = [...allPages];
         for (let i = shuffled.length - 1; i > 0; i--) { 
@@ -299,11 +347,25 @@
         }
         renderGrid(shuffled.slice(0, 5), 'random-grid', false);
         goToPage(1);
-        
-        const oldSearch = document.getElementById('search-results');
-        if (oldSearch) oldSearch.remove();
     }
-
+    
+    function showSearchInfo(query, resultCount) {
+        const searchInfoContainer = document.getElementById('search-info-container');
+        if (!searchInfoContainer) return;
+        
+        searchInfoContainer.innerHTML = `
+            <div class="search-info">
+                <div class="search-info-text">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Search results for "<strong>${escapeHtml(query)}</strong>" - Found ${resultCount} comic${resultCount !== 1 ? 's' : ''}
+                </div>
+                <button class="clear-search" onclick="resetToHome()">
+                    <i class="fa-solid fa-times"></i> Clear Search
+                </button>
+            </div>
+        `;
+    }
+    
     async function loadData() {
         try {
             document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">⏳ Loading data...</div>';
@@ -314,7 +376,6 @@
             const data = await response.json();
             allPages = data.pages || [];
             
-            // ========= PERBAIKAN: URUTKAN BERDASARKAN TANGGAL (TERBARU DI DEPAN) =========
             allPages.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -323,11 +384,7 @@
                 return dateB - dateA;
             });
             
-            // DEBUG: lihat urutan di console
-            console.log('===== URUTAN NEW UPLOADS (TERBARU KE LAMA) =====');
-            allPages.forEach((page, idx) => {
-                console.log(`${idx + 1}. ${page.title} - ${page.date}`);
-            });
+            console.log('Data loaded successfully. Total comics:', allPages.length);
             
             if (allPages.length === 0) {
                 document.getElementById('random-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">📭 No data available</div>';
@@ -343,14 +400,28 @@
             renderGrid(shuffled.slice(0, 5), 'random-grid', false);
             goToPage(1);
             
+            // Check URL parameters for search query
+            checkURLForSearch();
+            
         } catch (err) {
             console.error('Error:', err);
             document.getElementById('random-grid').innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#ff8888;">❌ Failed: ${err.message}<br>${DATA_URL}</div>`;
             document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Failed to load data.</div>';
         }
     }
-
-    function renderGrid(data, gridId, isNewUploads = false) {
+    
+    function checkURLForSearch() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q');
+        if (searchQuery && searchQuery.trim()) {
+            // Small delay to ensure data is loaded
+            setTimeout(() => {
+                performSearch(searchQuery.trim());
+            }, 100);
+        }
+    }
+    
+    function renderGrid(data, gridId, showNewBadge = false) {
         const grid = document.getElementById(gridId);
         if (!grid) return;
         grid.innerHTML = "";
@@ -366,7 +437,7 @@
             let title = item.title || "Untitled";
             let badge = '';
             
-            if (isNewUploads && idx < 5) {
+            if (showNewBadge && idx < 5 && !isSearchMode) {
                 badge = '<span class="badge badge-new">NEW</span>';
             }
             
@@ -384,19 +455,58 @@
             `;
         });
     }
-
+    
+    function renderSearchResults(results, page = 1) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedResults = results.slice(start, end);
+        renderGrid(paginatedResults, 'new-uploads-grid', false);
+        
+        // Render pagination for search results
+        renderSearchPagination(results.length, page);
+    }
+    
+    function renderSearchPagination(totalItems, currentPage) {
+        const container = document.getElementById('pagination');
+        if (!container) return;
+        container.innerHTML = "";
+        
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        if (totalPages <= 1) return;
+        
+        for(let i = 1; i <= totalPages; i++) {
+            if(i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                let btn = document.createElement('button');
+                btn.innerText = i; 
+                btn.className = `page-num ${i === currentPage ? 'active' : ''}`;
+                btn.onclick = () => {
+                    currentPageNum = i;
+                    renderSearchResults(filteredPages, i);
+                    renderSearchPagination(totalItems, i);
+                    window.scrollTo({ top: document.getElementById('new-section').offsetTop - 100, behavior: 'smooth' });
+                };
+                container.appendChild(btn);
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                let span = document.createElement('span'); 
+                span.innerText = '...'; 
+                span.style.color = '#aaa'; 
+                span.style.padding = '0 5px';
+                container.appendChild(span);
+            }
+        }
+    }
+    
     function goToPage(page) {
         if (isSearchMode) return;
         currentPageNum = page;
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        // Pastikan menggunakan allPages yang sudah terurut
         const paginatedData = allPages.slice(start, end);
         renderGrid(paginatedData, 'new-uploads-grid', true);
         renderPagination(page);
         if (page > 1) document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
     }
-
+    
     function renderPagination(currentPage) {
         const container = document.getElementById('pagination');
         if (!container) return;
@@ -416,30 +526,53 @@
             }
         }
     }
-
+    
     function performSearch(query) {
-        if(!query.trim()) { 
+        if(!query || !query.trim()) { 
             resetToHome(); 
             return; 
         }
         
+        currentSearchQuery = query.trim();
         isSearchMode = true;
-        filteredPages = allPages.filter(p => (p.title || "").toLowerCase().includes(query.toLowerCase()));
         
+        // Search in titles (case insensitive)
+        filteredPages = allPages.filter(p => {
+            const title = (p.title || "").toLowerCase();
+            const searchTerm = currentSearchQuery.toLowerCase();
+            return title.includes(searchTerm);
+        });
+        
+        // Update UI
         document.getElementById('recommended-header').style.display = 'none';
         document.getElementById('random-grid').style.display = 'none';
-        document.getElementById('new-uploads-title').innerText = `Search Results: ${query} (${filteredPages.length})`;
-        document.getElementById('pagination').style.display = 'none';
+        document.getElementById('pagination').style.display = 'flex';
+        document.getElementById('new-uploads-title').innerText = `Search Results`;
+        
+        // Show search info
+        showSearchInfo(currentSearchQuery, filteredPages.length);
         
         if(filteredPages.length === 0) {
-            document.getElementById('new-uploads-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">🔍 No comics found with that title</div>';
+            document.getElementById('new-uploads-grid').innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:50px;">
+                    <i class="fa-solid fa-face-frown" style="font-size: 48px; margin-bottom: 20px; color: #ffa74e;"></i>
+                    <h3>No comics found with title "${escapeHtml(currentSearchQuery)}"</h3>
+                    <p style="color: #aaa; margin-top: 10px;">Try different keywords or browse our collection</p>
+                </div>
+            `;
+            document.getElementById('pagination').innerHTML = '';
         } else {
-            renderGrid(filteredPages, 'new-uploads-grid', true);
+            renderSearchResults(filteredPages, 1);
+            currentPageNum = 1;
         }
+        
+        // Update URL without reloading the page
+        const newUrl = `${window.location.pathname}?q=${encodeURIComponent(currentSearchQuery)}`;
+        window.history.pushState({ search: currentSearchQuery }, '', newUrl);
         
         document.getElementById('new-section').scrollIntoView({ behavior: 'smooth' });
     }
-
+    
     function escapeHtml(str) { 
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m){ 
@@ -449,7 +582,18 @@
             return m;
         }); 
     }
-
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q');
+        if (searchQuery && searchQuery.trim()) {
+            performSearch(searchQuery.trim());
+        } else {
+            resetToHome();
+        }
+    });
+    
     // EVENT LISTENERS
     document.addEventListener("DOMContentLoaded", () => {
         loadData();
@@ -462,7 +606,9 @@
             searchBtnDesktop.onclick = () => performSearch(searchInputDesktop.value);
         }
         if(searchInputDesktop) {
-            searchInputDesktop.onkeypress = (e) => { if(e.key === 'Enter') performSearch(e.target.value); };
+            searchInputDesktop.onkeypress = (e) => { 
+                if(e.key === 'Enter') performSearch(e.target.value); 
+            };
         }
         
         // MOBILE SEARCH
@@ -530,7 +676,7 @@
             mobileOverlay.addEventListener('click', function(e) {
                 if(e.target === mobileOverlay) {
                     mobileOverlay.style.display = 'none';
-                    searchInputMobile.value = '';
+                    if(searchInputMobile) searchInputMobile.value = '';
                 }
             });
         }
