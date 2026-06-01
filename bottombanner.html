@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Wadah utama bottom banner */
+        .ads-bottomcontainer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        /* Kotak pembungkus tiap iklan bottom */
+        .ads-unit-bottom {
+            width: 300px;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="ads-bottomcontainer-row" id="ads-bottomcontainer"></div>
+
+    <script>
+        (function() {
+            const jumlahIklan = 4;
+            const iklanKey = 'b6bd9a04c3422304caa7d0bb3cdb4da8';
+            const container = document.getElementById('ads-bottomcontainer');
+            
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < jumlahIklan; i++) {
+                const adDiv = document.createElement('div');
+                adDiv.className = 'ads-unit-bottom';
+                
+                const iframe = document.createElement('iframe');
+                iframe.width = '300';
+                iframe.height = '250';
+                iframe.style.border = 'none';
+                iframe.style.overflow = 'hidden';
+                iframe.scrolling = 'no';
+                
+                adDiv.appendChild(iframe);
+                container.appendChild(adDiv);
+                
+                const iframeContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <style>
+                            body { margin: 0; padding: 0; width: 300px; height: 250px; overflow: hidden; background: transparent; }
+                        </style>
+                    </head>
+                    <body>
+                        <script>
+                            atOptions = {
+                                'key' : '${iklanKey}',
+                                'format' : 'iframe',
+                                'height' : 250,
+                                'width' : 300,
+                                'params' : {}
+                            };
+                        <\/script>
+                        <script src="https://rhubarbambassadorweep.com/${iklanKey}/invoke.js"><\/script>
+                    </body>
+                    </html>
+                `;
+                
+                const iframeDoc = iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(iframeContent);
+                iframeDoc.close();
+            }
+            
+            console.log('✅ BOTTOM BANNER: ' + jumlahIklan + ' iklan berhasil dibuat');
+        })();
+    </script>
+</body>
+</html>
