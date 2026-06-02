@@ -294,10 +294,38 @@ function escapeHtml(str) {
     });
 }
 
-// ========= EVENT HANDLERS =========
+// ========= EVENT HANDLERS (DIPERBAIKI DENGAN EVENT DELEGATION) =========
 function initEventListeners() {
+    // EVENT DELEGATION untuk elemen yang dimuat secara dinamis
+    document.body.addEventListener('click', function(e) {
+        // Home button
+        if (e.target.closest('#navHome')) {
+            e.preventDefault();
+            goHome();
+        }
+        
+        // Random button
+        if (e.target.closest('#navRandom')) {
+            e.preventDefault();
+            getRandomComic();
+        }
+        
+        // Video button
+        if (e.target.closest('#navVideo')) {
+            e.preventDefault();
+            openVideo();
+        }
+        
+        // Logo click
+        if (e.target.closest('#logoClick')) {
+            goHome();
+        }
+    });
+    
+    // ELEMEN YANG SUDAH PASTI ADA (tidak perlu event delegation)
     const mainSearchInput = document.getElementById('mainSearchInput');
     const mainSearchBtn = document.getElementById('mainSearchBtn');
+    const clearBtn = document.getElementById('clearSearchBtn');
     
     if (mainSearchBtn) {
         mainSearchBtn.onclick = () => {
@@ -315,7 +343,6 @@ function initEventListeners() {
         };
     }
     
-    const clearBtn = document.getElementById('clearSearchBtn');
     if (clearBtn) {
         clearBtn.onclick = () => {
             clearSearch();
@@ -323,18 +350,8 @@ function initEventListeners() {
     }
 }
 
-// ========= NAVIGASI MENU =========
-function initNavigation() {
-    const homeBtn = document.getElementById('navHome');
-    const randomBtn = document.getElementById('navRandom');
-    const videoBtn = document.getElementById('navVideo');
-    const logo = document.getElementById('logoClick');
-    
-    if (homeBtn) homeBtn.onclick = (e) => { e.preventDefault(); goHome(); };
-    if (randomBtn) randomBtn.onclick = (e) => { e.preventDefault(); getRandomComic(); };
-    if (videoBtn) videoBtn.onclick = (e) => { e.preventDefault(); openVideo(); };
-    if (logo) logo.onclick = () => { goHome(); };
-}
+// ========= NAVIGASI MENU (TIDAK PERLU LAGI KARENA SUDAH PAKAI EVENT DELEGATION) =========
+// function initNavigation() { ... } -> SUDAH TIDAK DIPERLUKAN
 
 // ========= POPSTATE =========
 window.addEventListener('popstate', function() {
@@ -353,6 +370,5 @@ window.addEventListener('popstate', function() {
 // ========= INIT =========
 document.addEventListener("DOMContentLoaded", () => {
     loadData();
-    initNavigation();
-    initEventListeners();
+    initEventListeners(); // Hanya ini yang dipanggil (tanpa initNavigation)
 });
