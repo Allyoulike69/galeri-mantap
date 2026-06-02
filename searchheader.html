@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>Allyoulike Comic - Gallery Comic Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+    /* ========= GLOBAL & RESET ========= */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+        background: #111; 
+        color: #fff; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* ========= HEADER (TANPA SEARCH APAPUN) ========= */
+    .main-header { 
+        background: #0a0a0a; 
+        border-bottom: 3px solid #ffa74e; 
+        border-radius: 0 0 12px 12px; 
+        padding: 10px 20px; 
+        margin-bottom: 30px;
+    }
+    .top-bar { display: flex; justify-content: flex-start; align-items: center; width: 100%; }
+    
+    /* LOGO AREA */
+    .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-shrink: 0; }
+    .logo-icon { 
+        width: 48px; 
+        height: 48px; 
+        border-radius: 50%; 
+        object-fit: cover; 
+        border: 2px solid #ffa74e;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .logo-icon:hover {
+        transform: scale(1.05);
+        border-color: #ff5e7c;
+    }
+    .logo-text { 
+        font-size: 24px; 
+        font-weight: 800; 
+        background: linear-gradient(135deg, #ffa74e, #ff5e7c, #ffa74e);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradient 3s ease infinite;
+        letter-spacing: 1px;
+    }
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .logo-sub { 
+        font-size: 10px; 
+        color: #aaa; 
+        margin-top: 2px;
+    }
+    .logo-sub i {
+        font-size: 10px;
+        margin-right: 4px;
+        color: #ffa74e;
+    }
+    
+    /* NAV MENU */
+    .nav-menu { display: flex; gap: 25px; justify-content: center; padding: 15px 0 5px; flex-wrap: wrap; }
+    .nav-menu a { color: #ddd; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .nav-menu a:hover { color: #ffa74e; }
+</style>
+
+<!-- ========= HEADER HTML ========= -->
+<div class="main-header">
+    <div class="top-bar">
+        <div class="logo-area" id="logoClick">
+            <img src="https://i.ibb.co.com/11BD9mL/38ce5f186788fbab817dc04d9ccc14e4.jpg" 
+                 alt="Allyoulike Comic Logo" 
+                 class="logo-icon"
+                 onerror="this.onerror=null; this.src='https://placehold.co/48x48?text=AC'">
+            <div>
+                <div class="logo-text">Allyoulike Comic</div>
+                <div class="logo-sub"><i class="fa-regular fa-images"></i> Gallery Comic Center</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="nav-menu">
+        <a href="#" id="navHome"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="#" id="navRandom"><i class="fa-solid fa-shuffle"></i> Random</a>
+        <a href="#" id="navVideo"><i class="fa-solid fa-film"></i> Video</a>
+        <a href="https://www.google.com" id="navVideo34" target="_blank"><i class="fa-solid fa-video"></i> Video 34</a>
+    </div>
+</div>
