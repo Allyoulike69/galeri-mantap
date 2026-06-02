@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* Wadah utama middle banner */
+        .ads-middlecontainer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        /* Kotak pembungkus tiap iklan middle */
+        .ads-unit-middle {
+            width: 100%;
+            max-width: 728px;
+            min-height: 90px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .ads-unit-middle {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ads-middlecontainer-row" id="ads-middlecontainer">
+        <div class="ads-unit-middle">
+            <div id="container-6d8c4b544c615e4c5859237dcde978d6"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Hapus script invoke.js yang mungkin sudah ada sebelumnya
+            const oldScripts = document.querySelectorAll('script[src*="rhubarbambassadorweep.com"]');
+            oldScripts.forEach(old => {
+                if (old.parentNode) old.remove();
+            });
+            
+            // Buat script baru
+            const script = document.createElement('script');
+            script.src = "https://rhubarbambassadorweep.com/6d8c4b544c615e4c5859237dcde978d6/invoke.js";
+            script.async = true;
+            script.setAttribute('data-cfasync', 'false');
+            
+            // Tambahkan ke body
+            document.body.appendChild(script);
+            
+            console.log('✅ MIDDLE BANNER: script berhasil dimuat');
+        })();
+    </script>
+</body>
+</html>
