@@ -1,79 +1,92 @@
 <style>
-    /* Wadah utama */
-    .ads-container-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-        margin: 15px 0;
-    }
+  /* Wadah utama */
+  .ads-container-row {
+    display: flex;
+    flex-wrap: wrap; /* Supaya otomatis turun ke baris baru jika layar sempit */
+    justify-content: center; /* Rata tengah */
+    gap: 8px; /* Jarak antar unit iklan */
+    width: 100%;
+    margin: 15px 0;
+  }
 
-    /* Kotak pembungkus tiap iklan */
-    .ads-unit-small {
-        width: 320px;
-        height: 50px;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  /* Kotak pembungkus tiap iklan */
+  .ads-unit-small {
+    width: 320px;
+    height: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 
-<div class="ads-container-row" id="ads-container"></div>
+<div class="ads-container-row">
 
-<script>
-    const jumlahIklan = 4;
-    const iklanKey = '4f759e1897a054ed568b0ba50e541a39';
-    const container = document.getElementById('ads-container');
-    
-    container.innerHTML = '';
-    
-    for (let i = 0; i < jumlahIklan; i++) {
-        const adDiv = document.createElement('div');
-        adDiv.className = 'ads-unit-small';
-        
-        // PAKAI IFRAME biar tidak bentrok
-        const iframe = document.createElement('iframe');
-        iframe.width = '320';
-        iframe.height = '50';
-        iframe.style.border = 'none';
-        iframe.style.overflow = 'hidden';
-        iframe.scrolling = 'no';
-        
-        adDiv.appendChild(iframe);
-        container.appendChild(adDiv);
-        
-        // Konten iklan di dalam iframe
-        const iframeContent = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { margin: 0; padding: 0; width: 320px; height: 50px; overflow: hidden; background: transparent; }
-                </style>
-            </head>
-            <body>
-                <script>
-                    atOptions = {
-                        'key' : '${iklanKey}',
-                        'format' : 'iframe',
-                        'height' : 50,
-                        'width' : 320,
-                        'params' : {}
-                    };
-                <\/script>
-                <script src="https://rhubarbambassadorweep.com/${iklanKey}/invoke.js"><\/script>
-            </body>
-            </html>
-        `;
-        
-        const iframeDoc = iframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(iframeContent);
-        iframeDoc.close();
-    }
-    
-    console.log('✅ ' + jumlahIklan + ' iklan berhasil dibuat');
+  <!-- Iklan 1 -->
+  <div class="ads-unit-small">
+   <script>
+  atOptions = {
+    'key' : '454cc007bcd1e700f5f4dde5ec883788',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
 </script>
+<script src="https://rhubarbambassadorweep.com/454cc007bcd1e700f5f4dde5ec883788/invoke.js"></script>
+
+
+
+  </div>
+
+  <!-- Iklan 2 -->
+  <div class="ads-unit-small">
+    <script>
+  atOptions = {
+    'key' : '454cc007bcd1e700f5f4dde5ec883788',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://rhubarbambassadorweep.com/454cc007bcd1e700f5f4dde5ec883788/invoke.js"></script>
+
+
+
+  </div>
+
+  <!-- Iklan 3 -->
+  <div class="ads-unit-small">
+  <script>
+  atOptions = {
+    'key' : '454cc007bcd1e700f5f4dde5ec883788',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://rhubarbambassadorweep.com/454cc007bcd1e700f5f4dde5ec883788/invoke.js"></script>
+
+
+
+  </div>
+
+  <!-- Iklan 4 -->
+  <div class="ads-unit-small">
+  <script>
+  atOptions = {
+    'key' : '454cc007bcd1e700f5f4dde5ec883788',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://rhubarbambassadorweep.com/454cc007bcd1e700f5f4dde5ec883788/invoke.js"></script>
+
+
+  </div>
+
+</div>
