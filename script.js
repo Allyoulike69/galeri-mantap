@@ -1,9 +1,9 @@
 // ========= KONFIGURASI =========
-const DATA_URL = "https://allyoulikecomic.neocities.org/p/daftar.json";
-const BASE_URL = "https://allyoulikecomic.neocities.org/p/";
-const HOME_URL = "https://allyoulikecomic.neocities.org/";
+const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/p/daftar.json";
+const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/p/";
+const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";
 const VIDEO_URL = "https://www.youtube.com";
-const SEARCH_PAGE_URL = "https://allyoulikecomic.neocities.org/search";
+const SEARCH_PAGE_URL = "https://allyoulike69.github.io/galeri-mantap/search";
 
 let allPages = [];
 let currentPageNum = 1;
