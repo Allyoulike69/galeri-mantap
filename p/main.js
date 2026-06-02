@@ -414,8 +414,35 @@ async function loadData() {
     }
 }
 
-// ========= EVENT LISTENERS =========
+// ========= EVENT LISTENERS (DIPERBAIKI DENGAN EVENT DELEGATION) =========
 function setupEventListeners() {
+    // EVENT DELEGATION - untuk elemen yang dimuat secara dinamis
+    document.body.addEventListener('click', function(e) {
+        // Home button
+        if (e.target.closest('#navHome')) {
+            e.preventDefault();
+            window.location.href = HOME_URL;
+        }
+        
+        // Random button
+        if (e.target.closest('#navRandom')) {
+            e.preventDefault();
+            if (allPages.length > 0) showRandomComic();
+        }
+        
+        // Video button
+        if (e.target.closest('#navVideo')) {
+            e.preventDefault();
+            openVideoSite();
+        }
+        
+        // Logo click
+        if (e.target.closest('#logoClick')) {
+            window.location.href = HOME_URL;
+        }
+    });
+    
+    // SEARCH FUNCTIONALITY (tetap sama)
     const searchBtnDesktop = document.getElementById('searchBtnDesktop');
     const searchInputDesktop = document.getElementById('searchInputDesktop');
     const searchIconMobile = document.getElementById('searchIconMobile');
@@ -460,25 +487,6 @@ function setupEventListeners() {
             }
         };
     }
-    
-    document.getElementById('navHome').onclick = (e) => { 
-        e.preventDefault(); 
-        window.location.href = HOME_URL; 
-    };
-    
-    document.getElementById('navRandom').onclick = (e) => { 
-        e.preventDefault(); 
-        if (allPages.length > 0) showRandomComic();
-    };
-    
-    document.getElementById('navVideo').onclick = (e) => { 
-        e.preventDefault(); 
-        openVideoSite();
-    };
-    
-    document.getElementById('logoClick').onclick = () => { 
-        window.location.href = HOME_URL; 
-    };
 }
 
 // ========= KEYBOARD SHORTCUTS =========
