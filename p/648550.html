@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Allyoulike Comic - Gallery Comic Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     /* --- CSS BASE (sama seperti sebelumnya) --- */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        background: #111; 
+        color: #fff; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Segoe UI', 'Poppins', sans-serif; 
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      body.item-view .PopularPosts {display: none;}
+
+      /* ========= HEADER STYLE – DIHAPUS ========= */
+
+      /* ========= SLIDER STYLE (SAMA PERSIS) ========= */
+      .main-column-container { 
+        position: relative; 
+        border: 2px solid #333; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        background: #1a1a1a; 
+        color: #fff; 
+      }
+      .column-header { 
+        margin-bottom: 15px; 
+        border-bottom: 2px solid #ffa74e; 
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .column-header i {
+        font-size: 20px;
+        color: #ffa74e;
+      }
+      .column-header h3 { 
+        margin: 0; 
+        padding: 5px 10px; 
+        background: #333; 
+        color: #ffa74e; 
+        font-size: 16px; 
+        text-transform: uppercase; 
+      }
+      #pop-viewport, #slider-viewport { 
+        overflow: hidden; 
+        width: 100%; 
+        border-radius: 8px; 
+      }
+      #pop-inner-slider, #random-slider-inner { 
+        display: flex; 
+        transition: transform 0.4s ease; 
+        gap: 12px; 
+      }
+      .slider-item, .pop-slide-item { 
+        flex: 0 0 calc(25% - 9px); 
+        border-radius: 8px; 
+        background: #0a0a0a; 
+        overflow: hidden; 
+        position: relative; 
+        display: flex; 
+        flex-direction: column; 
+        border: 1px solid #333;
+        transition: transform 0.2s;
+      }
+      .slider-item:hover, .pop-slide-item:hover {
+        transform: translateY(-3px);
+        border-color: #ffa74e;
+      }
+      .slider-item img, .pop-slide-item img { 
+        width: 100%; 
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        display: block; 
+        background: #222; 
+      }
+      .pop-view-badge { 
+        position: absolute; 
+        top: 8px; 
+        left: 8px; 
+        background: #ff2d55; 
+        color: #fff; 
+        font-size: 10px; 
+        padding: 3px 8px; 
+        border-radius: 4px; 
+        z-index: 2; 
+        font-weight: bold; 
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .slider-title, .pop-slide-title { 
+        padding: 10px 6px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        color: #eee; 
+        background: #0a0a0a; 
+        text-decoration: none; 
+        display: block; 
+        text-align: center; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        border-top: 1px solid #222;
+      }
+      .slider-title:hover, .pop-slide-title:hover {
+        color: #ffa74e;
+      }
+      .slider-controls, .pop-controls { 
+        position: absolute; 
+        top: 50%; 
+        left: 5px; 
+        right: 5px; 
+        transform: translateY(-50%); 
+        display: flex; 
+        justify-content: space-between; 
+        pointer-events: none; 
+        z-index: 10; 
+      }
+      .nav-btn, .pop-nav { 
+        pointer-events: auto; 
+        background: rgba(0, 0, 0, 0.7); 
+        color: #ffa74e; 
+        border: 1px solid #ffa74e; 
+        width: 36px; 
+        height: 36px; 
+        border-radius: 50%; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-weight: bold; 
+        font-size: 18px;
+        transition: 0.2s;
+      }
+      .nav-btn:hover, .pop-nav:hover {
+        background: #ffa74e;
+        color: #000;
+      }
+      
+      @media (max-width: 1024px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); }
+      }
+      @media (max-width: 768px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+      }
+      @media (max-width: 480px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+        .slider-item img, .pop-slide-item img { aspect-ratio: 3/4; }
+      }
+      
+      /* ========= KONTEN UTAMA WRAPPER ========= */
+      .main-content-wrapper {
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+      }
+      
+      .gallery-container {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+      }
+      .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+      .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent);
+      }
+      .page-title i {
+        margin-right: 10px;
+        color: #ffa74e;
+        font-size: 28px;
+      }
+      
+      #comic-gallery { 
+        width: 100%; 
+        max-width: 600px; 
+        margin: 0 auto 20px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+      }
+      #comic-gallery img { 
+        width: 100% !important; 
+        max-width: 565px;
+        margin-bottom: 15px; 
+        display: block; 
+        background: #222; 
+        border: 2px solid #333; 
+        border-radius: 8px;
+        cursor: pointer; 
+        transition: all 0.2s;
+        scroll-margin-top: 80px;
+      }
+      #comic-gallery img:hover {
+        transform: scale(1.02);
+        border-color: #ffa74e;
+      }
+      #comic-gallery img.highlight {
+        border-color: #ffa74e;
+        box-shadow: 0 0 20px rgba(255,167,78,0.8);
+        transition: all 0.3s ease;
+      }
+
+      /* READER MODAL */
+      #manga-reader {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: #000;
+        z-index: 9999;
+        flex-direction: column;
+      }
+      #reader-top-bar, #reader-bottom-bar {
+        background: #1a1a1a;
+        min-height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 8px 15px;
+        border-bottom: 1px solid #333;
+        position: relative;
+      }
+      #reader-bottom-bar {
+        border-bottom: none;
+        border-top: 1px solid #333;
+      }
+      .nav-arrow {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .nav-arrow:hover {
+        color: #ffa74e;
+      }
+      #page-counter {
+        color: #fff;
+        font-size: 16px;
+        min-width: 110px;
+        text-align: center;
+      }
+      .zoom-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .zoom-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 5px 8px;
+        transition: 0.2s;
+      }
+      .zoom-btn:hover {
+        color: #ffa74e;
+      }
+      .close-btn {
+        position: absolute;
+        left: 15px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 11;
+        transition: 0.2s;
+      }
+      .close-btn:hover {
+        color: #ffa74e;
+      }
+      .zoom-group {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #reader-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+        background: #000;
+        padding-top: 10px;
+      }
+      #reader-image {
+        max-width: 100%;
+        max-height: 100%;
+        cursor: pointer;
+        padding-bottom: 10px;
+        transition: transform 0.3s ease;
+        transform-origin: top center;
+      }
+
+      /* ========= FOOTER – DIHAPUS ========= */
+
+      @media (max-width: 600px) {
+        .zoom-group { display: none; }
+        .nav-arrow { font-size: 20px; padding: 4px 8px; }
+        #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
+        #reader-top-bar, #reader-bottom-bar { gap: 8px; padding: 8px 12px; }
+        .page-title { font-size: 22px; }
+        .page-title i { font-size: 22px; }
+        .main-content-wrapper { padding: 0 15px; }
+      }
+      
+      @media (max-width: 480px) {
+        .main-content-wrapper { padding: 0 12px; }
+      }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <!-- Top Banner -->
+  <div id="topbanner-container"></div>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-content-wrapper">
+    <div class="gallery-container">
+        <div class="page-title">
+            <i class="fa-solid fa-book-open"></i> 
+            <span id="pageTitleNumber"></span>
+        </div>
+    </div>
+    
+    <div id="comic-gallery"></div>
+    
+    <div id="middlebanner-container"></div>
+    
+    <div class="main-column-container" id="new-update-section">
+      <div class="column-header">
+        <i class="fa-solid fa-fire"></i>
+        <h3>NEW UPDATE</h3>
+      </div>
+      <div class="pop-controls">
+        <button class="pop-nav" onclick="movePopSlide(-1)">&#10094;</button>
+        <button class="pop-nav" onclick="movePopSlide(1)">&#10095;</button>
+      </div>
+      <div id="pop-viewport"><div id="pop-inner-slider"></div></div>
+    </div>
+    
+    <div class="main-column-container" id="recommended-section">
+      <div class="column-header">
+        <i class="fa-solid fa-heart"></i>
+        <h3>You Will Love IT !!!</h3>
+      </div>
+      <div class="slider-controls">
+        <button class="nav-btn" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="nav-btn" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+      <div id="slider-viewport"><div id="random-slider-inner"></div></div>
+    </div>
+    <div id="bottombanner-container"></div>
+  </div>
+
+  <!-- Sosial Bar Container -->
+<div id="socialbar-container" class="socialbar-container"></div>
+
+<div id="footer-placeholder"></div>
+
+  <div id="manga-reader">
+    <div id="reader-top-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+
+    <div id="reader-content">
+      <img id="reader-image" onclick="nextPage()" alt="Manga Page">
+    </div>
+
+    <div id="reader-bottom-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter-bottom" style="color:#fff; font-size:17px; min-width:110px; text-align:center;">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="raw-links" style="display:none;">
+    https://i.ibb.co.com/3yC9KChf/1t.webp
+        https://i.ibb.co.com/6J1rY3m8/2t-webp.webp
+        https://i.ibb.co.com/N6YvJsKg/3t.webp
+        https://i.ibb.co.com/Jh94Vfz/4t-webp.webp
+        https://i.ibb.co.com/Y478rt1f/5t-webp.webp
+        https://i.ibb.co.com/Pvt14s4f/6t-webp.webp
+        https://i.ibb.co.com/jkyKs86Q/7t.webp
+        https://i.ibb.co.com/606xsVxw/8t-webp.webp
+        https://i.ibb.co.com/3Y9WXNN3/9t.webp
+        https://i.ibb.co.com/0RQkGLnL/10t.webp
+        https://i.ibb.co.com/pvN1hKCH/11t-webp.webp
+        https://i.ibb.co.com/qYfxrj4T/12t-webp.webp
+        https://i.ibb.co.com/V73CyRm/13t.webp
+        https://i.ibb.co.com/N2z0r2n1/14t.webp
+        https://i.ibb.co.com/dsG3yQMq/15t.webp
+        https://i.ibb.co.com/vCbHp0DB/16t-webp.webp
+        https://i.ibb.co.com/NdYdp0Gf/17t.webp
+        https://i.ibb.co.com/gFDfnKfz/18t-webp.webp
+        https://i.ibb.co.com/fV9fQrXC/19t.webp
+        https://i.ibb.co.com/99PP5H3r/20t-webp.webp
+        https://i.ibb.co.com/fdxNbt84/21t.webp
+        https://i.ibb.co.com/np14cXq/22t.webp
+        https://i.ibb.co.com/v6dNDjVj/23t-webp.webp
+        https://i.ibb.co.com/zT7qdvzS/24t.webp
+        https://i.ibb.co.com/ks19crG2/25t.webp
+        https://i.ibb.co.com/PsXT1g0z/26t-webp.webp
+        https://i.ibb.co.com/4wZ5KhCL/27t-webp.webp
+        https://i.ibb.co.com/KcHGjYT7/28t.webp
+        https://i.ibb.co.com/zVQgYF7D/29t-webp.webp
+        https://i.ibb.co.com/QgVZ98Y/30t-webp.webp
+        https://i.ibb.co.com/fGzPCsdN/31t-webp.webp
+        https://i.ibb.co.com/BK2tc6St/32t-webp.webp
+        https://i.ibb.co.com/m5DRfz17/33t.webp
+        https://i.ibb.co.com/60QhBRWs/34t-webp.webp
+        https://i.ibb.co.com/QvHNbndM/35t.webp
+        https://i.ibb.co.com/wZMQsHsH/36t.webp
+        https://i.ibb.co.com/fVv4Xh7R/37t-webp.webp
+        https://i.ibb.co.com/B24DFvdz/38t-webp.webp
+        https://i.ibb.co.com/TMpH3rkp/39t.webp
+        https://i.ibb.co.com/xKG1WQ5d/40t.webp
+        https://i.ibb.co.com/sdvGRnKN/41t.webp
+        https://i.ibb.co.com/ZRDjPcRW/42t-webp.webp
+        https://i.ibb.co.com/d0xF1LbR/43t.webp
+        https://i.ibb.co.com/ds6KZ9Z5/44t.webp
+        https://i.ibb.co.com/8gczZgpF/45t-webp.webp
+        https://i.ibb.co.com/VkL0HJ6/46t-webp.webp
+        https://i.ibb.co.com/vCWqYszb/47t.webp
+        https://i.ibb.co.com/7xCnwv39/48t.webp
+        https://i.ibb.co.com/3QKnC40/49t-webp.webp
+        https://i.ibb.co.com/0pMTSH1P/50t-webp.webp
+        https://i.ibb.co.com/N62sQXcs/51t-webp.webp
+        https://i.ibb.co.com/G40RzNCB/52t-webp.webp
+        https://i.ibb.co.com/jkH7NjrW/53t.webp
+        https://i.ibb.co.com/rGm248vg/54t-webp.webp
+        https://i.ibb.co.com/JwWzjhn4/55t-webp.webp
+        https://i.ibb.co.com/fzGHWSBy/56t.webp
+        https://i.ibb.co.com/svhGNHsh/57t.webp
+        https://i.ibb.co.com/XZD967gJ/58t.webp
+        https://i.ibb.co.com/Xx0Lcp8j/59t-webp.webp
+        https://i.ibb.co.com/v4cw1H2j/60t.webp
+        https://i.ibb.co.com/vC5GDCtL/61t.webp
+        https://i.ibb.co.com/wF8qbmBP/62t.webp
+        https://i.ibb.co.com/HDtrxPsf/63t.webp
+        https://i.ibb.co.com/5hcT2CtY/64t.webp
+        https://i.ibb.co.com/HfsN9qHL/65t.webp
+        https://i.ibb.co.com/BHbdx5QK/66t.webp
+        https://i.ibb.co.com/8n1j0zLB/67t.webp
+        https://i.ibb.co.com/pjh1Y7vD/68t.jpg
+        https://i.ibb.co.com/1JLcwr58/69t.webp
+        https://i.ibb.co.com/sdxh7FRT/70t.jpg
+        https://i.ibb.co.com/mVm2rbHf/71t-jpg.webp
+        https://i.ibb.co.com/NgsfG4xk/72t.jpg
+        https://i.ibb.co.com/6R5BLsPq/73t.jpg
+        https://i.ibb.co.com/5gcpvb2f/74t.jpg
+        https://i.ibb.co.com/77DHmZ3/75t.jpg
+        https://i.ibb.co.com/8LyNnW0p/76t-jpg.webp
+        https://i.ibb.co.com/WWhZj9t7/77t.webp
+        https://i.ibb.co.com/zTvCTBwW/78t-jpg.webp
+        https://i.ibb.co.com/pBnbhdY5/79t-webp.webp
+        https://i.ibb.co.com/1YVt75rc/80t.jpg
+        https://i.ibb.co.com/SXWLXLx1/81t-jpg.webp
+        https://i.ibb.co.com/BHVdz75m/82t.webp
+        https://i.ibb.co.com/vCdYvdkb/83t.jpg
+        https://i.ibb.co.com/F4PbnxWc/84t.jpg
+        https://i.ibb.co.com/ym0HLmN6/85t-jpg.webp
+        https://i.ibb.co.com/SDmbCt7w/86t.webp
+        https://i.ibb.co.com/6JVjN2jc/87t.webp
+        https://i.ibb.co.com/svF9tvMN/88t-webp.webp
+        https://i.ibb.co.com/RGZ9x8BT/89t-webp.webp
+        https://i.ibb.co.com/fVjD8632/90t.jpg
+        https://i.ibb.co.com/xKRTWCPY/91t.webp
+        https://i.ibb.co.com/fVDKyDYX/92t-webp.webp
+        https://i.ibb.co.com/bRX6y9C7/93t-webp.webp
+        https://i.ibb.co.com/jk5Pd9bn/94t-webp.webp
+        https://i.ibb.co.com/7xQq601F/95t-webp.webp
+        https://i.ibb.co.com/849RZMdw/96t-webp.webp
+        https://i.ibb.co.com/hRsjjZXj/97t-webp.webp
+        https://i.ibb.co.com/WNsdMjBK/98t-webp.webp
+        https://i.ibb.co.com/0jF02RKB/99t.webp
+        https://i.ibb.co.com/qYNjSB5F/100t.webp
+        https://i.ibb.co.com/cX8jZtLx/101t.webp
+        https://i.ibb.co.com/7tjPCVMV/102t.webp
+        https://i.ibb.co.com/m5R2RX8w/103t.webp
+        https://i.ibb.co.com/RpR51qc1/104t-webp.webp
+        https://i.ibb.co.com/Cp39VBCC/105t.webp
+        https://i.ibb.co.com/rTVh766/106t-webp.webp
+        https://i.ibb.co.com/wrYNhv2C/107t-webp.webp
+        https://i.ibb.co.com/JVLK80X/108t-webp.webp
+        https://i.ibb.co.com/Y46LvQTx/109t-webp.webp
+        https://i.ibb.co.com/Y4XRQN38/110t-webp.webp
+        https://i.ibb.co.com/93BtZ513/111t.webp
+        https://i.ibb.co.com/9HCzNj1M/112t-webp.webp
+        https://i.ibb.co.com/yccnWdwV/113t.webp
+        https://i.ibb.co.com/wrb5JY0B/114t-webp.webp
+        https://i.ibb.co.com/tpVFTH4P/115t.webp
+        https://i.ibb.co.com/xSmLsLrh/116t.webp
+        https://i.ibb.co.com/kF36xXc/117t.webp
+        https://i.ibb.co.com/B1VpV8v/118t-webp.webp
+        https://i.ibb.co.com/HpFdKD3w/119t-webp.webp
+        https://i.ibb.co.com/tp32dMyp/120t.webp
+        https://i.ibb.co.com/C5T42hV3/121t.webp
+        https://i.ibb.co.com/FkZhWTXR/122t.webp
+        https://i.ibb.co.com/rKkLzBrg/123t.webp
+        https://i.ibb.co.com/67pwG5rs/124t-webp.webp
+        https://i.ibb.co.com/PvjPq5P0/125t-webp.webp
+        https://i.ibb.co.com/j9VSxMHy/126t.webp
+        https://i.ibb.co.com/vNjJqMq/127t.webp
+        https://i.ibb.co.com/FqjvhpN9/128t.webp
+        https://i.ibb.co.com/qYfPdDwD/129t.webp
+        https://i.ibb.co.com/YFw30GFh/130t.webp
+        https://i.ibb.co.com/8LK54Mv1/131t-webp.webp
+        https://i.ibb.co.com/S75JTtwG/132t.webp
+        https://i.ibb.co.com/1fT4M2hN/133t-webp.webp
+        https://i.ibb.co.com/1tyjpxkg/134t.webp
+        https://i.ibb.co.com/vxWWXszK/135t-webp.webp
+        https://i.ibb.co.com/mrBp8xJP/136t.webp
+        https://i.ibb.co.com/s98M2xt3/137t.webp
+        https://i.ibb.co.com/XxbYd7x1/138t.webp
+        https://i.ibb.co.com/PGcP6TFg/139t.webp
+        https://i.ibb.co.com/tMBGVZC7/140t.webp
+        https://i.ibb.co.com/9kzSdsbG/141t.webp
+        https://i.ibb.co.com/m5FGHW2B/142t-webp.webp
+        https://i.ibb.co.com/tp6MtfZH/143t.webp
+        https://i.ibb.co.com/C3KG6Pxs/144t-webp.webp
+        https://i.ibb.co.com/R5t8hkx/145t.webp
+        https://i.ibb.co.com/FvWw1Cg/146t.webp
+        https://i.ibb.co.com/QZFg6kV/147t.webp
+        https://i.ibb.co.com/Gv5010RQ/148t.webp
+        https://i.ibb.co.com/Gvfd5Vpy/149t.webp
+        https://i.ibb.co.com/FbXTC9CX/150t.webp
+        https://i.ibb.co.com/Rk3LsqmJ/151t-webp.webp
+        https://i.ibb.co.com/k6y9cV5k/152t-webp.webp
+        https://i.ibb.co.com/Qjvg6rL0/153t.webp
+        https://i.ibb.co.com/jPDNWpBy/154t.webp
+        https://i.ibb.co.com/RTj28Mk0/155t-webp.webp
+        https://i.ibb.co.com/spkGTS5x/156t-webp.webp
+        https://i.ibb.co.com/yCxwWgX/157t.webp
+        https://i.ibb.co.com/yFtHqC3v/158t-webp.webp
+        https://i.ibb.co.com/hJ3gHcf4/159t.webp
+        https://i.ibb.co.com/fYMJXLkQ/160t-webp.webp
+        https://i.ibb.co.com/F4q3QXcP/161t.webp
+        https://i.ibb.co.com/216tby3v/162t-webp.webp
+        https://i.ibb.co.com/9k5JD2tJ/163t-webp.webp
+        https://i.ibb.co.com/d0YPQhcx/164t.webp
+        https://i.ibb.co.com/QjkF5nd8/165t-webp.webp
+        https://i.ibb.co.com/VZGcy6h/166t-webp.webp
+        https://i.ibb.co.com/DfnzYrTY/167t-webp.webp
+        https://i.ibb.co.com/6JBRcgzS/168t-webp.webp
+        https://i.ibb.co.com/BHfpD4cv/169t.webp
+        https://i.ibb.co.com/HDmNvJ72/170t.webp
+        https://i.ibb.co.com/1fPP2Vs4/171t.webp
+        https://i.ibb.co.com/9kS2GgvZ/172t.webp
+        https://i.ibb.co.com/tM1ZHLFb/173t.webp
+        https://i.ibb.co.com/84nQGGBZ/174t.webp
+        https://i.ibb.co.com/wFhZWF7x/175t.webp
+        https://i.ibb.co.com/xKYnJ83Q/176t-webp.webp
+        https://i.ibb.co.com/jZHFmx8F/177t-webp.webp
+        https://i.ibb.co.com/ZRvByWC5/178t.webp
+        https://i.ibb.co.com/Cp73vsjQ/179t.webp
+        https://i.ibb.co.com/0L19jWk/180t-webp.webp
+        https://i.ibb.co.com/ZRBx1J8j/181t.webp
+        https://i.ibb.co.com/jZsDJfBP/182t.webp
+        https://i.ibb.co.com/845C8QFC/183t-webp.webp
+        https://i.ibb.co.com/FkS25V98/184t-webp.webp
+        https://i.ibb.co.com/yFKst2z8/185t-webp.webp
+        https://i.ibb.co.com/mCMh9sNQ/186t.webp
+        https://i.ibb.co.com/TBWK2fn3/187t.webp
+        https://i.ibb.co.com/TMLQHp3G/188t-webp.webp
+        https://i.ibb.co.com/TDNkr7v9/189t-webp.webp
+        https://i.ibb.co.com/mCW05LTQ/190t.webp
+        https://i.ibb.co.com/7JTxqMPr/191t-webp.webp
+        https://i.ibb.co.com/5y0t0xH/192t-webp.webp
+        https://i.ibb.co.com/d1HbQh1/193t-webp.webp
+        https://i.ibb.co.com/N2Dm6pTj/194t.webp
+        https://i.ibb.co.com/P3yk64k/195t.webp
+        https://i.ibb.co.com/VRKdGYp/196t.webp
+        https://i.ibb.co.com/dwBJkNX0/197t.webp
+        https://i.ibb.co.com/7JLd1MGj/198t.webp
+        https://i.ibb.co.com/k6rDzBT4/199t-webp.webp
+        https://i.ibb.co.com/ZzpVbHf4/200t.webp
+        https://i.ibb.co.com/YwFb2f7/201t.webp
+        https://i.ibb.co.com/BVkS1S9j/202t.webp
+        https://i.ibb.co.com/Y4hb0CTV/203t.webp
+        https://i.ibb.co.com/9mGGXrM0/204t-webp.webp
+        https://i.ibb.co.com/yBndqvt6/205t.webp
+        https://i.ibb.co.com/8DPdmx4v/206t-webp.webp
+        https://i.ibb.co.com/Ng7zpgyY/207t-webp.webp
+        https://i.ibb.co.com/YT2Gm9m9/208t.webp
+        https://i.ibb.co.com/xKQtz9F1/209t.webp
+        https://i.ibb.co.com/JwjZDTHB/210t-webp.webp
+        https://i.ibb.co.com/Fkx5rzzh/211t-webp.webp
+        https://i.ibb.co.com/qLfsh9tB/212t-webp.webp
+        https://i.ibb.co.com/27zc5PjD/213t-webp.webp
+        https://i.ibb.co.com/vK82h9N/214t.webp
+        https://i.ibb.co.com/SDRMqCLW/215t.webp
+        https://i.ibb.co.com/7x9q0shS/216t.webp
+        https://i.ibb.co.com/9kKnnnqL/217t.webp
+        https://i.ibb.co.com/S7JfZ5V0/218t.webp
+        https://i.ibb.co.com/GSzCSf9/219t-webp.webp
+        https://i.ibb.co.com/TD6dd8Lp/220t.webp
+        https://i.ibb.co.com/v4K0qKzw/221t.webp
+        https://i.ibb.co.com/Q3SShy0f/222t.webp
+        https://i.ibb.co.com/vCvcg15X/223t-webp.webp
+        https://i.ibb.co.com/0pQsfTcr/224t-webp.webp
+        https://i.ibb.co.com/tMvRYmGg/225t.webp
+        https://i.ibb.co.com/ycY3Gm71/226t-webp.webp
+        https://i.ibb.co.com/hJFZvw9x/227t.webp
+        https://i.ibb.co.com/XZF89hqX/228t-webp.webp
+        https://i.ibb.co.com/FbPRcHGQ/229t-webp.webp
+        https://i.ibb.co.com/dsR19RHk/230t-webp.webp
+        https://i.ibb.co.com/HL9CHym2/231t.webp
+        https://i.ibb.co.com/LDjvn8gR/232t.webp
+        https://i.ibb.co.com/zhq7XM2D/233t.webp
+        https://i.ibb.co.com/hFKgYg4F/234t.webp
+        https://i.ibb.co.com/GfNZQfzL/235t-webp.webp
+        https://i.ibb.co.com/TMyJg00N/236t.webp
+        https://i.ibb.co.com/nTQTc3F/237t-webp.webp
+        https://i.ibb.co.com/7x1dV5H9/238t.webp
+        https://i.ibb.co.com/1Gf5FSBf/239t-webp.webp
+        https://i.ibb.co.com/d4LtdjdY/240t.webp
+        https://i.ibb.co.com/NdDZHCZF/241t-webp.webp
+        https://i.ibb.co.com/B5kpgGgf/242t.webp
+        https://i.ibb.co.com/Kp8y7JGV/243t-webp.webp
+        https://i.ibb.co.com/3ypXktSP/244t.webp
+        https://i.ibb.co.com/1JYDMXWt/245t-webp.webp
+        https://i.ibb.co.com/39fKmv0z/246t.webp
+        https://i.ibb.co.com/qM0s4jsy/247t-webp.webp
+        https://i.ibb.co.com/jkmCMKKz/248t.webp
+        https://i.ibb.co.com/pBXkp9b5/249t-webp.webp
+        https://i.ibb.co.com/mrKGF44v/250t.webp
+        https://i.ibb.co.com/nsN6Hb1D/251t.webp
+        https://i.ibb.co.com/Sw0FySkV/252t-webp.webp
+        https://i.ibb.co.com/jPTrTcbv/253t.webp
+        https://i.ibb.co.com/tPM6tZcg/254t-webp.webp
+        https://i.ibb.co.com/MDrWk9tY/255t.webp
+        https://i.ibb.co.com/nNbV65N0/256t.webp
+        https://i.ibb.co.com/Tq1KSNF5/257t-webp.webp
+        https://i.ibb.co.com/v48vzQ5q/258t.webp
+        https://i.ibb.co.com/k2vbf0m9/259t-webp.webp
+        https://i.ibb.co.com/tTyF7SWV/260t.webp
+        https://i.ibb.co.com/QvgvZ3pb/261t-webp.webp
+        https://i.ibb.co.com/rK4GWqv0/262t-webp.webp
+        https://i.ibb.co.com/bjhccb89/263t-webp.webp
+        https://i.ibb.co.com/k2Fb6QxQ/264t-webp.webp
+        https://i.ibb.co.com/VcnHW4K7/265t-webp.webp
+        https://i.ibb.co.com/dwypXD4b/266t.webp
+        https://i.ibb.co.com/9mQtGrM7/267t-webp.webp
+        https://i.ibb.co.com/FbBj1JHf/268t-webp.webp
+        https://i.ibb.co.com/DPP5KfCG/269t.webp
+        https://i.ibb.co.com/vvHNhBgm/270t-webp.webp
+        https://i.ibb.co.com/rRbPMTkS/271t.webp
+        https://i.ibb.co.com/3VbpzdP/272t.webp
+        https://i.ibb.co.com/bgWKVNDf/273t-webp.webp
+        https://i.ibb.co.com/N2STdGKD/274t-webp.webp
+        https://i.ibb.co.com/Y44GwDwR/275t-webp.webp
+        https://i.ibb.co.com/bgZPqwtG/276t.webp
+        https://i.ibb.co.com/PsgC9LHm/277t.webp
+        https://i.ibb.co.com/4nrpLFHP/278t-webp.webp
+        https://i.ibb.co.com/DfgmwxWq/279t.webp
+        https://i.ibb.co.com/PS0DtdB/280t.webp
+        https://i.ibb.co.com/RpwT3BQN/281t.webp
+        https://i.ibb.co.com/fd2J8sGb/282t.webp
+        https://i.ibb.co.com/NdBvWdtX/283t.webp
+        https://i.ibb.co.com/TMYp6gCh/284t-webp.webp
+        https://i.ibb.co.com/qFrBxPvr/285t.webp
+        https://i.ibb.co.com/23b1Gt83/286t.webp
+        https://i.ibb.co.com/Xfg9RMbh/287t-webp.webp
+        https://i.ibb.co.com/PsWX4WHN/288t.webp
+        https://i.ibb.co.com/6JVkjMp4/289t-webp.webp
+        https://i.ibb.co.com/5W5Xbr9n/290t.webp
+        https://i.ibb.co.com/fz8pRgT1/291t-webp.webp
+        https://i.ibb.co.com/KcvR0FHB/292t.webp
+        https://i.ibb.co.com/tM5BbVX7/293t-webp.webp
+        https://i.ibb.co.com/8gJR50gy/294t.webp
+        https://i.ibb.co.com/6JvvCPBH/295t.webp
+        https://i.ibb.co.com/QvfCj6pt/296t-webp.webp
+        https://i.ibb.co.com/ZzKDcCfx/297t-webp.webp
+        https://i.ibb.co.com/chGVB24d/298t-webp.webp
+        https://i.ibb.co.com/MkVBytLv/299t.webp
+        https://i.ibb.co.com/JjG3Fh1m/300t.webp
+        https://i.ibb.co.com/zhppTM20/301t.webp
+        https://i.ibb.co.com/V08mHYrx/302t.webp
+        https://i.ibb.co.com/gF7bDwYK/303t.webp
+        https://i.ibb.co.com/twGgZCjH/304t-webp.webp
+        https://i.ibb.co.com/d0PmtgW9/305t-webp.webp
+        https://i.ibb.co.com/dshv6cXw/306t-webp.webp
+        https://i.ibb.co.com/Qv9RvnDf/307t.webp
+        https://i.ibb.co.com/SXJ9tbPJ/308t-webp.webp
+        https://i.ibb.co.com/ZzsxMBDK/309t.webp
+        https://i.ibb.co.com/zhB8bqph/310t-webp.webp
+        https://i.ibb.co.com/bjMVwhhS/311t.webp
+        https://i.ibb.co.com/WNt6DXfM/312t.webp
+        https://i.ibb.co.com/Q35gY49b/313t.webp
+        https://i.ibb.co.com/qMpfyx1J/314t-webp.webp
+        https://i.ibb.co.com/fY59jKL8/315t-webp.webp
+        https://i.ibb.co.com/QjF9WZMF/316t.webp
+        https://i.ibb.co.com/bjkP1ND9/317t.webp
+        https://i.ibb.co.com/gFyXJMJk/318t-webp.webp
+        https://i.ibb.co.com/4wCyKsFq/319t.webp
+        https://i.ibb.co.com/Tq7CjGgR/320t-webp.webp
+        https://i.ibb.co.com/1Y9BkDPy/321t-webp.webp
+        https://i.ibb.co.com/YF5qtQkt/322t.webp
+        https://i.ibb.co.com/W4LDLRdz/323t.webp
+        https://i.ibb.co.com/DPXPFZbV/324t-webp.webp
+        https://i.ibb.co.com/wFfpjRQ8/325t-webp.webp
+        https://i.ibb.co.com/j9Ww42QV/326t.webp
+        https://i.ibb.co.com/jkf1mztz/327t-webp.webp
+        https://i.ibb.co.com/HkyFhPp/328t-webp.webp
+        https://i.ibb.co.com/PZbjQnjY/329t-webp.webp
+        https://i.ibb.co.com/BH2GNzvv/330t-webp.webp
+        https://i.ibb.co.com/r2X9h4mv/331t.webp
+        https://i.ibb.co.com/9Hn52DLD/332t-webp.webp
+        https://i.ibb.co.com/sdNs0JxP/333t-webp.webp
+        https://i.ibb.co.com/k6rHFnmx/334t-webp.webp
+        https://i.ibb.co.com/7dgG3McN/335t.webp
+        https://i.ibb.co.com/4Hsm9TP/336t.webp
+        https://i.ibb.co.com/1f9yT1rN/337t.webp
+        https://i.ibb.co.com/TqYLL4Nw/338t.webp
+        https://i.ibb.co.com/m5hwVJHB/339t.webp
+        https://i.ibb.co.com/SGf4ryW/340t-webp.webp
+        https://i.ibb.co.com/05YgcVW/341t-webp.webp
+        https://i.ibb.co.com/FLgBp4wz/342t-webp.webp
+        https://i.ibb.co.com/3y6ZG10d/343t-webp.webp
+        https://i.ibb.co.com/7Jg9SD7j/344t.webp
+        https://i.ibb.co.com/6R20nbzQ/345t.webp
+        https://i.ibb.co.com/qMDQKS4f/346t.webp
+        https://i.ibb.co.com/FkPqnCtQ/347t.webp
+        https://i.ibb.co.com/qYsyGvFv/348t-webp.webp
+        https://i.ibb.co.com/4R3NXmPh/349t-webp.webp
+        https://i.ibb.co.com/W4L5NJNp/350t.webp
+        https://i.ibb.co.com/HD8QtKbN/351t-webp.webp
+        https://i.ibb.co.com/pvyC4wGz/352t.webp
+        https://i.ibb.co.com/PH9d1fc/353t.webp
+        https://i.ibb.co.com/XnCdZk5/354t.webp
+        https://i.ibb.co.com/ksH6hd9D/355t-webp.webp
+        https://i.ibb.co.com/tpj6LPn7/356t-webp.webp
+        https://i.ibb.co.com/JWJQJzw0/357t-webp.webp
+        https://i.ibb.co.com/9HHr1C7Y/358t-webp.webp
+        https://i.ibb.co.com/4w5bQMjk/359t.webp
+        https://i.ibb.co.com/LdgGd8gx/360t.webp
+        https://i.ibb.co.com/rRjZW5GX/361t-webp.webp
+        https://i.ibb.co.com/bpBKNXM/362t.webp
+        https://i.ibb.co.com/s93ZV9XT/363t-webp.webp
+        https://i.ibb.co.com/pB1TrdC8/364t.webp
+        https://i.ibb.co.com/tpcs2ZVv/365t.webp
+        https://i.ibb.co.com/ZzN1tWLR/366t-webp.webp
+        https://i.ibb.co.com/hJZ59dTK/367t-webp.webp
+        https://i.ibb.co.com/Q3LZcjW6/368t-webp.webp
+        https://i.ibb.co.com/hJcwp2pd/369t-webp.webp
+        https://i.ibb.co.com/qMzFKHss/370t.webp
+        https://i.ibb.co.com/xRqVjMt/371t.webp
+        https://i.ibb.co.com/VpMT639f/372t-webp.webp
+        https://i.ibb.co.com/YBtDPGNd/373t.webp
+        https://i.ibb.co.com/6JyKyr33/374t.webp
+        https://i.ibb.co.com/29whDW5/375t-webp.webp
+        https://i.ibb.co.com/5g5BJPJm/376t.webp
+        https://i.ibb.co.com/hJNVCZPq/377t.webp
+        https://i.ibb.co.com/23hmR0kq/378t-webp.webp
+        https://i.ibb.co.com/FbVMQ1DR/379t.webp
+        https://i.ibb.co.com/N6ns6SrJ/380t-webp.webp
+        https://i.ibb.co.com/HfDn6kJD/381t.webp
+        https://i.ibb.co.com/VWv37dY2/382t-webp.webp
+        https://i.ibb.co.com/C3SMN14F/383t.webp
+        https://i.ibb.co.com/B5R3VGgB/384t-webp.webp
+        https://i.ibb.co.com/VWk26CCZ/385t-webp.webp
+        https://i.ibb.co.com/fY6Vbgwy/386t-webp.webp
+        https://i.ibb.co.com/dsYSGCQ2/387t.webp
+        https://i.ibb.co.com/d0M1B04v/388t.webp
+        https://i.ibb.co.com/Pz4p5HCB/389t-webp.webp
+        https://i.ibb.co.com/whpqtmv0/390t.webp
+        https://i.ibb.co.com/7xT6Kx1G/391t.webp
+        https://i.ibb.co.com/KczXZTd2/392t-webp.webp
+        https://i.ibb.co.com/tTVWYkk3/393t.webp
+        https://i.ibb.co.com/7J58x0Kq/394t.webp
+        https://i.ibb.co.com/xqZB7zxW/395t.webp
+        https://i.ibb.co.com/7x5xffT3/396t.webp
+        https://i.ibb.co.com/S4Czwwg1/397t.webp
+        https://i.ibb.co.com/N2KmxR0C/398t-webp.webp
+        https://i.ibb.co.com/HLPC230f/399t.webp
+        https://i.ibb.co.com/d0tHL8ZP/400t.webp
+        https://i.ibb.co.com/ymNGq1Z4/401t.webp
+        https://i.ibb.co.com/cS3cBd4k/402t.webp
+        https://i.ibb.co.com/Z1zvfB1j/403t.webp
+        https://i.ibb.co.com/pBf8ktMT/404t-webp.webp
+        https://i.ibb.co.com/p6GdBWYd/405t-webp.webp
+        https://i.ibb.co.com/KxpNsPkt/406t.webp
+        https://i.ibb.co.com/GQxXrx60/407t.webp
+        https://i.ibb.co.com/VWXM1wTB/408t-webp.webp
+        https://i.ibb.co.com/GGCfB2F/409t-webp.webp
+        https://i.ibb.co.com/cS5Jjqbr/410t.webp
+        https://i.ibb.co.com/Df1d9cGB/411t-webp.webp
+        https://i.ibb.co.com/h1L9jMht/412t-webp.webp
+        https://i.ibb.co.com/SXsQy0fW/413t-webp.webp
+        https://i.ibb.co.com/JFbTPXfy/414t-webp.webp
+        https://i.ibb.co.com/tp03WV7w/415t-webp.webp
+        https://i.ibb.co.com/xqcSD1j5/416t.webp
+        https://i.ibb.co.com/8Dxm20Ms/417t-webp.webp
+        https://i.ibb.co.com/WXCGcmh/418t-webp.webp
+        https://i.ibb.co.com/G4bjv2wN/419t-webp.webp
+        https://i.ibb.co.com/MxfJzmKD/420t-webp.webp
+        https://i.ibb.co.com/gZV0X4WC/421t.webp
+        https://i.ibb.co.com/vvx0RRTh/422t-webp.webp
+        https://i.ibb.co.com/FLDRJ5r3/423t.webp
+        https://i.ibb.co.com/8LcQzByH/424t.webp
+        https://i.ibb.co.com/NnYFBgwf/425t.webp
+        https://i.ibb.co.com/4ZMJW9Cs/426t-webp.webp
+        https://i.ibb.co.com/0R56nfGr/427t.webp
+        https://i.ibb.co.com/JRD032v4/428t-webp.webp
+        https://i.ibb.co.com/Pq6R7Sy/429t.webp
+        https://i.ibb.co.com/d4Zvj9PT/430t.webp
+  </div>
+  
+  <script>
+    // Fungsi untuk memuat konten dari file eksternal ke dalam container
+    function loadComponent(containerId, fileUrl) {
+        fetch(fileUrl + '?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jika yang dimuat adalah file banner, jalankan script iklan yang ada di dalamnya
+                if (fileUrl === 'topbanner.html' || fileUrl === 'middlebanner.html' || fileUrl === 'bottombanner.html') {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        if (oldScript.parentNode) oldScript.remove();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${fileUrl}:`, error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:10px; color:#ff3b6f;">Failed to load banner. Please check network.</div>';
+                }
+            });
+    }
+
+    // Fungsi untuk memuat sosial bar dari file sosialbar.html
+    function loadSocialBar() {
+        fetch('sosialbar.html?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById('socialbar-container');
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jalankan semua script yang ada di dalam sosialbar.html
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (oldScript.parentNode) oldScript.remove();
+                });
+                
+                console.log('Social bar loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading sosialbar.html:', error);
+                const container = document.getElementById('socialbar-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; background:#121212; border-radius:20px; border:1px solid #ff3b6f;">⚠️ Gagal memuat Social Bar. Pastikan file sosialbar.html tersedia.</div>';
+                }
+            });
+    }
+
+    // Memuat Top Banner, Middle Banner, Bottom Banner, Header, dan Footer
+    loadComponent('topbanner-container', 'topbanner.html');
+    loadComponent('middlebanner-container', 'middlebanner.html');
+    loadComponent('bottombanner-container', 'bottombanner.html');
+    loadComponent('header-placeholder', 'header.html');
+    loadComponent('footer-placeholder', 'footer.html');
+    
+    // Memuat sosial bar dari file sosialbar.html
+    loadSocialBar();
+</script>
+
+  <script src="main.js"></script>
+</body>
+</html>
