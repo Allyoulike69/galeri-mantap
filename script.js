@@ -89,7 +89,7 @@ async function loadData() {
         }
         
         const recommendedComics = getRecommendedComics();
-        renderGrid(recommendedComics, 'random-grid', false);
+        renderGrid(recommendedComics, 'random-grid', false, 1);
         
         const lastPage = getLastPage();
         currentPageNum = lastPage;
@@ -105,7 +105,7 @@ async function loadData() {
     }
 }
 
-function renderGrid(data, gridId, showNewBadge = false) {
+function renderGrid(data, gridId, showNewBadge = false, currentPage = 1) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
     grid.innerHTML = "";
@@ -118,7 +118,13 @@ function renderGrid(data, gridId, showNewBadge = false) {
         let imgUrl = item.image || "https://placehold.co/400x600?text=No+Image";
         let title = item.title || "Untitled";
         let badge = '';
-        if (showNewBadge && idx < 5) badge = '<span class="badge badge-new">NEW</span>';
+        // Badge NEW hanya tampil jika:
+        // 1. showNewBadge = true (untuk grid new-uploads)
+        // 2. currentPage === 1 (hanya halaman pertama)
+        // 3. idx < 5 (hanya 5 item pertama di halaman tersebut)
+        if (showNewBadge && currentPage === 1 && idx < 5) {
+            badge = '<span class="badge badge-new">NEW</span>';
+        }
         grid.innerHTML += `
             <div class="comic-item">
                 ${badge}
@@ -189,7 +195,8 @@ function goToPage(page) {
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const paginatedData = allPages.slice(start, end);
-    renderGrid(paginatedData, 'new-uploads-grid', true);
+    // Kirimkan currentPage ke renderGrid untuk menentukan apakah badge NEW ditampilkan
+    renderGrid(paginatedData, 'new-uploads-grid', true, page);
     renderPagination(page);
     saveCurrentPage(page);
     const newSection = document.getElementById('new-section');
