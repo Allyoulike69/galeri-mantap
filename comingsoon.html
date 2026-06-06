@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Coming Soon | ALLYOULIKE</title>
+  <meta name="description" content="Something amazing is on the way. ALLYOULIKE is coming soon. Stay tuned for fresh inspiration and exclusive updates.">
+  <!-- Google Fonts: Poppins & Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (Free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      color: #FFFFFF;
+      overflow-x: hidden;
+      position: relative;
+      background: #0a0c12;
+    }
+
+    /* Fullscreen background image */
+    .hero-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.6) contrast(1.1);
+    }
+
+    /* Gradient overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.5) 0%, 
+        rgba(30, 20, 50, 0.55) 50%,
+        rgba(0, 0, 0, 0.6) 100%);
+      z-index: 1;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Brand / Logo */
+    .brand {
+      margin-bottom: 1.5rem;
+    }
+    .logo {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #FFFFFF, #FFEAA7, #FFC857, #FF9F4A, #FF6B8B);
+      background-size: 300% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-stroke: 2px #0a0a1a;
+      text-stroke: 2px #0a0a1a;
+      text-shadow: 0 0 8px rgba(255, 200, 100, 0.4);
+      animation: logoGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoGlow {
+      0% { 
+        background-position: 0% 50%;
+        text-shadow: 0 0 5px rgba(255, 200, 100, 0.3);
+      }
+      100% { 
+        background-position: 100% 50%;
+        text-shadow: 0 0 20px rgba(255, 107, 139, 0.6), 0 0 10px rgba(255, 200, 100, 0.4);
+      }
+    }
+
+    /* Main heading */
+    h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 900;
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #FFFFFF, #FFEAA7, #FFD700, #FF9F4A, #FF6B8B, #D986FF);
+      background-size: 400% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+      -webkit-text-stroke: 2.5px #0a0a1a;
+      text-stroke: 2.5px #0a0a1a;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      animation: titleShine 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleShine {
+      0% { 
+        background-position: 0% 50%;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+      }
+      100% { 
+        background-position: 100% 50%;
+        text-shadow: 0 0 30px rgba(255, 107, 139, 0.6), 0 0 15px rgba(255, 215, 0, 0.4);
+      }
+    }
+
+    /* Description text */
+    .description {
+      font-size: 1.2rem;
+      max-width: 650px;
+      margin: 0 auto 1rem auto;
+      color: #FFF8F0;
+      line-height: 1.6;
+      font-weight: 600;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px;
+      display: inline-block;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(255, 200, 120, 0.5);
+    }
+
+    /* Back to Home button */
+    .back-home-wrapper {
+      margin: 2rem 0 1.8rem 0;
+    }
+    .btn-back-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #FF6B8B, #FF9F4A, #FFD966);
+      background-size: 200% 200%;
+      border: none;
+      padding: 1rem 2.4rem;
+      border-radius: 60px;
+      font-weight: 800;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.15rem;
+      color: #1F1A2E;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      text-decoration: none;
+      letter-spacing: 0.8px;
+      backdrop-filter: blur(4px);
+      animation: gradientShift 3s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .btn-back-home i {
+      font-size: 1.2rem;
+      transition: transform 0.25s;
+    }
+    .btn-back-home:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.5);
+    }
+    .btn-back-home:hover i {
+      transform: translateX(-5px);
+    }
+
+    /* Social media links */
+    .social-links {
+      display: flex;
+      gap: 1.8rem;
+      margin: 0.8rem 0 1.8rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(12px);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      color: #FFEFD6;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      text-decoration: none;
+      border: 1px solid rgba(255, 180, 100, 0.6);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .social-icon:hover {
+      background: linear-gradient(135deg, #FF6B8B, #FF9F4A);
+      color: #1F1A2E;
+      transform: translateY(-6px) scale(1.08);
+      border-color: #FFE0A3;
+    }
+
+    /* FOOTER - TULISAN SUPER TERANG, TANPA BORDER/OUTLINE */
+    .footer-note {
+      margin-top: 2.8rem;
+      padding: 0.9rem 1.8rem;
+      display: inline-block;
+      transition: all 0.3s ease;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+    }
+    
+    .footer-note:hover {
+      transform: scale(1.02);
+      background: rgba(0, 0, 0, 0.35);
+    }
+    
+    /* Teks footer - GRADIEN SUPER CERAH, TANPA STROKE/OUTLINE */
+    .footer-text {
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #FFFFFF, #FFEAA7, #FFD700, #FF9F4A, #FF6B8B, #D986FF);
+      background-size: 400% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      animation: footerShine 3s ease-in-out infinite alternate;
+    }
+    
+    @keyframes footerShine {
+      0% { 
+        background-position: 0% 50%;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+      }
+      100% { 
+        background-position: 100% 50%;
+        text-shadow: 0 0 25px rgba(255, 107, 139, 0.6), 0 0 15px rgba(255, 215, 0, 0.5);
+      }
+    }
+    
+    /* Brand highlight di footer - TANPA OUTLINE */
+    .footer-note .brand-highlight {
+      font-weight: 900;
+      font-size: 1.15rem;
+      letter-spacing: 1.5px;
+      background: linear-gradient(135deg, #FFD966, #FFB347, #FF6B8B, #D986FF, #FFD700);
+      background-size: 300% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      animation: brandGlow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes brandGlow {
+      0% { 
+        background-position: 0% 50%;
+        text-shadow: 0 0 8px rgba(255, 200, 100, 0.4);
+      }
+      100% { 
+        background-position: 100% 50%;
+        text-shadow: 0 0 25px rgba(255, 107, 139, 0.7), 0 0 15px rgba(255, 200, 100, 0.5);
+      }
+    }
+
+    /* Decorative floating shapes */
+    .floating-shape {
+      position: fixed;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.25;
+      animation: floatShape 12s infinite alternate ease-in-out;
+    }
+    .shape-1 {
+      width: 350px;
+      height: 350px;
+      background: #FF6B8B;
+      bottom: -120px;
+      left: -120px;
+    }
+    .shape-2 {
+      width: 450px;
+      height: 450px;
+      background: #FF9F4A;
+      top: -180px;
+      right: -180px;
+    }
+    .shape-3 {
+      width: 280px;
+      height: 280px;
+      background: #8B5CF6;
+      bottom: 20%;
+      right: 5%;
+    }
+
+    @keyframes floatShape {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+      100% { transform: translate(40px, -40px) scale(1.2); opacity: 0.35; }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .btn-back-home {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+      }
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      .social-links {
+        gap: 1.2rem;
+      }
+      .social-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+      }
+      .logo {
+        font-size: 2.2rem;
+        -webkit-text-stroke: 1.5px #0a0a1a;
+      }
+      h1 {
+        -webkit-text-stroke: 1.8px #0a0a1a;
+      }
+      .description {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+      }
+      .footer-text {
+        font-size: 0.75rem;
+      }
+      .footer-note .brand-highlight {
+        font-size: 0.85rem;
+      }
+      .footer-note {
+        padding: 0.7rem 1.2rem;
+      }
+    }
+
+    /* fade-up animation */
+    .fade-up {
+      animation: fadeUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+    .delay-4 { animation-delay: 0.5s; }
+  </style>
+</head>
+<body>
+
+<!-- Background image -->
+<img class="hero-bg" src="https://i.ibb.co.com/11BD9mL/38ce5f186788fbab817dc04d9ccc14e4.jpg" alt="ALLYOULIKE background">
+<div class="overlay"></div>
+
+<!-- Floating shapes -->
+<div class="floating-shape shape-1"></div>
+<div class="floating-shape shape-2"></div>
+<div class="floating-shape shape-3"></div>
+
+<div class="container">
+  <div class="brand fade-up">
+    <div class="logo">ALLYOULIKE</div>
+  </div>
+
+  <h1 class="fade-up delay-1">Coming Soon</h1>
+  <p class="description fade-up delay-1">
+    ✨ We're crafting something fresh and inspiring — tailor-made for everything you love ✨<br>
+    A vibrant new digital experience is just around the corner.
+  </p>
+
+  <!-- Back to Home Button -->
+  <div class="back-home-wrapper fade-up delay-2">
+    <a href="#" class="btn-back-home" id="backHomeBtn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+  </div>
+
+  <!-- Social Media Links:
+       - Patreon
+       - Telegram (ganti dari Twitter)
+       - Facebook
+       - YouTube
+       - TikTok
+       (Discord dihapus)
+  -->
+  <div class="social-links fade-up delay-3">
+    <a href="#" class="social-icon" aria-label="Patreon"><i class="fab fa-patreon"></i></a>
+    <a href="#" class="social-icon" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+    <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="#" class="social-icon" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+  </div>
+
+  <!-- Footer - TULISAN SUPER TERANG TANPA BORDER/OUTLINE -->
+  <div class="footer-note fade-up delay-4">
+    <span class="brand-highlight">ALLYOULIKE</span> 
+    <span class="footer-text">— coming soon to inspire your world with fantasy you like ✨🌟</span>
+  </div>
+</div>
+
+<script>
+  // Back to Home button
+  const backHomeBtn = document.getElementById('backHomeBtn');
+  backHomeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      window.location.href = window.location.origin + '/';
+    }, 250);
+  });
+  
+  // Social media interactions
+  const socialIcons = document.querySelectorAll('.social-icon');
+  socialIcons.forEach(icon => {
+    icon.addEventListener('click', (e) => {
+      e.preventDefault();
+      const platform = icon.getAttribute('aria-label') || 'social';
+      console.log(`🌈 ${platform} — coming soon!`);
+    });
+  });
+  
+  // Mouse move effect for shapes
+  document.addEventListener('mousemove', (e) => {
+    const shapes = document.querySelectorAll('.floating-shape');
+    const mouseX = e.clientX / window.innerWidth;
+    const mouseY = e.clientY / window.innerHeight;
+    shapes.forEach((shape, index) => {
+      const moveX = (mouseX - 0.5) * 25 * (index + 1);
+      const moveY = (mouseY - 0.5) * 25 * (index + 1);
+      shape.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+    });
+  });
+  
+  console.log(`🎨 ALLYOULIKE — Social media: Patreon, Telegram, Facebook, YouTube, TikTok`);
+  console.log(`✅ Twitter diganti Telegram, Discord dihapus.`);
+</script>
+</body>
+</html>
