@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Allyoulike Comic - Gallery Comic Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     /* --- CSS BASE (sama seperti sebelumnya) --- */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        background: #111; 
+        color: #fff; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Segoe UI', 'Poppins', sans-serif; 
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      body.item-view .PopularPosts {display: none;}
+
+      /* ========= HEADER STYLE – DIHAPUS ========= */
+
+      /* ========= SLIDER STYLE (SAMA PERSIS) ========= */
+      .main-column-container { 
+        position: relative; 
+        border: 2px solid #333; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        background: #1a1a1a; 
+        color: #fff; 
+      }
+      .column-header { 
+        margin-bottom: 15px; 
+        border-bottom: 2px solid #ffa74e; 
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .column-header i {
+        font-size: 20px;
+        color: #ffa74e;
+      }
+      .column-header h3 { 
+        margin: 0; 
+        padding: 5px 10px; 
+        background: #333; 
+        color: #ffa74e; 
+        font-size: 16px; 
+        text-transform: uppercase; 
+      }
+      #pop-viewport, #slider-viewport { 
+        overflow: hidden; 
+        width: 100%; 
+        border-radius: 8px; 
+      }
+      #pop-inner-slider, #random-slider-inner { 
+        display: flex; 
+        transition: transform 0.4s ease; 
+        gap: 12px; 
+      }
+      .slider-item, .pop-slide-item { 
+        flex: 0 0 calc(25% - 9px); 
+        border-radius: 8px; 
+        background: #0a0a0a; 
+        overflow: hidden; 
+        position: relative; 
+        display: flex; 
+        flex-direction: column; 
+        border: 1px solid #333;
+        transition: transform 0.2s;
+      }
+      .slider-item:hover, .pop-slide-item:hover {
+        transform: translateY(-3px);
+        border-color: #ffa74e;
+      }
+      .slider-item img, .pop-slide-item img { 
+        width: 100%; 
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        display: block; 
+        background: #222; 
+      }
+      .pop-view-badge { 
+        position: absolute; 
+        top: 8px; 
+        left: 8px; 
+        background: #ff2d55; 
+        color: #fff; 
+        font-size: 10px; 
+        padding: 3px 8px; 
+        border-radius: 4px; 
+        z-index: 2; 
+        font-weight: bold; 
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .slider-title, .pop-slide-title { 
+        padding: 10px 6px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        color: #eee; 
+        background: #0a0a0a; 
+        text-decoration: none; 
+        display: block; 
+        text-align: center; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        border-top: 1px solid #222;
+      }
+      .slider-title:hover, .pop-slide-title:hover {
+        color: #ffa74e;
+      }
+      .slider-controls, .pop-controls { 
+        position: absolute; 
+        top: 50%; 
+        left: 5px; 
+        right: 5px; 
+        transform: translateY(-50%); 
+        display: flex; 
+        justify-content: space-between; 
+        pointer-events: none; 
+        z-index: 10; 
+      }
+      .nav-btn, .pop-nav { 
+        pointer-events: auto; 
+        background: rgba(0, 0, 0, 0.7); 
+        color: #ffa74e; 
+        border: 1px solid #ffa74e; 
+        width: 36px; 
+        height: 36px; 
+        border-radius: 50%; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-weight: bold; 
+        font-size: 18px;
+        transition: 0.2s;
+      }
+      .nav-btn:hover, .pop-nav:hover {
+        background: #ffa74e;
+        color: #000;
+      }
+      
+      @media (max-width: 1024px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); }
+      }
+      @media (max-width: 768px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+      }
+      @media (max-width: 480px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+        .slider-item img, .pop-slide-item img { aspect-ratio: 3/4; }
+      }
+      
+      /* ========= KONTEN UTAMA WRAPPER ========= */
+      .main-content-wrapper {
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+      }
+      
+      .gallery-container {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+      }
+      .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+      .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent);
+      }
+      .page-title i {
+        margin-right: 10px;
+        color: #ffa74e;
+        font-size: 28px;
+      }
+      
+      #comic-gallery { 
+        width: 100%; 
+        max-width: 600px; 
+        margin: 0 auto 20px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+      }
+      #comic-gallery img { 
+        width: 100% !important; 
+        max-width: 565px;
+        margin-bottom: 15px; 
+        display: block; 
+        background: #222; 
+        border: 2px solid #333; 
+        border-radius: 8px;
+        cursor: pointer; 
+        transition: all 0.2s;
+        scroll-margin-top: 80px;
+      }
+      #comic-gallery img:hover {
+        transform: scale(1.02);
+        border-color: #ffa74e;
+      }
+      #comic-gallery img.highlight {
+        border-color: #ffa74e;
+        box-shadow: 0 0 20px rgba(255,167,78,0.8);
+        transition: all 0.3s ease;
+      }
+
+      /* READER MODAL */
+      #manga-reader {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: #000;
+        z-index: 9999;
+        flex-direction: column;
+      }
+      #reader-top-bar, #reader-bottom-bar {
+        background: #1a1a1a;
+        min-height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 8px 15px;
+        border-bottom: 1px solid #333;
+        position: relative;
+      }
+      #reader-bottom-bar {
+        border-bottom: none;
+        border-top: 1px solid #333;
+      }
+      .nav-arrow {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .nav-arrow:hover {
+        color: #ffa74e;
+      }
+      #page-counter {
+        color: #fff;
+        font-size: 16px;
+        min-width: 110px;
+        text-align: center;
+      }
+      .zoom-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .zoom-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 5px 8px;
+        transition: 0.2s;
+      }
+      .zoom-btn:hover {
+        color: #ffa74e;
+      }
+      .close-btn {
+        position: absolute;
+        left: 15px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 11;
+        transition: 0.2s;
+      }
+      .close-btn:hover {
+        color: #ffa74e;
+      }
+      .zoom-group {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #reader-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+        background: #000;
+        padding-top: 10px;
+      }
+      #reader-image {
+        max-width: 100%;
+        max-height: 100%;
+        cursor: pointer;
+        padding-bottom: 10px;
+        transition: transform 0.3s ease;
+        transform-origin: top center;
+      }
+
+      /* ========= FOOTER – DIHAPUS ========= */
+
+      @media (max-width: 600px) {
+        .zoom-group { display: none; }
+        .nav-arrow { font-size: 20px; padding: 4px 8px; }
+        #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
+        #reader-top-bar, #reader-bottom-bar { gap: 8px; padding: 8px 12px; }
+        .page-title { font-size: 22px; }
+        .page-title i { font-size: 22px; }
+        .main-content-wrapper { padding: 0 15px; }
+      }
+      
+      @media (max-width: 480px) {
+        .main-content-wrapper { padding: 0 12px; }
+      }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <!-- Top Banner -->
+  <div id="topbanner-container"></div>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-content-wrapper">
+    <div class="gallery-container">
+        <div class="page-title">
+            <i class="fa-solid fa-book-open"></i> 
+            <span id="pageTitleNumber"></span>
+        </div>
+    </div>
+    
+    <div id="comic-gallery"></div>
+    
+    <div id="middlebanner-container"></div>
+    
+    <div class="main-column-container" id="new-update-section">
+      <div class="column-header">
+        <i class="fa-solid fa-fire"></i>
+        <h3>NEW UPDATE</h3>
+      </div>
+      <div class="pop-controls">
+        <button class="pop-nav" onclick="movePopSlide(-1)">&#10094;</button>
+        <button class="pop-nav" onclick="movePopSlide(1)">&#10095;</button>
+      </div>
+      <div id="pop-viewport"><div id="pop-inner-slider"></div></div>
+    </div>
+    
+    <div class="main-column-container" id="recommended-section">
+      <div class="column-header">
+        <i class="fa-solid fa-heart"></i>
+        <h3>You Will Love IT !!!</h3>
+      </div>
+      <div class="slider-controls">
+        <button class="nav-btn" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="nav-btn" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+      <div id="slider-viewport"><div id="random-slider-inner"></div></div>
+    </div>
+    <div id="bottombanner-container"></div>
+  </div>
+
+  <!-- Sosial Bar Container -->
+<div id="socialbar-container" class="socialbar-container"></div>
+
+<div id="footer-placeholder"></div>
+
+  <div id="manga-reader">
+    <div id="reader-top-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+
+    <div id="reader-content">
+      <img id="reader-image" onclick="nextPage()" alt="Manga Page">
+    </div>
+
+    <div id="reader-bottom-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter-bottom" style="color:#fff; font-size:17px; min-width:110px; text-align:center;">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="raw-links" style="display:none;">
+    https://i.ibb.co.com/vxzt9q5H/1t.webp
+        https://i.ibb.co.com/6pmnvv9/2t-webp.webp
+        https://i.ibb.co.com/nqDSQkgJ/3t.webp
+        https://i.ibb.co.com/BDZcTpC/4t-webp.webp
+        https://i.ibb.co.com/WpBz8VPs/5t-webp.webp
+        https://i.ibb.co.com/KxjKx3sc/6t-webp.webp
+        https://i.ibb.co.com/W4SsH4z8/7t.webp
+        https://i.ibb.co.com/7JQTBXgv/8t-webp.webp
+        https://i.ibb.co.com/wNmR2Dv2/9t.webp
+        https://i.ibb.co.com/3YsB8HZd/10t.webp
+        https://i.ibb.co.com/qFryZ0nn/11t-webp.webp
+        https://i.ibb.co.com/rGC29PRy/12t-webp.webp
+        https://i.ibb.co.com/yFC2B0rY/13t.webp
+        https://i.ibb.co.com/5xFLrKBZ/14t.webp
+        https://i.ibb.co.com/DfVwgPCf/15t.webp
+        https://i.ibb.co.com/Q7D9GDWr/16t-webp.webp
+        https://i.ibb.co.com/JRmKwRQR/17t.webp
+        https://i.ibb.co.com/WN26rvBN/18t-webp.webp
+        https://i.ibb.co.com/JF7GZH5z/19t.webp
+        https://i.ibb.co.com/WWRs8y0V/20t-webp.webp
+        https://i.ibb.co.com/pB7wMFkz/21t.webp
+        https://i.ibb.co.com/vCmB5hhW/22t.webp
+        https://i.ibb.co.com/4ZQPLyNq/23t-webp.webp
+        https://i.ibb.co.com/BVBkZ6N0/24t.webp
+        https://i.ibb.co.com/FqcFR4BB/25t.webp
+        https://i.ibb.co.com/XrDfbyPb/26t-webp.webp
+        https://i.ibb.co.com/Jw41z22G/27t-webp.webp
+        https://i.ibb.co.com/JjYQrhvy/28t.webp
+        https://i.ibb.co.com/CKHv82Dy/29t-webp.webp
+        https://i.ibb.co.com/cSDTsnsT/30t-webp.webp
+        https://i.ibb.co.com/FbjnZ9cV/31t-webp.webp
+        https://i.ibb.co.com/TBjygfj6/32t-webp.webp
+        https://i.ibb.co.com/r2wnQQHx/33t.webp
+        https://i.ibb.co.com/vCWfyyVv/34t-webp.webp
+        https://i.ibb.co.com/WvfgvsvK/35t.webp
+        https://i.ibb.co.com/MDFyYzPg/36t.webp
+        https://i.ibb.co.com/BKQJxKz4/37t-webp.webp
+        https://i.ibb.co.com/xtPbQZBq/38t-webp.webp
+        https://i.ibb.co.com/k2X9fwNY/39t.webp
+        https://i.ibb.co.com/BVMzBPXR/40t.webp
+        https://i.ibb.co.com/sdqJHW6Y/41t.webp
+        https://i.ibb.co.com/B2c10f25/42t-webp.webp
+        https://i.ibb.co.com/KjmF5SS3/43t.webp
+        https://i.ibb.co.com/chgYjVrY/44t.webp
+        https://i.ibb.co.com/vCQ8LWf1/45t-webp.webp
+        https://i.ibb.co.com/svDDDvHN/46t-webp.webp
+        https://i.ibb.co.com/jPf5RBLN/47t.png
+        https://i.ibb.co.com/cK0gtm6m/48t.webp
+  </div>
+  
+  <script>
+    // Fungsi untuk memuat konten dari file eksternal ke dalam container
+    function loadComponent(containerId, fileUrl) {
+        fetch(fileUrl + '?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jika yang dimuat adalah file banner, jalankan script iklan yang ada di dalamnya
+                if (fileUrl === 'topbanner.html' || fileUrl === 'middlebanner.html' || fileUrl === 'bottombanner.html') {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        if (oldScript.parentNode) oldScript.remove();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${fileUrl}:`, error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:10px; color:#ff3b6f;">Failed to load banner. Please check network.</div>';
+                }
+            });
+    }
+
+    // Fungsi untuk memuat sosial bar dari file sosialbar.html
+    function loadSocialBar() {
+        fetch('sosialbar.html?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById('socialbar-container');
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jalankan semua script yang ada di dalam sosialbar.html
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (oldScript.parentNode) oldScript.remove();
+                });
+                
+                console.log('Social bar loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading sosialbar.html:', error);
+                const container = document.getElementById('socialbar-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; background:#121212; border-radius:20px; border:1px solid #ff3b6f;">⚠️ Gagal memuat Social Bar. Pastikan file sosialbar.html tersedia.</div>';
+                }
+            });
+    }
+
+    // Memuat Top Banner, Middle Banner, Bottom Banner, Header, dan Footer
+    loadComponent('topbanner-container', 'topbanner.html');
+    loadComponent('middlebanner-container', 'middlebanner.html');
+    loadComponent('bottombanner-container', 'bottombanner.html');
+    loadComponent('header-placeholder', 'header.html');
+    loadComponent('footer-placeholder', 'footer.html');
+    
+    // Memuat sosial bar dari file sosialbar.html
+    loadSocialBar();
+</script>
+
+  <script src="main.js"></script>
+</body>
+</html>
