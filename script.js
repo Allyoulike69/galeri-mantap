@@ -2,7 +2,7 @@
 const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/p/daftar.json";
 const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/p/";
 const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";
-const VIDEO_URL = "https://www.youtube.com";
+const VIDEO_URL = "https://alyoulikevideo.pages.dev/";
 const SEARCH_PAGE_URL = "https://allyoulike69.github.io/galeri-mantap/search";
 
 let allPages = [];
