@@ -1,9 +1,9 @@
 // ========= KONFIGURASI URL =========
-const DATA_URL = "https://allyoulike69.github.io/galeri-mantap/p/daftar.json";
-const BASE_URL = "https://allyoulike69.github.io/galeri-mantap/p/";
-const HOME_URL = "https://allyoulike69.github.io/galeri-mantap/";
+const DATA_URL = "https://allyoulikecomic.pages.dev/p/daftar.json";
+const BASE_URL = "https://allyoulikecomic.pages.dev/p/";
+const HOME_URL = "https://allyoulikecomic.pages.dev/";
 const VIDEO_URL = "https://alyoulikevideo.pages.dev/";
-const SEARCH_PAGE_URL = "https://allyoulike69.github.io/galeri-mantap/search";
+const SEARCH_PAGE_URL = "https://allyoulikecomic.pages.dev/search";
 
 // ========= KONSTANTA UNTUK 24 JAM =========
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
