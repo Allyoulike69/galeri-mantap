@@ -414,20 +414,13 @@
     </a>
   </div>
 
-  <!-- Social Media Links:
-       - Patreon
-       - Telegram (ganti dari Twitter)
-       - Facebook
-       - YouTube
-       - TikTok
-       (Discord dihapus)
-  -->
+  <!-- Social Media Links (with target="_blank" for new tab) -->
   <div class="social-links fade-up delay-3">
-    <a href="#" class="social-icon" aria-label="Patreon"><i class="fab fa-patreon"></i></a>
-    <a href="#" class="social-icon" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-    <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-    <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-    <a href="#" class="social-icon" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+    <a href="https://www.patreon.com/cw/allyoulike" target="_blank" class="social-icon" aria-label="Patreon"><i class="fab fa-patreon"></i></a>
+    <a href="https://t.me/+5hmwolv8Q842ZDBl" target="_blank" class="social-icon" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+    <a href="https://www.facebook.com/people/Allyoulike-II-Reborn/61590684270548/" target="_blank" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.youtube.com/@Allyoulike-69" target="_blank" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="https://www.tiktok.com/@allyoulike69" target="_blank" class="social-icon" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
   </div>
 
   <!-- Footer - TULISAN SUPER TERANG TANPA BORDER/OUTLINE -->
@@ -438,22 +431,26 @@
 </div>
 
 <script>
-  // Back to Home button
+  // Back to Home button - tetap berfungsi untuk navigasi
   const backHomeBtn = document.getElementById('backHomeBtn');
-  backHomeBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    setTimeout(() => {
+  if (backHomeBtn) {
+    backHomeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Animasi sebentar sebelum pindah halaman (opsional)
       window.location.href = window.location.origin + '/';
-    }, 250);
-  });
+    });
+  }
   
-  // Social media interactions
+  // Hanya console log untuk tracking interaksi sosial, TANPA preventDefault
+  // agar link bisa berfungsi normal
   const socialIcons = document.querySelectorAll('.social-icon');
   socialIcons.forEach(icon => {
     icon.addEventListener('click', (e) => {
-      e.preventDefault();
+      // Kita biarkan link berjalan normal (tidak panggil preventDefault)
+      // Hanya log untuk keperluan tracking atau analytics ringan
       const platform = icon.getAttribute('aria-label') || 'social';
-      console.log(`🌈 ${platform} — coming soon!`);
+      console.log(`🔗 Mengunjungi ${platform}: ${icon.href}`);
+      // Link akan tetap terbuka karena kita tidak mencegah event default
     });
   });
   
@@ -469,8 +466,8 @@
     });
   });
   
-  console.log(`🎨 ALLYOULIKE — Social media: Patreon, Telegram, Facebook, YouTube, TikTok`);
-  console.log(`✅ Twitter diganti Telegram, Discord dihapus.`);
+  console.log(`🎨 ALLYOULIKE — Social media links sudah aktif dengan target _blank`);
+  console.log(`✅ Link: Patreon, Telegram, Facebook, YouTube, TikTok sudah bisa diklik`);
 </script>
 </body>
 </html>
