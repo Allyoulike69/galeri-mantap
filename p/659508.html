@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Allyoulike Comic - Gallery Comic Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     /* --- CSS BASE (sama seperti sebelumnya) --- */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        background: #111; 
+        color: #fff; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Segoe UI', 'Poppins', sans-serif; 
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      body.item-view .PopularPosts {display: none;}
+
+      /* ========= HEADER STYLE – DIHAPUS ========= */
+
+      /* ========= SLIDER STYLE (SAMA PERSIS) ========= */
+      .main-column-container { 
+        position: relative; 
+        border: 2px solid #333; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        background: #1a1a1a; 
+        color: #fff; 
+      }
+      .column-header { 
+        margin-bottom: 15px; 
+        border-bottom: 2px solid #ffa74e; 
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .column-header i {
+        font-size: 20px;
+        color: #ffa74e;
+      }
+      .column-header h3 { 
+        margin: 0; 
+        padding: 5px 10px; 
+        background: #333; 
+        color: #ffa74e; 
+        font-size: 16px; 
+        text-transform: uppercase; 
+      }
+      #pop-viewport, #slider-viewport { 
+        overflow: hidden; 
+        width: 100%; 
+        border-radius: 8px; 
+      }
+      #pop-inner-slider, #random-slider-inner { 
+        display: flex; 
+        transition: transform 0.4s ease; 
+        gap: 12px; 
+      }
+      .slider-item, .pop-slide-item { 
+        flex: 0 0 calc(25% - 9px); 
+        border-radius: 8px; 
+        background: #0a0a0a; 
+        overflow: hidden; 
+        position: relative; 
+        display: flex; 
+        flex-direction: column; 
+        border: 1px solid #333;
+        transition: transform 0.2s;
+      }
+      .slider-item:hover, .pop-slide-item:hover {
+        transform: translateY(-3px);
+        border-color: #ffa74e;
+      }
+      .slider-item img, .pop-slide-item img { 
+        width: 100%; 
+        aspect-ratio: 2/3;
+        object-fit: cover;
+        display: block; 
+        background: #222; 
+      }
+      .pop-view-badge { 
+        position: absolute; 
+        top: 8px; 
+        left: 8px; 
+        background: #ff2d55; 
+        color: #fff; 
+        font-size: 10px; 
+        padding: 3px 8px; 
+        border-radius: 4px; 
+        z-index: 2; 
+        font-weight: bold; 
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .slider-title, .pop-slide-title { 
+        padding: 10px 6px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        color: #eee; 
+        background: #0a0a0a; 
+        text-decoration: none; 
+        display: block; 
+        text-align: center; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        border-top: 1px solid #222;
+      }
+      .slider-title:hover, .pop-slide-title:hover {
+        color: #ffa74e;
+      }
+      .slider-controls, .pop-controls { 
+        position: absolute; 
+        top: 50%; 
+        left: 5px; 
+        right: 5px; 
+        transform: translateY(-50%); 
+        display: flex; 
+        justify-content: space-between; 
+        pointer-events: none; 
+        z-index: 10; 
+      }
+      .nav-btn, .pop-nav { 
+        pointer-events: auto; 
+        background: rgba(0, 0, 0, 0.7); 
+        color: #ffa74e; 
+        border: 1px solid #ffa74e; 
+        width: 36px; 
+        height: 36px; 
+        border-radius: 50%; 
+        cursor: pointer; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-weight: bold; 
+        font-size: 18px;
+        transition: 0.2s;
+      }
+      .nav-btn:hover, .pop-nav:hover {
+        background: #ffa74e;
+        color: #000;
+      }
+      
+      @media (max-width: 1024px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(33.33% - 8px); }
+      }
+      @media (max-width: 768px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+      }
+      @media (max-width: 480px) {
+        .slider-item, .pop-slide-item { flex: 0 0 calc(50% - 6px); }
+        .slider-item img, .pop-slide-item img { aspect-ratio: 3/4; }
+      }
+      
+      /* ========= KONTEN UTAMA WRAPPER ========= */
+      .main-content-wrapper {
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+      }
+      
+      .gallery-container {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+      }
+      .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+      .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent);
+      }
+      .page-title i {
+        margin-right: 10px;
+        color: #ffa74e;
+        font-size: 28px;
+      }
+      
+      #comic-gallery { 
+        width: 100%; 
+        max-width: 600px; 
+        margin: 0 auto 20px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+      }
+      #comic-gallery img { 
+        width: 100% !important; 
+        max-width: 565px;
+        margin-bottom: 15px; 
+        display: block; 
+        background: #222; 
+        border: 2px solid #333; 
+        border-radius: 8px;
+        cursor: pointer; 
+        transition: all 0.2s;
+        scroll-margin-top: 80px;
+      }
+      #comic-gallery img:hover {
+        transform: scale(1.02);
+        border-color: #ffa74e;
+      }
+      #comic-gallery img.highlight {
+        border-color: #ffa74e;
+        box-shadow: 0 0 20px rgba(255,167,78,0.8);
+        transition: all 0.3s ease;
+      }
+
+      /* READER MODAL */
+      #manga-reader {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: #000;
+        z-index: 9999;
+        flex-direction: column;
+      }
+      #reader-top-bar, #reader-bottom-bar {
+        background: #1a1a1a;
+        min-height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 8px 15px;
+        border-bottom: 1px solid #333;
+        position: relative;
+      }
+      #reader-bottom-bar {
+        border-bottom: none;
+        border-top: 1px solid #333;
+      }
+      .nav-arrow {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .nav-arrow:hover {
+        color: #ffa74e;
+      }
+      #page-counter {
+        color: #fff;
+        font-size: 16px;
+        min-width: 110px;
+        text-align: center;
+      }
+      .zoom-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .zoom-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 5px 8px;
+        transition: 0.2s;
+      }
+      .zoom-btn:hover {
+        color: #ffa74e;
+      }
+      .close-btn {
+        position: absolute;
+        left: 15px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 26px;
+        cursor: pointer;
+        z-index: 11;
+        transition: 0.2s;
+      }
+      .close-btn:hover {
+        color: #ffa74e;
+      }
+      .zoom-group {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #reader-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+        background: #000;
+        padding-top: 10px;
+      }
+      #reader-image {
+        max-width: 100%;
+        max-height: 100%;
+        cursor: pointer;
+        padding-bottom: 10px;
+        transition: transform 0.3s ease;
+        transform-origin: top center;
+      }
+
+      /* ========= FOOTER – DIHAPUS ========= */
+
+      @media (max-width: 600px) {
+        .zoom-group { display: none; }
+        .nav-arrow { font-size: 20px; padding: 4px 8px; }
+        #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
+        #reader-top-bar, #reader-bottom-bar { gap: 8px; padding: 8px 12px; }
+        .page-title { font-size: 22px; }
+        .page-title i { font-size: 22px; }
+        .main-content-wrapper { padding: 0 15px; }
+      }
+      
+      @media (max-width: 480px) {
+        .main-content-wrapper { padding: 0 12px; }
+      }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <!-- Top Banner -->
+  <div id="topbanner-container"></div>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-content-wrapper">
+    <div class="gallery-container">
+        <div class="page-title">
+            <i class="fa-solid fa-book-open"></i> 
+            <span id="pageTitleNumber"></span>
+        </div>
+    </div>
+    
+    <div id="comic-gallery"></div>
+    
+    <div id="middlebanner-container"></div>
+    
+    <div class="main-column-container" id="new-update-section">
+      <div class="column-header">
+        <i class="fa-solid fa-fire"></i>
+        <h3>NEW UPDATE</h3>
+      </div>
+      <div class="pop-controls">
+        <button class="pop-nav" onclick="movePopSlide(-1)">&#10094;</button>
+        <button class="pop-nav" onclick="movePopSlide(1)">&#10095;</button>
+      </div>
+      <div id="pop-viewport"><div id="pop-inner-slider"></div></div>
+    </div>
+    
+    <div class="main-column-container" id="recommended-section">
+      <div class="column-header">
+        <i class="fa-solid fa-heart"></i>
+        <h3>You Will Love IT !!!</h3>
+      </div>
+      <div class="slider-controls">
+        <button class="nav-btn" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="nav-btn" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+      <div id="slider-viewport"><div id="random-slider-inner"></div></div>
+    </div>
+    <div id="bottombanner-container"></div>
+  </div>
+
+  <!-- Sosial Bar Container -->
+<div id="socialbar-container" class="socialbar-container"></div>
+
+<div id="footer-placeholder"></div>
+
+  <div id="manga-reader">
+    <div id="reader-top-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+
+    <div id="reader-content">
+      <img id="reader-image" onclick="nextPage()" alt="Manga Page">
+    </div>
+
+    <div id="reader-bottom-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter-bottom" style="color:#fff; font-size:17px; min-width:110px; text-align:center;">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="raw-links" style="display:none;">
+    https://i.ibb.co.com/60Q9Yvkb/1t-jpg.webp
+https://i.ibb.co.com/fY43zZpQ/2t-jpg.webp
+https://i.ibb.co.com/BVNbMrbw/3t-jpg.webp
+https://i.ibb.co.com/PZ4jj07Q/4t.jpg
+https://i.ibb.co.com/TBqgXQNt/5t-jpg.webp
+https://i.ibb.co.com/zVBcqhDK/6t.jpg
+https://i.ibb.co.com/JR2hcQrP/7t.jpg
+https://i.ibb.co.com/HTNwCJ7C/8t-jpg.webp
+https://i.ibb.co.com/HpYF5wxY/9t-jpg.webp
+https://i.ibb.co.com/YF7PygCm/10t.webp
+https://i.ibb.co.com/PZkzPNZK/11t-jpg.webp
+https://i.ibb.co.com/m51Sgbpd/12t-jpg.webp
+https://i.ibb.co.com/bgRVLY1t/13t-jpg.webp
+https://i.ibb.co.com/9m6fRf21/14t.jpg
+https://i.ibb.co.com/DDQtqXGW/15t.jpg
+https://i.ibb.co.com/s9dzPZ9s/16t-jpg.webp
+https://i.ibb.co.com/kgtnKqs7/17t.jpg
+https://i.ibb.co.com/xqvVCcN4/18t.jpg
+https://i.ibb.co.com/ZwsnfCs/19t.webp
+https://i.ibb.co.com/w9fQKf7/20t-webp.webp
+https://i.ibb.co.com/NgMx5FVT/21t.webp
+https://i.ibb.co.com/fVmxXh2B/22t.webp
+https://i.ibb.co.com/23R7tnr0/23t-webp.webp
+https://i.ibb.co.com/wftnqZV/24t.webp
+https://i.ibb.co.com/0pg21vYX/25t.webp
+https://i.ibb.co.com/bRgvR6PC/26t-webp.webp
+https://i.ibb.co.com/XkXJ0hTz/27t-webp.webp
+https://i.ibb.co.com/zWgrgN1H/28t.webp
+https://i.ibb.co.com/Mx07cLNJ/29t-webp.webp
+https://i.ibb.co.com/Tq0cyDC7/30t-webp.webp
+https://i.ibb.co.com/v4nNYQyW/31t.jpg
+https://i.ibb.co.com/kZZ3xX1/32t.jpg
+https://i.ibb.co.com/Xk2GkTJf/33t-jpg.webp
+https://i.ibb.co.com/1tW4Pp7C/34t-jpg.webp
+https://i.ibb.co.com/rRmHQM8P/35t.jpg
+https://i.ibb.co.com/h1ZmHyRK/36t.webp
+https://i.ibb.co.com/C59dPNX8/37t.jpg
+https://i.ibb.co.com/XZCxsxk4/38t-jpg.webp
+https://i.ibb.co.com/35J4gDr0/39t.jpg
+https://i.ibb.co.com/V0kPNyR0/40t-jpg.webp
+https://i.ibb.co.com/9mywF30x/41t.jpg
+https://i.ibb.co.com/CKB19Gqc/42t-jpg.webp
+https://i.ibb.co.com/h1ZNsYwF/43t-jpg.webp
+https://i.ibb.co.com/dTTFr4W/44t-jpg.webp
+https://i.ibb.co.com/NnZDc7z5/45t-webp.webp
+https://i.ibb.co.com/LzB1sS5n/46t.jpg
+https://i.ibb.co.com/JFs7qTcn/47t-jpg.webp
+https://i.ibb.co.com/hx2kL3Zw/48t.jpg
+https://i.ibb.co.com/4wyB0wnQ/49t-jpg.webp
+https://i.ibb.co.com/LXtj3VBK/50t-jpg.webp
+https://i.ibb.co.com/27XkXxxQ/51t.jpg
+https://i.ibb.co.com/jk4ZjB2f/52t-jpg.webp
+https://i.ibb.co.com/ch0hHwxg/53t-jpg.webp
+https://i.ibb.co.com/QvbVMxFr/54t-jpg.webp
+https://i.ibb.co.com/CpGSvT8W/55t.jpg
+https://i.ibb.co.com/Tx0ThyJH/56t.jpg
+https://i.ibb.co.com/KxTNbDPT/57t-jpg.webp
+https://i.ibb.co.com/ymKmNd8M/58t.jpg
+https://i.ibb.co.com/0VZPSxdW/59t-webp.webp
+https://i.ibb.co.com/prrDsz7Q/60t-jpg.webp
+https://i.ibb.co.com/pv37qkvb/61t.jpg
+https://i.ibb.co.com/s9ynrzWf/62t.jpg
+https://i.ibb.co.com/prd58cqm/63t.jpg
+https://i.ibb.co.com/hxPcM1Wy/64t.jpg
+https://i.ibb.co.com/cK6bSnjw/65t-jpg.webp
+https://i.ibb.co.com/35brL66p/66t-jpg.webp
+https://i.ibb.co.com/bgd1DgKS/67t.webp
+https://i.ibb.co.com/4ZFNFxKs/68t.jpg
+https://i.ibb.co.com/5gnH8tjt/69t-jpg.webp
+https://i.ibb.co.com/HLyg2Ydg/70t.webp
+https://i.ibb.co.com/QjbH5p6X/71t-jpg.webp
+https://i.ibb.co.com/G3Vmvb0y/72t.jpg
+https://i.ibb.co.com/1t2cSB8v/73t.webp
+https://i.ibb.co.com/FLRtc0Bx/74t.jpg
+https://i.ibb.co.com/qMXdwSb2/75t.jpg
+https://i.ibb.co.com/tPWwYNQH/76t-webp.webp
+https://i.ibb.co.com/20n06c0Z/77t.webp
+https://i.ibb.co.com/b5D78jfz/78t-webp.webp
+https://i.ibb.co.com/WW4XjPCt/79t-webp.webp
+https://i.ibb.co.com/chjdz8zf/80t-webp.webp
+https://i.ibb.co.com/27ktmkKq/81t.webp
+https://i.ibb.co.com/wFfswCs9/82t.webp
+https://i.ibb.co.com/Dg8JSSVW/83t.webp
+https://i.ibb.co.com/DH6xdqFR/84t.webp
+https://i.ibb.co.com/v4T855sP/85t.webp
+https://i.ibb.co.com/h1YTssGL/86t.webp
+https://i.ibb.co.com/4RWM0P1C/87t.webp
+https://i.ibb.co.com/60y8Rx50/88t-webp.webp
+https://i.ibb.co.com/hRLFWK9n/89t-webp.webp
+https://i.ibb.co.com/mCHCPrx4/90t.webp
+https://i.ibb.co.com/0jc5tzGY/91t.webp
+https://i.ibb.co.com/N50stTz/92t-webp.webp
+https://i.ibb.co.com/H5Q7dFf/93t-webp.webp
+https://i.ibb.co.com/sYXTNrt/94t-jpg.webp
+https://i.ibb.co.com/WvPfBJ57/95t-webp.webp
+https://i.ibb.co.com/hJQBd16F/96t-webp.webp
+https://i.ibb.co.com/svF1w4Qk/97t-webp.webp
+https://i.ibb.co.com/kg6ZB1qN/98t-webp.webp
+https://i.ibb.co.com/MyMwW3bs/99t-jpg.webp
+https://i.ibb.co.com/j99Vp8T4/100t.jpg
+https://i.ibb.co.com/TM14FSP3/101t-jpg.webp
+https://i.ibb.co.com/BVkX3kpn/102t.jpg
+https://i.ibb.co.com/9H2kx1yr/103t.jpg
+https://i.ibb.co.com/MkrYhLtY/104t-jpg.webp
+https://i.ibb.co.com/B2ndHsZt/105t.webp
+https://i.ibb.co.com/Hm9czXz/106t-jpg.webp
+https://i.ibb.co.com/G44R27Yh/107t.jpg
+https://i.ibb.co.com/9Stz44k/108t.jpg
+https://i.ibb.co.com/JjF53Bnk/109t-jpg.webp
+https://i.ibb.co.com/3mwbXf4f/110t.jpg
+https://i.ibb.co.com/RkD2vws5/111t-jpg.webp
+https://i.ibb.co.com/FLN3gY4d/112t.jpg
+https://i.ibb.co.com/WpM5x62b/113t.webp
+https://i.ibb.co.com/9HfgrpNH/114t-jpg.webp
+https://i.ibb.co.com/bRWBQY18/115t-jpg.webp
+https://i.ibb.co.com/RkyjZwq0/116t.jpg
+https://i.ibb.co.com/4ZR2FC9f/117t-jpg.webp
+https://i.ibb.co.com/zWZYrByg/118t.jpg
+https://i.ibb.co.com/4QD4fL1/119t.jpg
+https://i.ibb.co.com/7x0pVDS6/120t.webp
+https://i.ibb.co.com/dsL04QVp/121t.jpg
+https://i.ibb.co.com/gn8djH9/122t.webp
+https://i.ibb.co.com/prX37bWT/123t.jpg
+https://i.ibb.co.com/hFNwGNHW/124t-jpg.webp
+https://i.ibb.co.com/8nm2K6W5/125t.jpg
+https://i.ibb.co.com/d0657YVL/126t.jpg
+https://i.ibb.co.com/Dg8dDdFB/127t.jpg
+https://i.ibb.co.com/wNckBWkx/128t.jpg
+https://i.ibb.co.com/23pRNDyd/129t.jpg
+https://i.ibb.co.com/fGBtHqJ2/130t-jpg.webp
+https://i.ibb.co.com/FbfK9DXM/131t-jpg.webp
+https://i.ibb.co.com/gM6Rjq6G/132t.jpg
+https://i.ibb.co.com/8nTrwP28/133t.jpg
+https://i.ibb.co.com/4wzW6ZZC/134t.webp
+https://i.ibb.co.com/KzRC6Fd1/135t-jpg.webp
+https://i.ibb.co.com/Zzb9BkLt/136t-jpg.webp
+https://i.ibb.co.com/DDmcMnKR/137t.webp
+https://i.ibb.co.com/rfL72cBP/138t-jpg.webp
+https://i.ibb.co.com/LhxkvkS1/139t.jpg
+https://i.ibb.co.com/PGfWTn1q/140t-jpg.webp
+https://i.ibb.co.com/xS1Ncvm5/141t.webp
+https://i.ibb.co.com/4ZBC5phw/142t-webp.webp
+https://i.ibb.co.com/nNdkV1jx/143t.webp
+https://i.ibb.co.com/C4NgfZ4/144t-webp.webp
+https://i.ibb.co.com/ynnR2ByS/145t.webp
+https://i.ibb.co.com/xKw8YK4z/146t.webp
+https://i.ibb.co.com/v6y0P3vZ/147t.webp
+https://i.ibb.co.com/TDtxn9r8/148t.webp
+https://i.ibb.co.com/BXx971j/149t.webp
+https://i.ibb.co.com/Xxn5X8h1/150t.jpg
+https://i.ibb.co.com/BV6nfzPx/151t-jpg.webp
+https://i.ibb.co.com/F4qncfFp/152t-jpg.webp
+https://i.ibb.co.com/bgMRHGgv/153t.webp
+https://i.ibb.co.com/cSTG5VGj/154t.jpg
+https://i.ibb.co.com/KcMQzMXB/155t.jpg
+https://i.ibb.co.com/DPTrp3hT/156t.jpg
+https://i.ibb.co.com/fYPSM93V/157t-jpg.webp
+https://i.ibb.co.com/Pzxyy8CZ/158t.jpg
+https://i.ibb.co.com/qL8QB01K/159t.jpg
+https://i.ibb.co.com/R4Qg53Vw/160t-webp.webp
+https://i.ibb.co.com/CsK3sJYc/161t-jpg.webp
+https://i.ibb.co.com/dsMYb9F0/162t.jpg
+https://i.ibb.co.com/k6W84Hyq/163t.jpg
+https://i.ibb.co.com/RTrgXRFV/164t.jpg
+https://i.ibb.co.com/CqHCyDB/165t.jpg
+https://i.ibb.co.com/Fk7npGBW/166t-jpg.webp
+https://i.ibb.co.com/60FMRt62/167t.jpg
+https://i.ibb.co.com/4nMLWXxw/168t.jpg
+https://i.ibb.co.com/fVRBqHXs/169t.jpg
+https://i.ibb.co.com/s9zBJ3kX/170t-jpg.webp
+https://i.ibb.co.com/bMG5TrCP/171t-jpg.webp
+https://i.ibb.co.com/VW0fZd5j/172t.jpg
+https://i.ibb.co.com/G4NCGKxG/173t.jpg
+https://i.ibb.co.com/HTPV9TPz/174t-jpg.webp
+https://i.ibb.co.com/20kj7Ymw/175t.jpg
+https://i.ibb.co.com/JwhpVTWk/176t.jpg
+https://i.ibb.co.com/ccVY54Bj/177t-webp.webp
+https://i.ibb.co.com/1kzYRFf/178t-jpg.webp
+https://i.ibb.co.com/hFgztdtw/179t.jpg
+https://i.ibb.co.com/whvtkjcv/180t-jpg.webp
+https://i.ibb.co.com/M5pWNk43/181t.jpg
+https://i.ibb.co.com/b5N8jR1h/182t.jpg
+https://i.ibb.co.com/vfyXsmv/183t.jpg
+https://i.ibb.co.com/hF82prhs/184t-jpg.webp
+https://i.ibb.co.com/RppBy9pm/185t-jpg.webp
+https://i.ibb.co.com/ZRKx1Ghb/186t.webp
+  </div>
+  
+  <script>
+    // Fungsi untuk memuat konten dari file eksternal ke dalam container
+    function loadComponent(containerId, fileUrl) {
+        fetch(fileUrl + '?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jika yang dimuat adalah file banner, jalankan script iklan yang ada di dalamnya
+                if (fileUrl === 'topbanner.html' || fileUrl === 'middlebanner.html' || fileUrl === 'bottombanner.html') {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        if (oldScript.parentNode) oldScript.remove();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${fileUrl}:`, error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:10px; color:#ff3b6f;">Failed to load banner. Please check network.</div>';
+                }
+            });
+    }
+
+    // Fungsi untuk memuat sosial bar dari file sosialbar.html
+    function loadSocialBar() {
+        fetch('sosialbar.html?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById('socialbar-container');
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jalankan semua script yang ada di dalam sosialbar.html
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (oldScript.parentNode) oldScript.remove();
+                });
+                
+                console.log('Social bar loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading sosialbar.html:', error);
+                const container = document.getElementById('socialbar-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; background:#121212; border-radius:20px; border:1px solid #ff3b6f;">⚠️ Gagal memuat Social Bar. Pastikan file sosialbar.html tersedia.</div>';
+                }
+            });
+    }
+
+    // Memuat Top Banner, Middle Banner, Bottom Banner, Header, dan Footer
+    loadComponent('topbanner-container', 'topbanner.html');
+    loadComponent('middlebanner-container', 'middlebanner.html');
+    loadComponent('bottombanner-container', 'bottombanner.html');
+    loadComponent('header-placeholder', 'header.html');
+    loadComponent('footer-placeholder', 'footer.html');
+    
+    // Memuat sosial bar dari file sosialbar.html
+    loadSocialBar();
+</script>
+
+  <script src="main.js"></script>
+</body>
+</html>
