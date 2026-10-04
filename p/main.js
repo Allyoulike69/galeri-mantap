@@ -441,15 +441,20 @@ function rememberComicId(id) {
     try { sessionStorage.setItem("currentComic", JSON.stringify({ id: String(id), t: Date.now(), v: 2 })); } catch (e) {}
 }
 function beautifyUrl(id) {
-    // Paksa URL cantik: /p/base.html?id=685373 -> /p/685373.
+    // Paksa URL cantik: /p/base.html?id=685373 -> /p/685373
+    // (atau /read.html?id=685373 -> /p/685373 bila reader di root).
     // Kalau sudah cantik, tidak ngapa-ngapain.
     try {
         if (!id || !/^[A-Za-z0-9_-]+$/.test(String(id))) return;
         var path = window.location.pathname;
         var cur = (path.replace(/\/+$/, "").split("/").pop() || "");
         if (cur === String(id)) return;
-        var base = path.slice(0, path.lastIndexOf("/p/") + 3);
-        if (base.indexOf("/p/") === -1) base = path.replace(/[^\/]*$/, "");
+        var base;
+        if (path.lastIndexOf("/p/") !== -1) {
+            base = path.slice(0, path.lastIndexOf("/p/") + 3);
+        } else {
+            base = SITE_ROOT + "p/";
+        }
         window.history.replaceState(null, "", base + id + window.location.hash);
     } catch (e) {}
 }
