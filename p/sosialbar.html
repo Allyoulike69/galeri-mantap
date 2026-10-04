@@ -1,0 +1,25 @@
+<script src="https://rhubarbambassadorweep.com/61/bb/fc/61bbfca03b2f74a6f4d30300201fe5d4.js"></script>
+<script>
+// Ingat komik yang diklik (untuk URL cantik yang landing di base.html).
+document.addEventListener("click", function(e) {
+    try {
+        var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+        if (!a) return;
+        var href = a.getAttribute("href") || "";
+        var id = "";
+        var m = href.match(/[?&]id=([^&#]+)/);
+        if (m) id = decodeURIComponent(m[1]).replace(/^#/, "");
+        if (!id) {
+            var seg = href.split("?")[0].split("/").pop().replace(/\.html$/i, "");
+            if (/^\d+$/.test(seg)) id = seg;
+        }
+        if (!id) {
+            var c = href.match(/#(\d+)/);
+            if (c) id = c[1];
+        }
+        if (id) {
+            try { localStorage.setItem("lastComic", JSON.stringify({ id: id, t: Date.now() })); } catch (err) {}
+        }
+    } catch (err) {}
+}, true);
+</script>
