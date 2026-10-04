@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn</title>
+    <meta name="description" content="ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+    /* HEADER CSS */
+    .main-header {
+        background: #0a0a0a;
+        padding: 10px 10px;
+        width: 100%;
+        position: relative;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .logo-icon:hover {
+        transform: scale(1.05);
+        border-color: #ff5e7c;
+    }
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* SEARCH DESKTOP */
+    .desktop-search-wrapper { display: block; }
+    .search-panel-desktop {
+        display: flex;
+        background: #6d6a6a;
+        border: 1px solid #444;
+    }
+    .search-panel-desktop input {
+        background: transparent;
+        border: none;
+        padding: 8px;
+        color: white;
+        outline: none;
+        width: 250px;
+    }
+    .search-panel-desktop input::placeholder { color: #888; }
+    .search-panel-desktop button {
+        background: #ff0000;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+        padding: 0px 10px;
+    }
+    
+    .search-icon-mobile {
+        display: none;
+        background: none;
+        border: none;
+        color: #ffa74e;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 8px;
+        flex-shrink: 0;
+    }
+    
+    .hamburger-menu {
+        display: none;
+        background: #555;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px 12px;
+        flex-shrink: 0;
+        margin-left: auto;
+        border-radius: 5px;
+    }
+    
+    .mobile-nav-overlay {
+        display: none;
+        width: 100%;
+        background: #333;
+        flex-direction: column;
+    }
+    .mobile-nav-overlay.show { display: flex; }
+    .mobile-nav-sidebar {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+    .mobile-nav-sidebar a {
+        color: #a5a4a4;
+        text-decoration: none;
+        padding: 12px 20px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .mobile-nav-sidebar a:hover {
+        background: #555;
+        color: white;
+    }
+    .mobile-nav-close {
+        display: none;
+    }
+    
+    .mobile-search-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        background: #0a0a0a;
+        padding: 15px 20px;
+        z-index: 9999;
+        border-bottom: 2px solid #ffa74e;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .mobile-search-container {
+        display: flex;
+        align-items: center;
+        background: #222;
+        border-radius: 50px;
+        padding: 5px 15px;
+        border: 1px solid #444;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .mobile-search-container input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 12px 8px;
+        color: white;
+        font-size: 16px;
+        outline: none;
+    }
+    .mobile-search-container button {
+        background: transparent;
+        border: none;
+        color: #ffa74e;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+    }
+    
+    .nav-menu {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-left: 20px;
+    }
+    .nav-menu a {
+        color: #ddd;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s;
+    }
+    .nav-menu a:hover { color: #ff0008; }
+    .nav-dropdown-click { position: relative; display: flex; align-items: center; }
+    .nav-dropdown-click .dropbtn-click { cursor: pointer; border: 1px solid #555; border-radius: 5px; padding: 5px 10px; background: #555; color: white; }
+    .dropdown-content-click {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 5px;
+        min-width: 140px;
+        z-index: 200;
+        flex-direction: column;
+        padding: 5px 0;
+    }
+    .dropdown-content-click a {
+        padding: 8px 15px;
+        font-size: 15px;
+        color: #a5a4a4;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .dropdown-content-click a:hover {
+        background: #777;
+        color: white;
+    }
+    .dropdown-content-click.show { display: flex; }
+    
+    @media (max-width: 760px) {
+        .search-icon-mobile { display: none !important; }
+        .hamburger-menu { display: block !important; }
+        .nav-menu { display: none !important; }
+        .nav-dropdown-click { display: none !important; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-menu a { font-size: 12px; }
+    }
+    @media (max-width: 1280px) and (min-width: 761px) {
+        .nav-menu a { display: none; }
+        .nav-dropdown-click { display: flex; }
+    }
+    @media (min-width: 1281px) {
+        .nav-dropdown-click { display: none; }
+    }
+    @media (max-width: 480px) {
+
+        .logo-icon { width: 36px; height: 36px; }
+        .nav-menu { gap: 10px; }
+        .nav-menu a { font-size: 11px; }
+    }
+    @media (max-width: 400px) {
+        .search-panel-desktop input { width: 190px; }
+    }
+</style>
+
+<div class="main-header">
+    <div class="top-bar">
+        <div class="logo-area" id="logoClick">
+            <img src="logo.png"
+                 alt="Allyoulike Comic Logo"
+                 class="logo-icon"
+                 onerror="this.onerror=null; this.src='https://placehold.co/48x48?text=AC'">
+        </div>
+
+        <div class="desktop-search-wrapper">
+            <div class="search-panel-desktop">
+                <input type="text" id="searchInputDesktop" placeholder="Search comics, manga, title...">
+                <button id="searchBtnDesktop"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+
+        <div class="nav-dropdown-click">
+            <a href="#" class="dropbtn-click"><i class="fa fa-angle-down"></i></a>
+            <div class="dropdown-content-click">
+                <a href="#" id="navRandom">Random</a>
+                <a href="tags.html">Tags</a>
+                <a href="artists.html">Artists</a>
+                <a href="characters.html">Characters</a>
+                <a href="parodies.html">Parodies</a>
+                <a href="groups.html">Groups</a>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a href="#" id="navRandom">Random</a>
+            <a href="tags.html">Tags</a>
+            <a href="artists.html">Artists</a>
+            <a href="characters.html">Characters</a>
+            <a href="parodies.html">Parodies</a>
+            <a href="groups.html">Groups</a>
+        </div>
+        <button class="search-icon-mobile" id="searchIconMobile">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="hamburger-menu" id="hamburgerMenu">
+            <i class="fa fa-bars"></i>
+        </button>
+    </div>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+        <div class="mobile-nav-sidebar">
+            <a href="#" id="navRandomMobile">Random</a>
+            <a href="tags.html">Tags</a>
+            <a href="artists.html">Artists</a>
+            <a href="characters.html">Characters</a>
+            <a href="parodies.html">Parodies</a>
+            <a href="groups.html">Groups</a>
+        </div>
+    </div>
+</div>
+
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="mobile-search-container">
+        <input type="text" id="searchInputMobile" placeholder="Search comics, manga, title..." autocomplete="off">
+        <button id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
+    </div>
+</div>
+

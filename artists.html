@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn</title>
+    <meta name="description" content="ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background: #000000; color: #fff; margin: 0; padding: 0;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            overflow-x: hidden; scrollbar-gutter: stable;
+        }
+        #header-placeholder { min-height: 60px; }
+        .main-content-container {
+            max-width: 960px; margin: 20px auto; padding: 15px;
+            background: #1a1a1a;
+            border-radius: 5px;
+        }
+        .section-title {
+            display: flex; align-items: center;
+            max-width: 960px; margin: 20px auto 0; font-size: 20px; font-weight: bold;
+            padding: 0 0px;
+        }
+        .section-title .title-ribbon {
+            background: #b80006; color: #fff;
+            padding: 5px 30px 5px 10px;
+            clip-path: polygon(0 0, 100% 0, 65% 100%, 100% 100%, 0 100%, 0px 50%);
+            white-space: nowrap;
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 2px; background: #b80006;
+        }
+        .sort-populer {
+            cursor: pointer; color: #fffefe; font-size: 15px; font-weight: 600;
+            background: #3c3f38;
+            padding: 5px 25px 5px 10px;
+            clip-path: polygon(0 0, 100% 0, 65% 100%, 100% 100%, 0 100%, 0px 50%);
+            margin: 0px -20px 0px 0px;
+        }
+        .sort-az {
+            cursor: pointer; color: #ffffff; font-size: 15px; font-weight: 600;
+            background: #3c3f38;
+            padding: 5px 10px 5px 25px;
+            clip-path: polygon(100% 0, 100% 50%, 100% 100%, 0 100%, 49% 0);
+            margin: 0px 0px 0px -5px;
+        }
+        .sort-populer:hover, .sort-az:hover { background: #555; color: #fff; }
+        .sort-populer.active, .sort-az.active { background: #b80006; color: #fff; }
+        .sort-bar {
+            max-width: 960px; margin: 10px auto 0; padding: 0 0px;
+            display: flex; justify-content: center; gap: 0;
+        }
+        #artists-container {
+            column-count: 6; column-gap: 20px;
+            column-rule: 1px solid #fffdfd;
+        }
+        @media (max-width: 1050px) { #artists-container { column-count: 5; } }
+        @media (max-width: 850px) { #artists-container { column-count: 4; } }
+        @media (max-width: 680px) { #artists-container { column-count: 2; } }
+        @media (max-width: 360px) { #artists-container { column-count: 2; } }
+        .tag-letter-header {
+            font-size: 16px; font-weight: bold; color: #ffffff;
+            padding: 0px 0 2px; margin: 0px 0 2px;
+        }
+        #artists-container .tag-item {
+            margin: 0 0 4px 0; border-radius: 4px;
+            position: relative;
+            display: inline-flex; align-items: stretch;
+            background: #555; color: #fff;
+            font-weight: 700; font-size: 10px;
+            text-decoration: none; transition: 0.2s;
+            border: 1px solid #777; width: 100%;
+        }
+        #artists-container .tag-item:hover { background: #777; }
+        .tag-item .tag-name { padding: 3px 0 3px 8px; color: #fff; flex: 1; }
+        .tag-count {
+            display: flex; align-items: center; color: #fff;
+            background: #000; padding: 3px 7px; margin-left: 6px; font-size: 12px;
+        }
+        .loading { text-align: center; padding: 0px; color: #888; font-size: 15px; }
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .pagination-btn, .pagination-arrow {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .pagination-btn.active { color: #ffffff; font-weight: bold; background-color: #ff0008; }
+        .pagination-btn:hover, .pagination-arrow:hover { color: #fff; background-color: #3b3737; }
+        .pagination-arrow.disabled { display: none; }
+        .pagination-dots { color: #888; padding: 8px 4px; font-size: 14px; }
+        .letter-filter {
+            max-width: 960px; margin: 10px auto 0; padding: 0 0px;
+            display: flex; justify-content: center; gap: 3px; flex-wrap: wrap;
+        }
+        .letter-filter span {
+            display: inline-block; padding: 4px 10px; cursor: pointer;
+            background: #333; color: #aaa; border-radius: 3px;
+            font-size: 13px; font-weight: 600; transition: 0.2s;
+        }
+        .letter-filter span:hover { background: #555; color: #fff; }
+        .letter-filter span.active { background: #b80006; color: #fff; }
+        @media (max-width: 600px) {
+            .tag-item { font-size: 11px; }
+            .tag-count { font-size: 10px; padding: 2px 5px; }
+        }
+    </style>
+</head>
+<body>
+<div id="header-placeholder"></div>
+<!-- Top Banner -->
+<div id="topbanner-container"></div>
+<h2 class="section-title"><span class="title-ribbon">Artists</span></h2>
+<div class="sort-bar"><span class="sort-populer active" id="sortPopuler">Populer</span><span class="sort-az" id="sortAZ">A-Z</span></div>
+<div class="letter-filter" id="letterFilter"></div>
+<div class="main-content-container">
+    <div id="artists-container" class="loading">Loading tags...</div>
+</div>
+<div id="artists-pagination" class="pagination-container"></div>
+<!-- Middle Banner -->
+<div id="middlebanner-container"></div>
+<!-- Bottom Banner -->
+<div id="bottombanner-container"></div>
+<div id="socialbar-container" class="socialbar-container"></div>
+<div id="footer-placeholder"></div>
+
+<script src="artists.js"></script>
+<script src="tracker.js?v=4"></script>
+</body>
+</html>
+
+
+
+
+
+
