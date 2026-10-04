@@ -1,0 +1,13 @@
+# Pretty URL komik untuk Cloudflare Pages / Netlify (tidak baca .htaccess).
+# PENTING: redirect Cloudflare selalu menang atas file statis, jadi file asli
+# (.json/.js/.html/dll) WAJIB dipetakan eksplisit di atas wildcard.
+# Kalau tidak, /p/id-comic.json & /p/main.js ikut ke-proxy ke base.html
+# dan akibatnya gallery + info komik kosong.
+/p/*.json /p/:splat.json 200
+/p/*.js /p/:splat.js 200
+/p/*.html /p/:splat.html 200
+/p/*.png /p/:splat.png 200
+/p/*.ico /p/:splat.ico 200
+/p/*.webmanifest /p/:splat.webmanifest 200
+# Pretty URL komik: /p/685373 -> isi base.html, URL tetap cantik.
+/p/* /p/base.html?id=:splat 200
