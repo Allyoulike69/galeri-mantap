@@ -1,0 +1,18 @@
+# _redirects FINAL — ComicYouLike (Cloudflare Pages / Netlify).
+# Cara kerja: comic code #393878 -> buka /p/393878 -> disajikan isi
+# p/base.html (URL tetap cantik), lalu main.js membaca ID dari URL
+# dan mengambil data dari p/daftar-comic*.json + p/id-comic*.json.
+#
+# PENTING: redirect Cloudflare selalu menang atas file statis, jadi file
+# asli WAJIB dipetakan eksplisit di atas wildcard. Kalau tidak, misal
+# /p/id-comic.json ikut ke-proxy ke base.html dan gallery jadi kosong.
+/p/*.json /p/:splat.json 200
+/p/*.js /p/:splat.js 200
+/p/*.html /p/:splat.html 200
+/p/*.png /p/:splat.png 200
+/p/*.ico /p/:splat.ico 200
+/p/*.webmanifest /p/:splat.webmanifest 200
+# Pretty URL komik: /p/393878 -> isi p/base.html (URL tetap /p/393878).
+/p/* /p/base.html?id=:splat 200
+# Fallback: URL yang tidak dikenal -> homepage.
+/* /index.html 200
