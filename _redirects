@@ -1,6 +1,6 @@
 # _redirects FINAL — ComicYouLike (Cloudflare Pages / Netlify).
 # Cara kerja: comic code #393878 -> buka /p/393878 -> disajikan isi
-# p/base.html (URL tetap cantik), lalu main.js membaca ID dari URL
+# read.html (URL tetap cantik), lalu main.js membaca ID dari URL
 # dan mengambil data dari p/daftar-comic*.json + p/id-comic*.json.
 #
 # PENTING: redirect Cloudflare selalu menang atas file statis, jadi file
@@ -12,7 +12,8 @@
 /p/*.png /p/:splat.png 200
 /p/*.ico /p/:splat.ico 200
 /p/*.webmanifest /p/:splat.webmanifest 200
-# Pretty URL komik: /p/393878 -> isi p/base.html (URL tetap /p/393878).
-/p/* /p/base.html?id=:splat 200
+# Pretty URL komik: /p/393878 -> isi read.html (URL tetap /p/393878).
+# Target di root karena root terbukti tersaji normal; /p/*.html bermasalah di host.
+/p/* /read.html?id=:splat 200
 # Fallback: URL yang tidak dikenal -> homepage.
 /* /index.html 200
