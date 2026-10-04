@@ -1,6 +1,0 @@
-# Pretty URL komik: /p/659773 dilayani base.html (URL tetap cantik di browser).
-# File/halaman yang sudah ada tetap disajikan langsung tanpa rewrite.
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([A-Za-z0-9_-]+)$ base.html?id=$1 [QSA,L]
