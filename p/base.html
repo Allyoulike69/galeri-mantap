@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn</title>
+  <meta name="description" content="ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+     /* --- CSS BASE (sama seperti sebelumnya) --- */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        background: #000000; 
+        color: #fff; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Segoe UI', 'Poppins', sans-serif; 
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      body.item-view .PopularPosts {display: none;}
+
+      /* ========= HEADER STYLE – DIHAPUS ========= */
+
+      /* ========= SLIDER STYLE (SAMA PERSIS) ========= */
+      .main-column-container { 
+        position: relative; 
+        border: 2px solid #333; 
+        border-radius: 12px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        background: #1a1a1a; 
+        color: #fff; 
+      }
+      .column-header { 
+        margin-bottom: 15px; 
+        border-bottom: 2px solid #ffa74e; 
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .column-header i {
+        font-size: 20px;
+        color: #ffa74e;
+      }
+      .column-header h3 { 
+        margin: 0; 
+        padding: 5px 10px; 
+        background: #333; 
+        color: #ffa74e; 
+        font-size: 16px; 
+        text-transform: uppercase;
+      }
+/* ========= KONTEN UTAMA WRAPPER ========= */
+      .main-content-wrapper {
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 20px;
+      }
+      
+      .gallery-container {
+        text-align: center;
+        margin-bottom: 25px;
+        position: relative;
+      }
+      .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffa74e, #ff5e7c);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+      .page-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ffa74e, #ff5e7c, transparent);
+      }
+      .page-title i {
+        margin-right: 10px;
+        color: #ffa74e;
+        font-size: 28px;
+      }
+      
+      #comic-gallery { 
+        width: 100%; 
+        max-width: 600px; 
+        margin: 0 auto 20px; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+      }
+      #comic-gallery img { 
+        width: 100% !important; 
+        max-width: 565px;
+        margin-bottom: 15px; 
+        display: block; 
+        background: #222; 
+        border: 2px solid #333; 
+        border-radius: 8px;
+        cursor: pointer; 
+        transition: all 0.2s;
+        scroll-margin-top: 80px;
+      }
+      #comic-gallery img:hover {
+        -webkit-filter: brightness(110%);
+      }
+
+      /* READER MODAL */
+      #manga-reader {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: #000;
+        z-index: 9999;
+        flex-direction: column;
+      }
+      #reader-top-bar, #reader-bottom-bar {
+        background: #1a1a1a;
+        /* min-height: 55px; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0px;
+        padding: 0px 15px;
+        border-bottom: 1px solid #333;
+        position: relative;
+      }
+      #reader-bottom-bar {
+        border-bottom: none;
+        border-top: 1px solid #333;
+      }
+      .nav-arrow {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .nav-arrow:hover {
+        color: #ffa74e;
+      }
+      #page-counter {
+        color: #fff;
+        font-size: 16px;
+        min-width: 110px;
+        text-align: center;
+      }
+      .zoom-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .zoom-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .zoom-btn:hover {
+        color: #ffa74e;
+      }
+      .close-btn {
+        position: absolute;
+        left: 0px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        padding: 6px 10px;
+        cursor: pointer;
+        z-index: 11;
+        transition: 0.2s;
+      }
+      .close-btn:hover {
+        color: #ffa74e;
+      }
+      .nav-arrow, .zoom-btn, .close-btn, .settings-btn {
+        box-sizing: border-box;
+        width: 47px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Ikon zoom, close & settings dibuat lebih ringan, ukuran tombol tetap sama */
+      .zoom-btn i, .close-btn i, .settings-btn i {
+        font-size: 18px;
+        line-height: 1;
+      }
+      .zoom-btn svg {
+        display: block;
+        width: 25px;
+        height: 25px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .reader-right-controls {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        z-index: 12;
+      }
+      .zoom-group {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 0px;
+      }
+      .reader-right-controls .zoom-group,
+      .reader-right-controls .settings-btn {
+        position: static;
+        right: auto;
+      }
+      .settings-btn {
+        z-index: 12;
+      }
+      .reader-settings-panel {
+        display: none;
+        position: absolute;
+        right: 15px;
+        top: 46px;
+        z-index: 20;
+        width: 260px;
+        max-height: calc(100% - 92px);
+        overflow: auto;
+        padding: 12px;
+        background: #1f1f1f;
+        border: 1px solid #3a3a3a;
+        border-radius: 4px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.65);
+        color: #ddd;
+        font-size: 13px;
+      }
+      .reader-settings-panel.show { display: block; }
+      .reader-settings-panel h4 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: #fff;
+      }
+      .reader-settings-panel .setting-row { margin-bottom: 9px; }
+      .reader-settings-panel .setting-row > span {
+        display: block;
+        margin-bottom: 6px;
+        color: #aaa;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+      .reader-settings-panel button.opt {
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 5px 8px;
+        margin: 0 4px 4px 0;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .reader-settings-panel button.opt:hover { border-color: #ffa74e; }
+      .reader-settings-panel button.opt.active {
+        background: #ed2553;
+        border-color: #ed2553;
+        color: #fff;
+      }
+      .reader-settings-panel .shortcuts {
+        border-top: 1px solid #333;
+        margin-top: 6px;
+        padding-top: 9px;
+      }
+      .reader-settings-panel .shortcuts strong {
+        display: block;
+        margin-bottom: 7px;
+        color: #fff;
+        font-size: 12px;
+      }
+      .reader-settings-panel .shortcuts div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin: 4px 0;
+        color: #bbb;
+        font-size: 11px;
+      }
+      .reader-settings-panel kbd {
+        display: inline-block;
+        min-width: 18px;
+        padding: 1px 4px;
+        background: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 3px;
+        color: #ed2553;
+        font-size: 10px;
+        text-align: center;
+      }
+      .reader-settings-panel .settings-close {
+        width: 100%;
+        margin-top: 10px;
+        padding: 6px;
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .reader-settings-panel select {
+        width: 100%;
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 5px 6px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .reader-settings-panel select:focus { outline: none; border-color: #ffa74e; }
+      .reader-settings-panel .settings-close:hover {
+        border-color: #ed2553;
+        background: #ed2553;
+      }
+      #reader-content {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        overflow: auto;
+        background: #000;
+        padding-top: 10px;
+      }
+      #reader-zoom-wrap {
+        flex: 0 0 auto;
+        display: block;
+        margin: auto;
+      }
+      #reader-image {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        cursor: pointer;
+        /* Zoom harus langsung final supaya fokus scroll bisa dihitung dengan benar. */
+        transition: none;
+        transform-origin: top left;
+      }
+      #reader-content.fit-both #reader-image {
+        max-width: 100%;
+        max-height: 100%;
+        padding-bottom: 10px;
+      }
+      #reader-content.fit-horizontal {
+        align-items: flex-start;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+      #reader-content.fit-horizontal #reader-image {
+        width: 100%;
+        height: auto;
+        max-width: none;
+        max-height: none;
+      }
+      #reader-content.fit-original {
+        align-items: flex-start;
+        padding-top: 0;
+      }
+      #reader-content.fit-original #reader-image { max-width: none; max-height: none; }
+      /* ========= FOOTER – DIHAPUS ========= */
+
+      @media (max-width: 600px) {
+        .nav-arrow { font-size: 20px; padding: 4px 8px; }
+        #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
+        #reader-top-bar, #reader-bottom-bar { gap: 0px; padding: 8px 5px; }
+        .page-title { font-size: 22px; }
+        .page-title i { font-size: 22px; }
+        .main-content-wrapper { padding: 0 15px; }
+      }
+      
+      /* Sembunyikan zoom-group hanya pada ponsel kecil; tablet tetap mendapat zoom */
+      @media (max-width: 600px) {
+        .zoom-group { display: none !important; }
+        .reader-right-controls { right: 0px; }
+      }
+      
+      @media (max-width: 480px) {
+        .main-content-wrapper { padding: 0 12px; }
+      }
+      
+      .share-buttons-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+      .share-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #aaa;
+      }
+      .share-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .share-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        transition: transform 0.2s, background 0.2s;
+        border: 1px solid #444;
+      }
+      .share-btn:hover {
+        transform: translateY(-2px);
+      }
+      .share-btn.facebook { background: #3b5998; }
+      .share-btn.telegram { background: #0088cc; }
+      .share-btn.x { background: #000; }
+      .share-btn.copy { background: #555; cursor: pointer; border: none; }
+      .share-btn.copy:hover { background: #777; }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"><style>
+    /* HEADER CSS */
+    .main-header {
+        background: #0a0a0a;
+        padding: 10px 10px;
+        width: 100%;
+        position: relative;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .logo-icon:hover {
+        transform: scale(1.05);
+        border-color: #ff5e7c;
+    }
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* SEARCH DESKTOP */
+    .desktop-search-wrapper { display: block; }
+    .search-panel-desktop {
+        display: flex;
+        background: #6d6a6a;
+        border: 1px solid #444;
+    }
+    .search-panel-desktop input {
+        background: transparent;
+        border: none;
+        padding: 8px;
+        color: white;
+        outline: none;
+        width: 250px;
+    }
+    .search-panel-desktop input::placeholder { color: #888; }
+    .search-panel-desktop button {
+        background: #ff0000;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+        padding: 0px 10px;
+    }
+
+    .search-icon-mobile {
+        display: none;
+        background: none;
+        border: none;
+        color: #ffa74e;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 8px;
+        flex-shrink: 0;
+    }
+
+    .hamburger-menu {
+        display: none;
+        background: #555;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px 12px;
+        flex-shrink: 0;
+        margin-left: auto;
+        border-radius: 5px;
+    }
+
+    .mobile-nav-overlay {
+        display: none;
+        width: 100%;
+        background: #333;
+        flex-direction: column;
+    }
+    .mobile-nav-overlay.show { display: flex; }
+    .mobile-nav-sidebar {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+    .mobile-nav-sidebar a {
+        color: #a5a4a4;
+        text-decoration: none;
+        padding: 12px 20px;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .mobile-nav-sidebar a:hover {
+        background: #555;
+        color: white;
+    }
+    .mobile-nav-close {
+        display: none;
+    }
+
+    .mobile-search-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        background: #0a0a0a;
+        padding: 15px 20px;
+        z-index: 9999;
+        border-bottom: 2px solid #ffa74e;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .mobile-search-container {
+        display: flex;
+        align-items: center;
+        background: #222;
+        border-radius: 50px;
+        padding: 5px 15px;
+        border: 1px solid #444;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .mobile-search-container input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 12px 8px;
+        color: white;
+        font-size: 16px;
+        outline: none;
+    }
+    .mobile-search-container button {
+        background: transparent;
+        border: none;
+        color: #ffa74e;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    .nav-menu {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-left: 20px;
+    }
+    .nav-menu a {
+        color: #ddd;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s;
+    }
+    .nav-menu a:hover { color: #ff0008; }
+    .nav-dropdown-click { position: relative; display: flex; align-items: center; }
+    .nav-dropdown-click .dropbtn-click { cursor: pointer; border: 1px solid #555; border-radius: 5px; padding: 5px 10px; background: #555; color: white; }
+    .dropdown-content-click {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 5px;
+        min-width: 140px;
+        z-index: 200;
+        flex-direction: column;
+        padding: 5px 0;
+    }
+    .dropdown-content-click a {
+        padding: 8px 15px;
+        font-size: 15px;
+        color: #a5a4a4;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .dropdown-content-click a:hover {
+        background: #777;
+        color: white;
+    }
+    .dropdown-content-click.show { display: flex; }
+
+    @media (max-width: 760px) {
+        .search-icon-mobile { display: none !important; }
+        .hamburger-menu { display: block !important; }
+        .nav-menu { display: none !important; }
+        .nav-dropdown-click { display: none !important; }
+        .logo-icon { width: 40px; height: 40px; }
+        .nav-menu a { font-size: 12px; }
+    }
+    @media (max-width: 1280px) and (min-width: 761px) {
+        .nav-menu a { display: none; }
+        .nav-dropdown-click { display: flex; }
+    }
+    @media (min-width: 1281px) {
+        .nav-dropdown-click { display: none; }
+    }
+    @media (max-width: 480px) {
+        .logo-icon { width: 36px; height: 36px; }
+        .nav-menu { gap: 10px; }
+        .nav-menu a { font-size: 11px; }
+    }
+    @media (max-width: 400px) {
+        .search-panel-desktop input { width: 190px; }
+    }
+</style>
+
+<div class="main-header">
+    <div class="top-bar">
+        <div class="logo-area" id="logoClick">
+            <img src="logo.png"
+                 alt="Allyoulike Comic Logo"
+                 class="logo-icon"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://placehold.co/48x48?text=AC'">
+        </div>
+
+        <div class="desktop-search-wrapper">
+            <div class="search-panel-desktop">
+                <input type="text" id="searchInputDesktop" placeholder="Search comics, manga, title...">
+                <button id="searchBtnDesktop"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+
+        <div class="nav-dropdown-click">
+            <a href="#" class="dropbtn-click"><i class="fa fa-angle-down"></i></a>
+            <div class="dropdown-content-click">
+                <a href="#" id="navRandom">Random</a>
+                <a href="#" id="navFavorite">Favorite</a>
+                <a href="../tags.html">Tags</a>
+                <a href="../artists.html">Artists</a>
+                <a href="../characters.html">Characters</a>
+                <a href="../parodies.html">Parodies</a>
+                <a href="../groups.html">Groups</a>
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a href="#" id="navRandom">Random</a>
+            <a href="#" id="navFavorite">Favorite</a>
+            <a href="../tags.html">Tags</a>
+            <a href="../artists.html">Artists</a>
+            <a href="../characters.html">Characters</a>
+            <a href="../parodies.html">Parodies</a>
+            <a href="../groups.html">Groups</a>
+        </div>
+        <button class="search-icon-mobile" id="searchIconMobile">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="hamburger-menu" id="hamburgerMenu">
+            <i class="fa fa-bars"></i>
+        </button>
+    </div>
+    <div class="mobile-nav-overlay" id="mobileNavOverlay">
+        <div class="mobile-nav-sidebar">
+            <a href="#" id="navRandomMobile">Random</a>
+            <a href="#" id="navFavoriteMobile">Favorite</a>
+            <a href="../tags.html">Tags</a>
+            <a href="../artists.html">Artists</a>
+            <a href="../characters.html">Characters</a>
+            <a href="../parodies.html">Parodies</a>
+            <a href="../groups.html">Groups</a>
+        </div>
+    </div>
+</div>
+
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <div class="mobile-search-container">
+        <input type="text" id="searchInputMobile" placeholder="Search comics, manga, title..." autocomplete="off">
+        <button id="searchBtnMobile"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button id="closeSearchBtn"><i class="fa-solid fa-times"></i></button>
+    </div>
+</div></div>
+
+  <!-- Top Banner -->
+  <div id="topbanner-container"><style>
+    .ads-container-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        margin: 15px 0;
+    }
+    .ads-unit-small {
+        width: 320px;
+        height: 50px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="ads-container-row" id="ads-container"></div>
+
+<script>
+    // GANTI-KEY-IKLAN-TOP: cukup ganti key di baris bawah ini saja
+    const iklanKey = '1f10a9d53612a8c49203598bffed7c49';
+    const container = document.getElementById('ads-container');
+
+    function getJumlahIklan() {
+        const w = window.innerWidth;
+        if (w >= 1285) return 4;
+        if (w >= 1080) return 3;
+        if (w >= 545) return 2;
+        return 1;
+    }
+
+    function buatIklan() {
+        container.innerHTML = '';
+        const jumlah = getJumlahIklan();
+        for (let i = 0; i < jumlah; i++) {
+            const adDiv = document.createElement('div');
+            adDiv.className = 'ads-unit-small';
+            const iframe = document.createElement('iframe');
+            iframe.width = '320';
+            iframe.height = '50';
+            iframe.style.border = 'none';
+            iframe.style.overflow = 'hidden';
+            iframe.scrolling = 'no';
+            adDiv.appendChild(iframe);
+            container.appendChild(adDiv);
+            const iframeContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { margin: 0; padding: 0; width: 320px; height: 50px; overflow: hidden; background: transparent; }
+                    </style>
+                </head>
+                <body>
+                    <script>
+                        atOptions = {
+                            'key' : '${iklanKey}',
+                            'format' : 'iframe',
+                            'height' : 50,
+                            'width' : 320,
+                            'params' : {}
+                        };
+                    <\/script>
+                    <script data-cfasync="false" src="https://biomanos.org/22/${iklanKey}"><\/script>
+                </body>
+                </html>
+            `;
+            const iframeDoc = iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(iframeContent);
+            iframeDoc.close();
+        }
+    }
+
+    buatIklan();
+    window.addEventListener('resize', buatIklan);
+</script></div>
+
+  <!-- KONTEN UTAMA -->
+  <div class="main-content-wrapper">
+    <div class="gallery-container">
+        <div class="page-title">
+            <i class="fa-solid fa-book-open"></i> 
+            <span id="pageTitleNumber"></span>
+        </div>
+    </div>
+    
+    <div id="comic-gallery"></div>
+    
+    
+    <div id="more-like-this-section">
+      <h2 class="section-title"><span class="title-ribbon">More Like This</span></h2>
+      <div id="more-like-this-grid" class="comic-grid"></div>
+    </div>
+    <div id="middlebanner-container"><style>
+        /* Wadah utama middle banner */
+        .ads-middlecontainer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        /* Kotak pembungkus tiap iklan middle */
+        .ads-unit-middle {
+            width: 100%;
+            max-width: 728px;
+            min-height: 90px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .ads-unit-middle {
+                max-width: 100%;
+            }
+        }
+    </style>
+    <div class="ads-middlecontainer-row" id="ads-middlecontainer">
+        <div class="ads-unit-middle">
+            <div id="container-a1950b1b5b519135ac084cc06bee5a5a"></div>
+        </div>
+    </div>
+
+    <script async fetchpriority="high" data-cfasync="false" src="https://biomanos.org/21/a1950b1b5b519135ac084cc06bee5a5a"></script></div>
+    <div id="bottombanner-container"><style>
+        .ads-bottomcontainer-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin: 20px 0;
+        }
+        .ads-unit-bottom {
+            width: 300px;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <div class="ads-bottomcontainer-row" id="ads-bottomcontainer"></div>
+
+    <script>
+        (function() {
+            // GANTI-KEY-IKLAN-BOTTOM: cukup ganti key di baris bawah ini saja
+            const iklanKey = '5919fac96c79e892c7af2afe9607956a';
+            const container = document.getElementById('ads-bottomcontainer');
+            if (!container) return;
+
+            function getJumlahIklan() {
+                const w = window.innerWidth;
+                if (w >= 1285) return 4;
+                if (w >= 1080) return 3;
+                if (w >= 545) return 2;
+                return 1;
+            }
+
+            function buatIklan() {
+                container.innerHTML = '';
+                const jumlah = getJumlahIklan();
+                for (let i = 0; i < jumlah; i++) {
+                    const adDiv = document.createElement('div');
+                    adDiv.className = 'ads-unit-bottom';
+                    const iframe = document.createElement('iframe');
+                    iframe.width = '300';
+                    iframe.height = '250';
+                    iframe.style.border = 'none';
+                    iframe.style.overflow = 'hidden';
+                    iframe.scrolling = 'no';
+                    adDiv.appendChild(iframe);
+                    container.appendChild(adDiv);
+                    const iframeContent = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <style>
+                                body { margin: 0; padding: 0; width: 300px; height: 250px; overflow: hidden; background: transparent; }
+                            </style>
+                        </head>
+                        <body>
+                            <script>
+                                atOptions = {
+                                    'key' : '${iklanKey}',
+                                    'format' : 'iframe',
+                                    'height' : 250,
+                                    'width' : 300,
+                                    'params' : {}
+                                };
+                            <\/script>
+                            <script data-cfasync="false" src="https://biomanos.org/22/${iklanKey}"><\/script>
+                        </body>
+                        </html>
+                    `;
+                    const iframeDoc = iframe.contentWindow.document;
+                    iframeDoc.open();
+                    iframeDoc.write(iframeContent);
+                    iframeDoc.close();
+                }
+            }
+
+            buatIklan();
+            window.addEventListener('resize', buatIklan);
+        })();
+    </script></div>
+  </div>
+
+  <!-- Sosial Bar Container -->
+<div id="socialbar-container" class="socialbar-container"></div>
+<!-- Sosial bar: salinan lokal script provider dengan CDN yang diperbaiki.
+     Ganti key => download ulang script provider ke socialbar-fixed.js. -->
+<script data-cfasync="false" src="../socialbar-fixed.js?v=3"></script>
+<script>
+// Ingat komik yang diklik (untuk URL cantik yang landing di base.html).
+document.addEventListener("click", function(e) {
+    try {
+        var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+        if (!a) return;
+        var href = a.getAttribute("href") || "";
+        var id = "";
+        var m = href.match(/[?&]id=([^&#]+)/);
+        if (m) id = decodeURIComponent(m[1]).replace(/^#/, "");
+        if (!id) {
+            var seg = href.split("?")[0].split("/").pop().replace(/\.html$/i, "");
+            if (/^\d+$/.test(seg)) id = seg;
+        }
+        if (!id) {
+            var c = href.match(/#(\d+)/);
+            if (c) id = c[1];
+        }
+        if (id) {
+            try { localStorage.setItem("lastComic", JSON.stringify({ id: id, t: Date.now() })); } catch (err) {}
+        }
+    } catch (err) {}
+}, true);
+</script>
+
+<div id="footer-placeholder"><style>
+    .main-footer {
+        background: #030303;
+        border-top: 1px solid #222;
+        margin-top: 0px;
+        padding: 24px 20px;
+        text-align: center;
+        width: 100%;
+    }
+    .footer-text {
+        color: #888;
+        font-size: 13px;
+        letter-spacing: 0.3px;
+    }
+    .footer-text i {
+        color: #ff3b6f;
+        margin: 0 4px;
+    }
+</style>
+<footer class="main-footer">
+    <div class="footer-text">
+        © 2025 Allyoulike Comic - Gallery Comic Center. All rights reserved. | Designed with <i class="fa-solid fa-heart"></i> for comic lovers
+    </div>
+</footer></div>
+
+  <div id="manga-reader">
+    <div id="reader-top-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="reader-right-controls">
+        <div class="zoom-group">
+          <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line></svg></button>
+          <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+          <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"></line></svg></button>
+        </div>
+        <button class="zoom-btn settings-btn" id="readerSettingsBtn" onclick="toggleReaderSettings(this)" title="Reader settings"><i class="fa fa-gear"></i></button>
+      </div>
+    </div>
+
+    <div id="reader-content">
+      <div id="reader-zoom-wrap">
+        <img id="reader-image" onclick="readerImageClick(event)" alt="Manga Page" loading="lazy">
+      </div>
+    </div>
+
+    <div id="reader-bottom-bar">
+      <button class="close-btn" onclick="closeReader()"><i class="fa fa-reply"></i></button>
+      <button class="nav-arrow" onclick="firstPage()">««</button>
+      <button class="nav-arrow" onclick="prevPage()">‹</button>
+      <div id="page-counter-bottom" style="color:#fff; font-size:17px; min-width:110px; text-align:center;">1 of 9</div>
+      <button class="nav-arrow" onclick="nextPage()">›</button>
+      <button class="nav-arrow" onclick="lastPage()">»»</button>
+      <div class="zoom-group">
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line></svg></button>
+        <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"></line></svg></button>
+      </div>
+    </div>
+
+    <div id="reader-settings" class="reader-settings-panel">
+      <h4>Reader settings</h4>
+
+      <div class="setting-row">
+        <span>Image Preloading</span>
+        <select id="preload-select" onchange="setPreloadPages(parseInt(this.value, 10))">
+          <option value="0">Disable</option>
+          <option value="1">1 page</option>
+          <option value="2">2 pages</option>
+          <option value="3" selected>3 pages</option>
+          <option value="4">4 pages</option>
+          <option value="5">5 pages</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Page Turning</span>
+        <button class="opt active" data-turn="right" onclick="setPageTurn('right')">Right half</button>
+        <button class="opt" data-turn="left" onclick="setPageTurn('left')">Left half</button>
+      </div>
+
+      <div class="setting-row">
+        <span>Image Scaling</span>
+        <select id="scaling-select" onchange="setReaderFit(this.value)">
+          <option value="fit-horizontal" selected>Fit horizontal</option>
+          <option value="fit-both">Fit page</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Zoom</span>
+        <select id="settings-zoom" onchange="setZoomLevel(parseFloat(this.value))">
+          <option value="1">100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+          <option value="1.75">175%</option>
+          <option value="2">200%</option>
+          <option value="2.25">225%</option>
+          <option value="2.5">250%</option>
+          <option value="2.75">275%</option>
+          <option value="3">300%</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Jump on Page Turn</span>
+        <button class="opt active">Top of image</button>
+      </div>
+
+      <div class="shortcuts">
+        <strong>Keyboard Shortcuts</strong>
+        <div><kbd>W</kbd>, <kbd>↑</kbd> <span>Scroll up</span></div>
+        <div><kbd>A</kbd>, <kbd>←</kbd> <span>Back one page</span></div>
+        <div><kbd>S</kbd>, <kbd>↓</kbd> <span>Scroll down</span></div>
+        <div><kbd>D</kbd>, <kbd>→</kbd> <span>Forward one page</span></div>
+        <div><kbd>F</kbd> <span>Toggle image scaling</span></div>
+        <div><kbd>Shift</kbd> <span>Scroll/skip faster</span></div>
+        <div><kbd>+</kbd>, <kbd>-</kbd> <span>Zoom in/out</span></div>
+        <div><kbd>Esc</kbd> <span>Close/back to gallery</span></div>
+      </div>
+
+      <button class="settings-close" onclick="closeReaderSettings()">Close</button>
+    </div>
+  </div>
+  <div id="raw-links" style="display:none;">
+    
+  </div>
+  
+  <script>
+    // Fungsi untuk memuat konten dari file eksternal ke dalam container
+    function loadComponent(containerId, fileUrl) {
+        fetch(fileUrl + '?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jika yang dimuat adalah file banner, jalankan script iklan yang ada di dalamnya
+                if (fileUrl === 'topbanner.html' || fileUrl === 'middlebanner.html' || fileUrl === 'bottombanner.html') {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        if (oldScript.parentNode) oldScript.remove();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${fileUrl}:`, error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:10px; color:#ff3b6f;">Failed to load banner. Please check network.</div>';
+                }
+            });
+    }
+
+    // Fungsi untuk memuat sosial bar dari file sosialbar.html
+    function loadSocialBar() {
+        fetch('sosialbar.html?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById('socialbar-container');
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jalankan semua script yang ada di dalam sosialbar.html
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (oldScript.parentNode) oldScript.remove();
+                });
+                
+                console.log('Social bar loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading sosialbar.html:', error);
+                const container = document.getElementById('socialbar-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; background:#121212; border-radius:20px; border:1px solid #ff3b6f;">⚠️ Gagal memuat Social Bar. Pastikan file sosialbar.html tersedia.</div>';
+                }
+            });
+    }
+
+    // Header, banner, footer, sosialbar sudah ditanam langsung di HTML
+    // (anti fetch gagal di GitHub/Cloudflare). Tidak perlu dimuat lagi.
+</script>
+
+<!-- BUILD 20261004-v9 -->
+  <script src="main.js?v=25"></script>
+  <script>
+    // Tombol share (Facebook/X/Telegram) diisi oleh main.js saat info komik dibuat.
+    // Jangan diisi di sini: elemennya belum ada (dibuat dinamis), dulu bikin error null.
+    function copyLink() {
+        const url = window.location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                alert("Link copied to clipboard!");
+            }).catch(function () {
+                window.prompt("Copy link:", url);
+            });
+        } else {
+            window.prompt("Copy link:", url);
+        }
+    }
+
+  // Service worker DIMATIKAN permanen: SW basi dari deploy lama bisa
+  // menggagalkan navigasi /p/<id> total (ERR_FAILED di Chrome).
+  // Baris ini melepas semua SW yang mungkin nyangkut di pengunjung lama.
+  if ("serviceWorker" in navigator) {
+      try {
+          navigator.serviceWorker.getRegistrations().then(function (rs) {
+              rs.forEach(function (r) { try { r.unregister(); } catch (e) {} });
+          }).catch(function () {});
+      } catch (e) {}
+  }
+  </script>
+<script src="../tracker.js?v=5"></script>
+</body>
+</html>
