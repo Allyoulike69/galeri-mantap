@@ -1,20 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-  <!-- 404 fallback GitHub/Cloudflare Pages: copy dari p/base.html (isi sudah
-       ditanam permanen, tanpa fetch). URL /p/659773 tetap cantik. -->
-  <script>
-  (function () {
-    try {
-      var p = window.location.pathname;
-      // Hanya tangani /p/<id>, selain itu lempar ke not_found.html
-      if (!/\/p\/[^\/]+\/?$/.test(p)) {
-        var prefix = p.split("/p/")[0];
-        window.location.replace(prefix + "/not_found.html");
-      }
-    } catch (e) {}
-  })();
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn</title>
@@ -149,12 +135,12 @@
       }
       #reader-top-bar, #reader-bottom-bar {
         background: #1a1a1a;
-        min-height: 55px;
+        /* min-height: 55px; */
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        padding: 8px 15px;
+        gap: 0px;
+        padding: 0px 15px;
         border-bottom: 1px solid #333;
         position: relative;
       }
@@ -189,9 +175,9 @@
         background: none;
         border: none;
         color: #fff;
-        font-size: 22px;
+        font-size: 24px;
+        padding: 6px 10px;
         cursor: pointer;
-        padding: 5px 8px;
         transition: 0.2s;
       }
       .zoom-btn:hover {
@@ -199,11 +185,12 @@
       }
       .close-btn {
         position: absolute;
-        left: 15px;
+        left: 0px;
         background: none;
         border: none;
         color: #fff;
-        font-size: 26px;
+        font-size: 24px;
+        padding: 6px 10px;
         cursor: pointer;
         z-index: 11;
         transition: 0.2s;
@@ -211,46 +198,261 @@
       .close-btn:hover {
         color: #ffa74e;
       }
+      .nav-arrow, .zoom-btn, .close-btn, .settings-btn {
+        box-sizing: border-box;
+        width: 47px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Ikon zoom, close & settings dibuat lebih ringan, ukuran tombol tetap sama */
+      .zoom-btn i, .close-btn i, .settings-btn i {
+        font-size: 18px;
+        line-height: 1;
+      }
+      .zoom-btn svg {
+        display: block;
+        width: 25px;
+        height: 25px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .reader-right-controls {
+        position: absolute;
+        right: 15px;
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        z-index: 12;
+      }
       .zoom-group {
         position: absolute;
         right: 15px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0px;
+      }
+      .reader-right-controls .zoom-group,
+      .reader-right-controls .settings-btn {
+        position: static;
+        right: auto;
+      }
+      .settings-btn {
+        z-index: 12;
+      }
+      .reader-settings-panel {
+        display: none;
+        position: absolute;
+        right: 15px;
+        top: 46px;
+        z-index: 20;
+        width: 260px;
+        max-height: calc(100% - 92px);
+        overflow: auto;
+        padding: 12px;
+        background: #1f1f1f;
+        border: 1px solid #3a3a3a;
+        border-radius: 4px;
+        box-shadow: 0 6px 24px rgba(0,0,0,.65);
+        color: #ddd;
+        font-size: 13px;
+      }
+      .reader-settings-panel.show { display: block; }
+      .reader-settings-panel h4 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: #fff;
+      }
+      .reader-settings-panel .setting-row { margin-bottom: 9px; }
+      .reader-settings-panel .setting-row > span {
+        display: block;
+        margin-bottom: 6px;
+        color: #aaa;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+      .reader-settings-panel button.opt {
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 5px 8px;
+        margin: 0 4px 4px 0;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .reader-settings-panel button.opt:hover { border-color: #ffa74e; }
+      .reader-settings-panel button.opt.active {
+        background: #ed2553;
+        border-color: #ed2553;
+        color: #fff;
+      }
+      .reader-settings-panel .shortcuts {
+        border-top: 1px solid #333;
+        margin-top: 6px;
+        padding-top: 9px;
+      }
+      .reader-settings-panel .shortcuts strong {
+        display: block;
+        margin-bottom: 7px;
+        color: #fff;
+        font-size: 12px;
+      }
+      .reader-settings-panel .shortcuts div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin: 4px 0;
+        color: #bbb;
+        font-size: 11px;
+      }
+      .reader-settings-panel kbd {
+        display: inline-block;
+        min-width: 18px;
+        padding: 1px 4px;
+        background: #2a2a2a;
+        border: 1px solid #444;
+        border-radius: 3px;
+        color: #ed2553;
+        font-size: 10px;
+        text-align: center;
+      }
+      .reader-settings-panel .settings-close {
+        width: 100%;
+        margin-top: 10px;
+        padding: 6px;
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      .reader-settings-panel select {
+        width: 100%;
+        background: #2a2a2a;
+        color: #ddd;
+        border: 1px solid #444;
+        border-radius: 3px;
+        padding: 5px 6px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .reader-settings-panel select:focus { outline: none; border-color: #ffa74e; }
+      .reader-settings-panel .settings-close:hover {
+        border-color: #ed2553;
+        background: #ed2553;
       }
       #reader-content {
         flex: 1;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
         overflow: auto;
         background: #000;
         padding-top: 10px;
       }
+      #reader-zoom-wrap {
+        flex: 0 0 auto;
+        display: block;
+        margin: auto;
+      }
       #reader-image {
+        display: block;
         max-width: 100%;
         max-height: 100%;
         cursor: pointer;
-        padding-bottom: 10px;
-        transition: transform 0.3s ease;
-        transform-origin: top center;
+        /* Zoom harus langsung final supaya fokus scroll bisa dihitung dengan benar. */
+        transition: none;
+        transform-origin: top left;
       }
-
+      #reader-content.fit-both #reader-image {
+        max-width: 100%;
+        max-height: 100%;
+        padding-bottom: 10px;
+      }
+      #reader-content.fit-horizontal {
+        align-items: flex-start;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+      #reader-content.fit-horizontal #reader-image {
+        width: 100%;
+        height: auto;
+        max-width: none;
+        max-height: none;
+      }
+      #reader-content.fit-original {
+        align-items: flex-start;
+        padding-top: 0;
+      }
+      #reader-content.fit-original #reader-image { max-width: none; max-height: none; }
       /* ========= FOOTER – DIHAPUS ========= */
 
       @media (max-width: 600px) {
-        .zoom-group { display: none; }
         .nav-arrow { font-size: 20px; padding: 4px 8px; }
         #page-counter, #page-counter-bottom { font-size: 14px; min-width: 85px; }
-        #reader-top-bar, #reader-bottom-bar { gap: 8px; padding: 8px 12px; }
+        #reader-top-bar, #reader-bottom-bar { gap: 0px; padding: 8px 5px; }
         .page-title { font-size: 22px; }
         .page-title i { font-size: 22px; }
         .main-content-wrapper { padding: 0 15px; }
       }
       
+      /* Sembunyikan zoom-group hanya pada ponsel kecil; tablet tetap mendapat zoom */
+      @media (max-width: 600px) {
+        .zoom-group { display: none !important; }
+        .reader-right-controls { right: 0px; }
+      }
+      
       @media (max-width: 480px) {
         .main-content-wrapper { padding: 0 12px; }
       }
+      
+      .share-buttons-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+      .share-label {
+        font-weight: 600;
+        font-size: 14px;
+        color: #aaa;
+      }
+      .share-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .share-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #fff;
+        transition: transform 0.2s, background 0.2s;
+        border: 1px solid #444;
+      }
+      .share-btn:hover {
+        transform: translateY(-2px);
+      }
+      .share-btn.facebook { background: #3b5998; }
+      .share-btn.telegram { background: #0088cc; }
+      .share-btn.x { background: #000; }
+      .share-btn.copy { background: #555; cursor: pointer; border: none; }
+      .share-btn.copy:hover { background: #777; }
   </style>
 </head>
 <body>
@@ -501,6 +703,7 @@
             <a href="#" class="dropbtn-click"><i class="fa fa-angle-down"></i></a>
             <div class="dropdown-content-click">
                 <a href="#" id="navRandom">Random</a>
+                <a href="#" id="navFavorite">Favorite</a>
                 <a href="../tags.html">Tags</a>
                 <a href="../artists.html">Artists</a>
                 <a href="../characters.html">Characters</a>
@@ -510,6 +713,7 @@
         </div>
         <div class="nav-menu">
             <a href="#" id="navRandom">Random</a>
+            <a href="#" id="navFavorite">Favorite</a>
             <a href="../tags.html">Tags</a>
             <a href="../artists.html">Artists</a>
             <a href="../characters.html">Characters</a>
@@ -526,6 +730,7 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay">
         <div class="mobile-nav-sidebar">
             <a href="#" id="navRandomMobile">Random</a>
+            <a href="#" id="navFavoriteMobile">Favorite</a>
             <a href="../tags.html">Tags</a>
             <a href="../artists.html">Artists</a>
             <a href="../characters.html">Characters</a>
@@ -765,8 +970,9 @@
 
   <!-- Sosial Bar Container -->
 <div id="socialbar-container" class="socialbar-container"></div>
-<!-- Sosial bar: salinan lokal script provider dengan CDN yang diperbaiki. -->
-<script data-cfasync="false" src="socialbar-fixed.js?v=3"></script>
+<!-- Sosial bar: salinan lokal script provider dengan CDN yang diperbaiki.
+     Ganti key => download ulang script provider ke socialbar-fixed.js. -->
+<script data-cfasync="false" src="../socialbar-fixed.js?v=3"></script>
 <script>
 // Ingat komik yang diklik (untuk URL cantik yang landing di base.html).
 document.addEventListener("click", function(e) {
@@ -825,15 +1031,20 @@ document.addEventListener("click", function(e) {
       <div id="page-counter">1 of 9</div>
       <button class="nav-arrow" onclick="nextPage()">›</button>
       <button class="nav-arrow" onclick="lastPage()">»»</button>
-      <div class="zoom-group">
-        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
-        <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
-        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+      <div class="reader-right-controls">
+        <div class="zoom-group">
+          <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line></svg></button>
+          <span id="zoom-level" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
+          <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"></line></svg></button>
+        </div>
+        <button class="zoom-btn settings-btn" id="readerSettingsBtn" onclick="toggleReaderSettings(this)" title="Reader settings"><i class="fa fa-gear"></i></button>
       </div>
     </div>
 
     <div id="reader-content">
-      <img id="reader-image" onclick="nextPage()" alt="Manga Page" loading="lazy">
+      <div id="reader-zoom-wrap">
+        <img id="reader-image" onclick="readerImageClick(event)" alt="Manga Page" loading="lazy">
+      </div>
     </div>
 
     <div id="reader-bottom-bar">
@@ -844,13 +1055,76 @@ document.addEventListener("click", function(e) {
       <button class="nav-arrow" onclick="nextPage()">›</button>
       <button class="nav-arrow" onclick="lastPage()">»»</button>
       <div class="zoom-group">
-        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
+        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line></svg></button>
         <span id="zoom-level-bottom" style="color:#fff; min-width:55px; text-align:center;">1.0x</span>
-        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="15.5" y1="15.5" x2="21" y2="21"></line><line x1="7.5" y1="10.5" x2="13.5" y2="10.5"></line><line x1="10.5" y1="7.5" x2="10.5" y2="13.5"></line></svg></button>
       </div>
     </div>
-  </div>
 
+    <div id="reader-settings" class="reader-settings-panel">
+      <h4>Reader settings</h4>
+
+      <div class="setting-row">
+        <span>Image Preloading</span>
+        <select id="preload-select" onchange="setPreloadPages(parseInt(this.value, 10))">
+          <option value="0">Disable</option>
+          <option value="1">1 page</option>
+          <option value="2">2 pages</option>
+          <option value="3" selected>3 pages</option>
+          <option value="4">4 pages</option>
+          <option value="5">5 pages</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Page Turning</span>
+        <button class="opt active" data-turn="right" onclick="setPageTurn('right')">Right half</button>
+        <button class="opt" data-turn="left" onclick="setPageTurn('left')">Left half</button>
+      </div>
+
+      <div class="setting-row">
+        <span>Image Scaling</span>
+        <select id="scaling-select" onchange="setReaderFit(this.value)">
+          <option value="fit-horizontal" selected>Fit horizontal</option>
+          <option value="fit-both">Fit page</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Zoom</span>
+        <select id="settings-zoom" onchange="setZoomLevel(parseFloat(this.value))">
+          <option value="1">100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+          <option value="1.75">175%</option>
+          <option value="2">200%</option>
+          <option value="2.25">225%</option>
+          <option value="2.5">250%</option>
+          <option value="2.75">275%</option>
+          <option value="3">300%</option>
+        </select>
+      </div>
+
+      <div class="setting-row">
+        <span>Jump on Page Turn</span>
+        <button class="opt active">Top of image</button>
+      </div>
+
+      <div class="shortcuts">
+        <strong>Keyboard Shortcuts</strong>
+        <div><kbd>W</kbd>, <kbd>↑</kbd> <span>Scroll up</span></div>
+        <div><kbd>A</kbd>, <kbd>←</kbd> <span>Back one page</span></div>
+        <div><kbd>S</kbd>, <kbd>↓</kbd> <span>Scroll down</span></div>
+        <div><kbd>D</kbd>, <kbd>→</kbd> <span>Forward one page</span></div>
+        <div><kbd>F</kbd> <span>Toggle image scaling</span></div>
+        <div><kbd>Shift</kbd> <span>Scroll/skip faster</span></div>
+        <div><kbd>+</kbd>, <kbd>-</kbd> <span>Zoom in/out</span></div>
+        <div><kbd>Esc</kbd> <span>Close/back to gallery</span></div>
+      </div>
+
+      <button class="settings-close" onclick="closeReaderSettings()">Close</button>
+    </div>
+  </div>
   <div id="raw-links" style="display:none;">
     
   </div>
@@ -937,8 +1211,23 @@ document.addEventListener("click", function(e) {
 </script>
 
 <!-- BUILD 20261004-v9 -->
-  <script src="main.js?v=9"></script>
+  <script src="main.js?v=25"></script>
   <script>
+    // Tombol share (Facebook/X/Telegram) diisi oleh main.js saat info komik dibuat.
+    // Jangan diisi di sini: elemennya belum ada (dibuat dinamis), dulu bikin error null.
+    function copyLink() {
+        const url = window.location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                alert("Link copied to clipboard!");
+            }).catch(function () {
+                window.prompt("Copy link:", url);
+            });
+        } else {
+            window.prompt("Copy link:", url);
+        }
+    }
+
   // Service worker DIMATIKAN permanen: SW basi dari deploy lama bisa
   // menggagalkan navigasi /p/<id> total (ERR_FAILED di Chrome).
   // Baris ini melepas semua SW yang mungkin nyangkut di pengunjung lama.
@@ -950,6 +1239,6 @@ document.addEventListener("click", function(e) {
       } catch (e) {}
   }
   </script>
-<script src="../tracker.js?v=4"></script>
+<script src="../tracker.js?v=5"></script>
 </body>
 </html>
