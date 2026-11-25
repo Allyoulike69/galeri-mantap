@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Format Entri → daftar-comic.json</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(1200px 600px at 50% -100px, #221016 0%, #0a0a0a 55%) fixed, #0a0a0a;
+      color: #eee;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      letter-spacing: .5px;
+      padding-left: 10px;
+      border-left: 4px solid #f10000;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .topnav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+      margin: 14px 0 4px;
+      border-bottom: 1px solid #222;
+    }
+
+    .topnav button {
+      margin: 0;
+    }
+
+    .topnav.links a {
+      background: linear-gradient(180deg, #262626, #1b1b1b);
+      border: 1px solid #3a3a3a;
+      color: #fff;
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: transform .15s, box-shadow .15s, border-color .15s;
+    }
+
+    .topnav.links a:hover {
+      border-color: #f10000;
+      box-shadow: 0 0 12px rgba(241, 0, 0, .35);
+      transform: translateY(-1px);
+    }
+
+    .topnav.links a.red {
+      background: linear-gradient(180deg, #ff2b2b, #c80000);
+      border-color: #ff2b2b;
+    }
+
+    .topnav.links a.red:hover {
+      box-shadow: 0 0 14px rgba(241, 0, 0, .5);
+    }
+
+    .panel {
+      border: 1px solid #333;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .015);
+      padding: 6px 18px 22px;
+      margin-top: 4px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    input[type=text],
+    textarea,
+    select {
+      width: 100%;
+      background: #141414;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    input[type=text]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #f10000;
+      box-shadow: 0 0 10px rgba(241, 0, 0, .25);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 12px;
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    button {
+      background: linear-gradient(180deg, #ff2b2b, #c80000);
+      border: 1px solid #ff2b2b;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 5px 0 0;
+      transition: box-shadow .15s, transform .15s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 12px rgba(241, 0, 0, .4);
+      transform: translateY(-1px);
+    }
+
+    button.ghost {
+      background: linear-gradient(180deg, #2a2a2a, #1d1d1d);
+      border: 1px solid #3a3a3a;
+    }
+
+    button.ghost:hover {
+      border-color: #f10000;
+      box-shadow: 0 0 10px rgba(241, 0, 0, .25);
+    }
+
+    button.green {
+      background: linear-gradient(180deg, #1f9d4d, #146c33);
+      border: 1px solid #1f9d4d;
+    }
+
+    pre {
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 12px;
+      max-height: 320px;
+      overflow: auto;
+    }
+
+    .info {
+      color: #ffa74e;
+      font-size: 14px;
+    }
+
+    .warn {
+      color: #ff5555;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .ok {
+      color: #4dff88;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>Format Entri → daftar-comic.json (1–5)</h1>
+    </div>
+    <nav class="topnav links">
+      <a href="dash/index.html">Home</a>
+      <a href="index.html" target="_blank" rel="noopener">Lihat Situs</a>
+      <a href="dash/statistik.html" target="_blank" rel="noopener">Dashboard Statistik</a>
+      <a class="red" href="format-comic.html">Format Comic</a>
+      <a href="format-gambar.html" target="_blank" rel="noopener">Format Gambar</a>
+    </nav>
+    <div class="panel">
+      <p class="info">Tempel mentah → Petakan → Salin Entry → tempel ke file JSON.</p>
+
+      <label for="selFile">File target</label>
+      <select id="selFile">
+        <option value="daftar-comic.json">daftar-comic.json</option>
+        <option value="daftar-comic2.json">daftar-comic2.json</option>
+        <option value="daftar-comic3.json">daftar-comic3.json</option>
+        <option value="daftar-comic4.json">daftar-comic4.json</option>
+        <option value="daftar-comic5.json">daftar-comic5.json</option>
+      </select>
+      <div id="fileInfo" class="info"></div>
+
+      <label for="rawPaste">Tempel mentah (hasil copy dari situs — judul, code, tags + angka count)</label>
+      <textarea id="rawPaste"
+        placeholder="[Fuaku Yuu (Yufuck)] Semen Sweets Paradisus [MTL]&#10;#659784&#10;Parodies:&#10;original&#10;..."></textarea>
+      <button id="btnParse">Petakan Otomatis ke Form</button>
+      <span id="parseMsg" class="info"></span>
+
+      <div class="grid">
+        <div><label>Image / cover (tidak ada di teks mentah)</label><input type="text" id="f_image"
+            placeholder="https://..."></div>
+        <div><label>Tipe halaman</label>
+          <select id="f_tipe">
+            <option value="nomor">Nomor (659774.html)</option>
+            <option value="base">Base dinamis (659774)</option>
+          </select>
+        </div>
+        <div><label>Lengkap</label>
+          <select id="f_lengkap">
+            <option value="yes" selected>yes (tampil)</option>
+            <option value="-">- (sembunyi)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="dupWarn" class="warn"></div>
+      <span id="msg" class="ok"></span>
+
+      <label>Preview entry baru</label>
+      <pre id="outEntry">...</pre>
+      <button id="btnCopyEntry">Salin Entry</button>
+      <button id="btnClearAll" class="ghost">Hapus Semua</button>
+      <div id="fileStat" class="info"></div>
+
+      <p class="info">URL cantik /p/&lt;id&gt; otomatis dilayani 404.html — tidak perlu file _redirects lagi.</p>
+    </div>
+
+  </div>
+
+  <script>
+    var selFile = document.getElementById('selFile');
+    var fileInfo = document.getElementById('fileInfo');
+    var msg = document.getElementById('msg');
+    var dupWarn = document.getElementById('dupWarn');
+    var outEntry = document.getElementById('outEntry');
+    var fileStat = document.getElementById('fileStat');
+    var F = function (id) {return document.getElementById(id);};
+    var current = [];
+
+    function todayStr() {
+      var d = new Date();
+      return d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
+    }
+    var parsed = null; // hasil tempel mentah (satu-satunya sumber data)
+
+    function autoLink() {
+      if (!parsed || !parsed.code) return '';
+      var c = parsed.code.replace(/^#/, '');
+      return (F('f_tipe').value === 'base') ? c : (c + '.html');
+    }
+
+    function buildEntry() {
+      var p = parsed || {};
+      return {
+        title: p.title || '',
+        link: autoLink(),
+        image: F('f_image').value.trim(),
+        code: p.code || '',
+        Parodies: p.Parodies || '',
+        Characters: p.Characters || '-',
+        Tags: p.Tags || '',
+        Artists: p.Artists || '',
+        Groups: p.Groups || '',
+        Languages: p.Languages || '',
+        Categories: p.Categories || '',
+        Pages: p.Pages || '',
+        Uploaded: p.Uploaded || todayStr(),
+        lengkap: F('f_lengkap').value
+      };
+    }
+
+    function renderAll() {
+      var e = buildEntry();
+      outEntry.textContent = JSON.stringify(e, null, 2);
+      // cek duplikat vs isi file
+      var dup = null;
+      for (var i = 0; i < current.length; i++) {
+        var p = current[i];
+        if (e.link && p.link === e.link) {dup = 'link sama: ' + e.link; break;}
+        if (e.code && e.title && p.code === e.code && p.title === e.title) {dup = 'code+nama sama: ' + e.code; break;}
+      }
+      dupWarn.textContent = dup ? ('PERINGATAN duplikat — ' + dup + ' (nanti otomatis disembunyikan)') : '';
+      fileStat.textContent = 'File ' + selFile.value + ': ' + current.length + ' entri.';
+    }
+
+    function loadFile() {
+      msg.textContent = '';
+      var name = selFile.value;
+      fileInfo.textContent = 'memuat ' + name + ' ...';
+      fetch('p/' + name + '?t=' + Date.now())
+        .then(function (r) {if (!r.ok) throw new Error('HTTP ' + r.status); return r.json();})
+        .then(function (data) {
+          var arr = Array.isArray(data) ? data : (data.pages || []);
+          current = arr;
+          fileInfo.textContent = name + ' termuat: ' + current.length + ' entri.';
+          renderAll();
+        })
+        .catch(function (err) {
+          current = [];
+          fileInfo.textContent = name + ' gagal dimuat (' + err.message + ') — mulai dari kosong.';
+          renderAll();
+        });
+    }
+
+    F('f_image').addEventListener('input', renderAll);
+    F('f_tipe').addEventListener('change', renderAll);
+    F('f_lengkap').addEventListener('change', renderAll);
+    selFile.addEventListener('change', loadFile);
+
+    function copyText(txt, doneMsg) {
+      function done() {msg.textContent = doneMsg;}
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(done, function () {fallback();});
+      } else {fallback();}
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = txt;
+        document.body.appendChild(ta);
+        ta.select();
+        try {document.execCommand('copy'); done();} catch (e) { }
+        document.body.removeChild(ta);
+      }
+    }
+
+    F('btnCopyEntry').addEventListener('click', function () {
+      copyText(JSON.stringify(buildEntry(), null, 2), 'entry tersalin! Tempel ke dalam "pages": [...]');
+    });
+
+    F('btnClearAll').addEventListener('click', function () {
+      F('rawPaste').value = '';
+      F('f_image').value = '';
+      parsed = null;
+      F('parseMsg').textContent = '';
+      msg.textContent = '';
+      dupWarn.textContent = '';
+      renderAll();
+    });
+
+    // Tempel mentah -> petakan ke form (angka count spt 155.2k/44 dibuang)
+    function parseRaw() {
+      var lines = F('rawPaste').value.split(/\r?\n/);
+      var headMap = {
+        parodies: 'Parodies', tags: 'Tags', artists: 'Artists',
+        groups: 'Groups', languages: 'Languages', categories: 'Categories',
+        pages: 'Pages', characters: 'Characters', uploaded: 'Uploaded'
+      };
+      function isCount(s) {return /^[\d][\d.,]*\s*[kKmM]?$/.test(s);}
+      // "6 months, 1 week ago (3/19/2026)" -> "3/19/2026" (ambil tanggalnya saja)
+      function cleanUploaded(v) {
+        v = String(v == null ? '' : v);
+        var m = v.match(/\(([^()]*)\)/);
+        if (m && /\d+\/\d+\/\d+/.test(m[1])) return m[1].trim();
+        var d = v.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/);
+        if (d) return d[1];
+        return v.trim();
+      }
+      var title = '', code = '', vals = {}, section = null, codeFound = false;
+      for (var i = 0; i < lines.length; i++) {
+        var t = lines[i].trim();
+        if (!t) continue;
+        if (!codeFound) {
+          if (/^#\d+/.test(t)) {code = t.split(/\s+/)[0]; codeFound = true; continue;}
+          if (!title) title = t;
+          continue;
+        }
+        var h = t.replace(/:$/, '').toLowerCase();
+        if (headMap[h]) {section = headMap[h]; continue;}
+        // bentuk inline: "Uploaded: 6/27/2026" (header + isi sebaris)
+        var mIn = t.match(/^(parodies|tags|artists|groups|languages|categories|pages|characters|uploaded)\s*:\s*(.+)$/i);
+        if (mIn) {
+          section = headMap[mIn[1].toLowerCase()];
+          var vv = mIn[2].trim();
+          // Pages/Uploaded = nilai tunggal, jangan disaring sebagai angka count
+          if (vv && (section === 'Pages' || section === 'Uploaded' || !isCount(vv))) {
+            if (!vals[section]) vals[section] = [];
+            vals[section].push(vv);
+          }
+          continue;
+        }
+        if (!section) continue;
+        if (section !== 'Pages' && section !== 'Uploaded' && isCount(t)) continue;
+        if (!vals[section]) vals[section] = [];
+        vals[section].push(t);
+      }
+      function one(k) {return (vals[k] && vals[k][0]) || '';}
+      function many(k) {return (vals[k] || []).join(', ');}
+      parsed = {
+        title: title, code: code,
+        Parodies: many('Parodies'), Tags: many('Tags'), Artists: many('Artists'),
+        Groups: many('Groups'), Languages: many('Languages'),
+        Categories: many('Categories'), Pages: one('Pages'),
+        Characters: vals['Characters'] ? many('Characters') : '',
+        Uploaded: cleanUploaded(one('Uploaded'))
+      };
+      F('parseMsg').textContent = title ? ('terpetakan: ' + title) : 'tidak ada judul terdeteksi';
+      renderAll();
+    }
+    F('btnParse').addEventListener('click', parseRaw);
+
+    loadFile();
+  </script>
+</body>
+
+</html>

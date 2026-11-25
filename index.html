@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn</title>
+    <meta name="description" content="ComicYouLike - Free Hentai Manga, Daujinshi and Anime Porn">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+        /* RESET & GLOBAL */
+        * { box-sizing: border-box; }
+        body {
+            background: #000000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Poppins', sans-serif;
+            overflow-x: hidden;
+            scrollbar-gutter: stable;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+
+        /* KONTEN UTAMA: dibatasi lebar maksimal + margin kiri/kanan untuk iklan */
+        .main-content-container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 15px;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* FOOTER SEDERHANA */
+        .main-footer {
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-text {
+            color: #777;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        .footer-text i {
+            color: #ff5e7c;
+            margin: 0 2px;
+        }
+        .footer-text a {
+            color: #ffa74e;
+            text-decoration: none;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* GRID */
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .section-title .title-ribbon {
+            background: #b80006;
+            color: #fff;
+            padding: 5px 25px 5px 10px;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 100% 100%, 0 100%, 0px 50%);
+            white-space: nowrap;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: #b80006;
+        }
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 5px;
+            margin-bottom: 30px;
+            background-color: #292b2b;
+            padding: 10px;
+        }
+        @media (min-width: 768px) {
+            .comic-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        .header-title {
+            color: #eee;
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .color-icon { color: #ff2d55; font-size: 24px; }
+        
+        .comic-item {
+            position: relative;
+            margin-bottom: 1em;
+        }
+        .comic-item:hover {
+            border-color: #ff0008;
+            border-radius: 5px;
+            z-index: 100;
+            color: #ff0008;
+            background: #1a1a1a;
+        }
+        .comic-thumb-container { aspect-ratio: 2/3; overflow: hidden; background: #222; border-radius: 5px 5px 0 0; }
+        .comic-thumb { max-width: 100%; height: auto; display: block; }
+        .comic-title {
+            line-height: 15px;
+            font-size: 12px;
+            left: 0;
+            right: 0;
+            top: 94%;
+            position: absolute;
+            z-index: 10;
+            overflow: hidden;
+            width: 100%;
+            max-height: 34px;
+            padding: 3px;
+            background-color: #343535;
+            font-weight: 700;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: #ff0008;
+            border-bottom-left-radius: .3em;
+            border-bottom-right-radius: .3em;
+        }
+        .comic-item:hover .comic-title {
+            max-height: 100%;
+            box-shadow: 0 10px 20px var(--shadow);
+            background: #3f3d3d;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 8px;
+            left: -4px;
+            padding: 5px 15px 5px 10px;
+            font-size: 10px;
+            font-weight: 900;
+            color: white;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.8);
+            clip-path: polygon(0 0, 100% 0, 75% 100%, 100% 100%, 0 100%, 0px 50%);
+        }
+        .badge-new { background: #b80006; }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .pagination-arrow {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .pagination-arrow:hover { color: #fff; background-color: #3b3737; }
+        .pagination-arrow.disabled { opacity: 0.35; cursor: default; }
+        .pagination-jump {
+            width: 64px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid transparent;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            padding: 0 2px;
+            outline: none;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .pagination-jump::-webkit-outer-spin-button,
+        .pagination-jump::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .pagination-jump:focus { border-bottom-color: #ff0008; }
+        .pagination-label {
+            cursor: text;
+            padding: 5px 10px;
+            border-radius: 0px;
+        }
+        .pagination-info:hover .pagination-label { background: #3b3737; }
+        .pagination-bar {
+            display: inline-block;
+            width: 2px;
+            height: 11px;
+            background: currentColor;
+            vertical-align: 0px;
+            margin: 0 2px;
+        }
+        .pagination-arrow { border: 1px solid #444; background: #111; }
+        .pagination-arrow:hover { border-color: #ff0008; background-color: #3b3737; }
+        .pagination-info {
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: 700;
+            padding: 5px 10px;
+            white-space: nowrap;
+        }
+        .pagination-jump { border: 1px solid #444; border-radius: 4px; }
+        .pagination-jump:focus { border-color: #ff0008; }
+        .pagination-arrow, .pagination-info, .pagination-jump {
+            box-sizing: border-box;
+            width: 64px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1;
+            border: 1px solid #444;
+            border-radius: 0px;
+            background: #111;
+            color: #fff;
+        }
+        .pagination-arrow, .pagination-jump { padding: 0; }
+        .pagination-info .pagination-jump { width: 100%; height: 100%; border: 0; border-radius: 0; background: transparent; }
+        .pagination-info:focus-within { border-color: #ff0008; }
+        .pagination-container > :first-child { border-radius: 5px 0 0 5px; }
+        .pagination-container > :last-child { border-radius: 0 5px 5px 0; }
+        .pagination-jump { cursor: text; padding: 5px 10px; border-radius: 0px; }
+        @media (max-width: 480px) {
+            .main-content-container { padding: 0 12px; }
+        }
+        
+        @media (min-width: 769px) {
+            .main-content-container {
+            max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+        }
+        
+        /* TEMPORARY HIDDEN UNTUK HEADER YANG AKAN DIISI */
+        #header-placeholder {
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="header-placeholder"></div>
+
+<!-- Top Banner -->
+<div id="topbanner-container"></div>
+
+
+<div class="main-content-container">
+    <div id="search-info-container"></div>
+    
+    
+    <h2 class="section-title"><span class="title-ribbon">Recomend</span></h2>
+    <div id="recomend-grid" class="comic-grid"></div>
+    
+    <h2 class="section-title"><span class="title-ribbon">New Upload</span></h2>
+    <div id="new-uploads-grid" class="comic-grid"></div>
+    
+    <div id="pagination" class="pagination-container"></div>
+    
+    <!-- Bottom Banner -->
+    
+</div>
+
+ <!-- Middle Banner -->
+    <div id="middlebanner-container"></div>
+
+<div id="bottombanner-container"></div>
+
+<!-- Sosial Bar Container -->
+<div id="socialbar-container" class="socialbar-container"></div>
+
+<div id="footer-placeholder"></div>
+
+<script>
+    // Fungsi untuk memuat konten dari file eksternal ke dalam container
+    function loadComponent(containerId, fileUrl) {
+        fetch(fileUrl + '?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jika yang dimuat adalah file banner, jalankan script iklan yang ada di dalamnya
+                if (fileUrl === 'topbanner.html' || fileUrl === 'middlebanner.html' || fileUrl === 'bottombanner.html') {
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        if (oldScript.src) {
+                            newScript.src = oldScript.src;
+                        } else {
+                            newScript.textContent = oldScript.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                        if (oldScript.parentNode) oldScript.remove();
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error loading ${fileUrl}:`, error);
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:10px; color:#ff3b6f;">Failed to load banner. Please check network.</div>';
+                }
+            });
+    }
+
+    // Fungsi untuk memuat sosial bar dari file sosialbar.html
+    function loadSocialBar() {
+        fetch('sosialbar.html?t=' + Date.now())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                const container = document.getElementById('socialbar-container');
+                if (!container) return;
+                container.innerHTML = data;
+                
+                // Jalankan semua script yang ada di dalam sosialbar.html
+                const scripts = container.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+                    if (oldScript.src) {
+                        newScript.src = oldScript.src;
+                    } else {
+                        newScript.textContent = oldScript.textContent;
+                    }
+                    document.body.appendChild(newScript);
+                    if (oldScript.parentNode) oldScript.remove();
+                });
+                
+                console.log('Social bar loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading sosialbar.html:', error);
+                const container = document.getElementById('socialbar-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px; background:#121212; border-radius:20px; border:1px solid #ff3b6f;">⚠️ Gagal memuat Social Bar. Pastikan file sosialbar.html tersedia.</div>';
+                }
+            });
+    }
+
+    // Memuat Top Banner, Middle Banner, Bottom Banner, Header, dan Footer
+    loadComponent('topbanner-container', 'topbanner.html');
+    loadComponent('middlebanner-container', 'middlebanner.html');
+    loadComponent('bottombanner-container', 'bottombanner.html');
+    loadComponent('header-placeholder', 'header.html');
+    loadComponent('footer-placeholder', 'footer.html');
+    
+    // Memuat sosial bar dari file sosialbar.html
+    loadSocialBar();
+</script>
+<script src="script.js?v=2"></script>
+
+<script src="tracker.js?v=4"></script>
+  <script>
+  // Service worker DIMATIKAN permanen: SW basi bikin kunjungan pertama
+  // ke /p/<id> gagal (ERR_FAILED) dan cuma sembuh habis hard refresh.
+  // Baris ini melepas semua SW yang mungkin nyangkut di pengunjung lama.
+  if ("serviceWorker" in navigator) {
+      try {
+          navigator.serviceWorker.getRegistrations().then(function (rs) {
+              rs.forEach(function (r) { try { r.unregister(); } catch (e) {} });
+          }).catch(function () {});
+      } catch (e) {}
+  }
+  </script>
+</body>
+</html>

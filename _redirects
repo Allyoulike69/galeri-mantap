@@ -1,0 +1,4 @@
+# Cloudflare Pages: JANGAN pakai "/p/* /p/base.html 200" di sini,
+# karena itu ikut membajak /p/*.json dan /p/*.js (homepage jadi No data).
+# Pretty URL /p/<id> dilayani oleh 404.html (copy dari p/base.html).
+# Tanpa function, tanpa rewrite — cara kerjanya 100% sama kayak GitHub Pages.

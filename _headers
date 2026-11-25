@@ -1,0 +1,9 @@
+# Jangan cache halaman komik: waktu masa function/_redirects rusak, respon error
+# sempat nyangkut di cache browser/edge sehingga kunjungan pertama gagal dan
+# baru sembuh habis Ctrl+F5. File statis (js/json/png) tetap boleh di-cache.
+/p/base.html
+  Cache-Control: no-store
+/404.html
+  Cache-Control: no-store
+/not_found.html
+  Cache-Control: no-store
