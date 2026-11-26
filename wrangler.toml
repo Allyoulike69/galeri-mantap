@@ -1,0 +1,11 @@
+# wrangler.toml — Cloudflare Pages + D1
+# Ganti database_id dengan nilai dari: wrangler d1 create comichen-counter
+
+name = "allyoulikecomic"
+pages_build_output_dir = "."
+compatibility_date = "2026-11-26"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "comichen-counter"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
