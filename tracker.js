@@ -1,40 +1,45 @@
 /* ============================================================
    tracker.js — Pencatat kunjungan & penonton untuk situs statis
-   Menggunakan CountAPI (countapi.mileshilliard.com)
-   Gratis, tanpa daftar, tanpa API key. CORS terbuka (*)
-   Catatan: angka counter bersifat publik & bisa dinaikkan orang.
+
+   Cloudflare Pages Function /api/count + D1 (binding DB).
+   Semua key dikirim dalam SATU request (hit & get digabung).
+   Tidak ada provider lama / fallback CountAPI.
+
+   Endpoint DIHITUNG OTOMATIS:
+     - Di domain production      -> endpoint domain itu sendiri (/api/count)
+     - Di localhost / 127.0.0.1  -> otomatis ke endpoint production
+                                    https://allyoulikecomic.pages.dev/api/count
+
+   Jadi pindah domain = langsung ikut, TANPA edit / tukar-tukar.
+   Override manual (opsional, untuk wrangler dev):
+     window.VH_API = 'http://127.0.0.1:8788/api/count';
    ============================================================ */
 (function (window, document) {
     'use strict';
 
-    var API = 'https://countapi.mileshilliard.com/api/v1';
+    var IS_LOCAL = /^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname);
+    var PROD_API = 'https://allyoulikecomic.pages.dev/api/count';
+
+    function defaultEndpoint() {
+        try {
+            var script = document.currentScript;
+            if (!script) {
+                var scripts = document.getElementsByTagName('script');
+                for (var i = scripts.length - 1; i >= 0; i--) {
+                    if (/tracker\.js/.test(scripts[i].src || '')) { script = scripts[i]; break; }
+                }
+            }
+            if (script && script.src) return new URL('api/count', script.src).href;
+        } catch (e) {}
+        return new URL('/api/count', window.location.href).href;
+    }
+
+    var API = window.VH_API || (IS_LOCAL ? PROD_API : defaultEndpoint());
     var PREFIX = 'comichen';
     var PAGE_NAME = decodeURIComponent((window.location.pathname.split('/').pop() || '').split('?')[0]);
     var started = false;
 
     /* ---------- Utility ---------- */
-    function http(action, key, retries) {
-        retries = retries || 1;
-        function doFetch(attempt){
-            return fetch(API + '/' + action + '/' + encodeURIComponent(key), {
-                method: 'GET', cache: 'no-store', keepalive: true
-            }).then(function (r) {
-                if(!r.ok) throw new Error('http '+r.status);
-                return r.json().catch(function () { return {}; });
-            }).then(function (j) {
-                var v = parseInt(j && j.value, 10);
-                return isNaN(v) ? 0 : v;
-            }).catch(function (e) {
-                if(attempt < retries){
-                    return new Promise(function(res){ setTimeout(function(){ res(doFetch(attempt+1)); }, 400); });
-                }
-                console.warn('[VH] http fail', action, key, e.message);
-                return 0;
-            });
-        }
-        return doFetch(0);
-    }
-
     function slug(str) {
         return String(str == null ? '' : str).toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
@@ -72,6 +77,69 @@
         return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
 
+    /* ---------- Transport ---------- */
+    var pending = { hit: [], get: [] };
+    var waiters = [];
+    var flushTimer = null;
+
+    function enqueue(action, key) {
+        return new Promise(function (resolve) {
+            key = String(key == null ? '' : key);
+            if (!key) { resolve(0); return; }
+            pending[action].push(key);
+            waiters.push({ action: action, key: key, resolve: resolve });
+            if (flushTimer === null) flushTimer = setTimeout(flush, 0);
+        });
+    }
+
+    function many(action, keys) {
+        var list = (keys || []).map(function (k) { return String(k == null ? '' : k); }).filter(Boolean);
+        var promises = [];
+        // Worker membatasi 200 key per request.
+        for (var i = 0; i < list.length; i += 150) {
+            for (var j = i; j < Math.min(i + 150, list.length); j++) {
+                promises.push(enqueue(action, list[j]));
+            }
+        }
+        return Promise.all(promises);
+    }
+
+    function requestCounts(hits, gets) {
+        var params = [];
+        hits.forEach(function (k) { params.push('hit=' + encodeURIComponent(k)); });
+        gets.forEach(function (k) { params.push('get=' + encodeURIComponent(k)); });
+        var sep = API.indexOf('?') === -1 ? '?' : '&';
+        return fetch(API + sep + params.join('&'), {
+            method: 'GET', cache: 'no-store', keepalive: true
+        }).then(function (r) {
+            if (!r.ok) throw new Error('http ' + r.status);
+            return r.json().catch(function () { return {}; });
+        }).then(function (j) {
+            if (!j || j.ok === false) throw new Error('api error');
+            return j.values || {};
+        });
+    }
+
+    function flush() {
+        flushTimer = null;
+        var hits = pending.hit.splice(0);
+        var gets = pending.get.splice(0);
+        var current = waiters.splice(0);
+        if (!hits.length && !gets.length) return;
+
+        requestCounts(hits, gets).then(function (values) {
+            current.forEach(function (w) {
+                w.resolve((values && values[w.key]) || 0);
+            });
+        }).catch(function (e) {
+            console.warn('[VH] batch gagal', e.message);
+            current.forEach(function (w) { w.resolve(0); });
+        });
+    }
+
+    function hit(key) { return enqueue('hit', key); }
+    function get(key) { return enqueue('get', key); }
+
     /* ---------- Public API ---------- */
     window.VH = {
         keyOf: keyOf,
@@ -79,60 +147,62 @@
         isoFor: isoFor,
         dayKey: dayKey,
         isoHourOf: isoHourOf,
-        hit: http.bind(null, 'hit'),
-        get: http.bind(null, 'get'),
-        fmt: fmt
+        hit: hit,
+        get: get,
+        hitMany: function (keys) { return many('hit', keys); },
+        getMany: function (keys) { return many('get', keys); },
+        fmt: fmt,
+        endpoint: API
     };
 
     /* Video "dibuka" (halaman video dikunjungi) */
     window.VH_hitVideoPage = function (title) {
-        return http('hit', keyOf('video', title));
+        return hit(keyOf('video', title));
     };
 
     /* Video "diputar" (episode benar-benar diputar) */
     window.VH_hitWatch = function (title) {
-        return http('hit', keyOf('watch', title));
+        return hit(keyOf('watch', title));
     };
 
-    /* Video "dishare" - pakai keepalive + retry biar tidak hilang saat popup */
+    /* Video "dishare" - optimistik update UI dulu */
     window.VH_hitShare = function (title) {
-        if(!title) { console.warn('[VH] hitShare tanpa title'); return Promise.resolve(0); }
-        var k=keyOf('share', title);
+        if (!title) { console.warn('[VH] hitShare tanpa title'); return Promise.resolve(0); }
+        var k = keyOf('share', title);
         console.log('[VH] hitShare', title, '->', k);
-        // optimistik update UI dulu
-        var els0=document.querySelectorAll('.vh-share-el');
-        Array.prototype.forEach.call(els0, function(el){
-            var cur=parseInt((el.textContent||'0').replace(/\./g,''),10)||0;
-            el.textContent=fmt(cur+1);
+        var els0 = document.querySelectorAll('.vh-share-el');
+        Array.prototype.forEach.call(els0, function (el) {
+            var cur = parseInt((el.textContent || '0').replace(/\./g, ''), 10) || 0;
+            el.textContent = fmt(cur + 1);
         });
-        return fetch(API + '/hit/' + encodeURIComponent(k), {method:'GET', cache:'no-store', keepalive:true})
-            .then(function(r){ return r.json().catch(function(){return {};}); })
-            .then(function(j){ var v=parseInt(j && j.value,10); if(isNaN(v)) v=0; var els=document.querySelectorAll('.vh-share-el'); Array.prototype.forEach.call(els, function(el){ el.textContent=fmt(v); }); console.log('[VH] hitShare ok',k,v); return v; })
-            .catch(function(e){ console.warn('[VH] hitShare gagal',k,e); return 0; });
+        return hit(k).then(function (v) {
+            var els = document.querySelectorAll('.vh-share-el');
+            Array.prototype.forEach.call(els, function (el) { el.textContent = fmt(v); });
+            console.log('[VH] hitShare ok', k, v);
+            return v;
+        });
     };
 
-    /* Ambil jumlah buka + putar + share, lalu tampilkan di elemen .vh-views-el / .vh-played-el / .vh-share-el */
+    /* Ambil buka + putar + share dalam SATU request */
     window.VH_fillVideoStats = function (title) {
         if (!title) return;
-        Promise.all([
-            http('get', keyOf('video', title)),
-            http('get', keyOf('watch', title)),
-            http('get', keyOf('share', title))
-        ]).then(function (res) {
-            var viewsEls = document.querySelectorAll('.vh-views-el');
-            var playedEls = document.querySelectorAll('.vh-played-el');
-            var shareEls = document.querySelectorAll('.vh-share-el');
-            Array.prototype.forEach.call(viewsEls, function (el) { el.textContent = fmt(res[0]); });
-            Array.prototype.forEach.call(playedEls, function (el) { el.textContent = fmt(res[1]); });
-            Array.prototype.forEach.call(shareEls, function (el) { el.textContent = fmt(res[2]); });
-        });
+        many('get', [keyOf('video', title), keyOf('watch', title), keyOf('share', title)])
+            .then(function (res) {
+                var viewsEls = document.querySelectorAll('.vh-views-el');
+                var playedEls = document.querySelectorAll('.vh-played-el');
+                var shareEls = document.querySelectorAll('.vh-share-el');
+                Array.prototype.forEach.call(viewsEls, function (el) { el.textContent = fmt(res[0]); });
+                Array.prototype.forEach.call(playedEls, function (el) { el.textContent = fmt(res[1]); });
+                Array.prototype.forEach.call(shareEls, function (el) { el.textContent = fmt(res[2]); });
+            });
     };
 
-    /* Pasang badge "sekian kali dilihat" di kartu daftar video (index) */
+    /* Badge "sekian kali dilihat" di kartu daftar video (index) */
     window.VH_attachCardCounts = function (gridId, videos) {
         var grid = document.getElementById(gridId);
         if (!grid || !videos || !videos.length) return;
-        Array.prototype.forEach.call(grid.querySelectorAll('.video-item'), function (card) {
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.video-item'));
+        var keys = cards.map(function (card) {
             var url = card.getAttribute('data-url') || '';
             var fname = decodeURIComponent((url.split('/').pop() || '').split('?')[0]);
             var match = null;
@@ -140,13 +210,16 @@
                 if ((videos[i].link || '').trim() === fname) { match = videos[i]; break; }
             }
             var title = match ? match.title : fname.replace(/\.html$/i, '');
-            http('get', keyOf('video', title)).then(function (n) {
-                if (!n) return;
+            return keyOf('video', title);
+        });
+        many('get', keys).then(function (counts) {
+            cards.forEach(function (card, i) {
+                if (!counts[i]) return;
                 var thumb = card.querySelector('.video-thumb-container');
                 if (!thumb || thumb.querySelector('.vh-card-count')) return;
                 var b = document.createElement('div');
                 b.className = 'vh-card-count';
-                b.textContent = '\uD83D\uDC41 ' + fmt(n);
+                b.textContent = '\uD83D\uDC41 ' + fmt(counts[i]);
                 thumb.appendChild(b);
             });
         });
@@ -165,9 +238,8 @@
     }
 
     /* Tombol dashboard dimatikan sesuai request - tidak tampil di semua html */
-    var _oldBtn=document.getElementById('vh-dashboard-btn');
-    if(_oldBtn) _oldBtn.remove();
-    // if (window.location.pathname.indexOf('/stats') === -1 && !document.getElementById('vh-dashboard-btn')) { ... } - dihapus
+    var _oldBtn = document.getElementById('vh-dashboard-btn');
+    if (_oldBtn) _oldBtn.remove();
 
     /* Slug halaman saat ini (dipakai autoTrack + hit baca) */
     function currentPageSlug() {
@@ -176,9 +248,6 @@
         page = page.replace(/\.html$/i, '') || 'index';
         var lower = page.toLowerCase();
         if (lower === '' || lower === 'index') page = 'index';
-        // base dinamis (?id=/?code=): bedakan per komik.
-        // Pakai id mentah (bukan "base-<id>") supaya sama dengan slug dashboard
-        // dan sama dengan kunjungan lewat pretty URL /p/<id>.
         try {
             var qs = new URLSearchParams(window.location.search);
             var qid = (qs.get('id') || qs.get('code') || '').trim().replace(/^#/, '');
@@ -196,17 +265,16 @@
             try { last = sessionStorage.getItem(tkey); } catch (e) {}
             if (last && Date.now() - parseInt(last, 10) < 60000) return Promise.resolve(0);
             try { sessionStorage.setItem(tkey, String(Date.now())); } catch (e) {}
-            return http('hit', keyOf('read', page), 1);
+            return hit(keyOf('read', page));
         } catch (e) { return Promise.resolve(0); }
     };
 
-    /* ---------- Auto-hit kunjungan (total / harian / jam / bulanan / per-halaman) ---------- */
+    /* ---------- Auto-hit kunjungan: SATU request untuk semua key ---------- */
     function autoTrack() {
         if (started) return;
         started = true;
         // jangan hit jika sedang di halaman stats agar tidak mengotori data
         if (window.location.pathname.indexOf('/stats') !== -1 || window.location.pathname.indexOf('/dash/') !== -1) return;
-        // throttle dimatikan untuk akurasi (20 viewer harus 20 hit) - hanya cegah double-hit 2 detik
         try {
             var sessKey = 'vh_hit_' + window.location.pathname;
             var last = sessionStorage.getItem(sessKey);
@@ -219,27 +287,24 @@
 
         var now = new Date();
         var monthKey = now.getFullYear() + '-' + zeroPad(now.getMonth() + 1);
-
-        // sequential + keepalive biar tidak rate-limit 5 parallel
         var page = currentPageSlug();
-        var keysToHit=[keyOf('total'), keyOf('day', isoFor(0)), keyOf('hour', isoHourOf(now)), keyOf('month', monthKey), keyOf('page', page)];
-        // Tembak berurutan TANPA jeda timer: timer mati saat pindah halaman,
-        // sedangkan request yg sedang jalan diselamatkan keepalive.
-        (async function(){
-            for(var i=0;i<keysToHit.length;i++){
-                try{ await http('hit', keysToHit[i], 1); }catch(e){}
-            }
-        })();
+        var keysToHit = [
+            keyOf('total'),
+            keyOf('day', isoFor(0)),
+            keyOf('hour', isoHourOf(now)),
+            keyOf('month', monthKey),
+            keyOf('page', page)
+        ];
 
-        // share count opsional: jika ada ?share= di URL, hit share untuk video terkait (tetap hit page di atas)
+        // share count opsional: ikut satu request yang sama
         try {
-            var params = new URLSearchParams(window.location.search);
-            var sharedTitle = params.get('shared');
-            if (sharedTitle) http('hit', keyOf('share', sharedTitle));
+            var sharedTitle = new URLSearchParams(window.location.search).get('shared');
+            if (sharedTitle) keysToHit.push(keyOf('share', sharedTitle));
         } catch (e) {}
+
+        many('hit', keysToHit);
     }
 
     // Langsung tembak tanpa tunggu DOM (fetch tidak butuh DOM).
-    // Versi lama menunggu 300ms + jeda antar-hit: keburu mati saat pengunjung pindah halaman.
     try { autoTrack(); } catch (e) {}
 })(window, document);
